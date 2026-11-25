@@ -39,6 +39,6 @@ KINDS = {
     "video": "Videolar",
     "audio": "Ertaklar",
     "music": "Qo'shiqlar",
-    "islamic": "Islomiy",
+    "islamic": "Tarbiyaviy",
     "game": "O'yinlar",
 }

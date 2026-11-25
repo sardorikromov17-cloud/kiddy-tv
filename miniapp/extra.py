@@ -17,7 +17,7 @@ BADGES = [
     ("cartoon", "Multfilm muxlisi", "10 ta multfilm ko'r", "red", lambda s: s["kinds"].get("cartoon", 0), 10),
     ("audio", "Ertakchi", "10 ta ertak tingla", "blue", lambda s: s["kinds"].get("audio", 0), 10),
     ("music", "Qo'shiqchi", "10 ta qo'shiq tingla", "green", lambda s: s["kinds"].get("music", 0), 10),
-    ("islamic", "Odobli bola", "10 ta islomiy multfilm ko'r", "green", lambda s: s["kinds"].get("islamic", 0), 10),
+    ("islamic", "Odobli bola", "10 ta tarbiyaviy multfilm ko'r", "green", lambda s: s["kinds"].get("islamic", 0), 10),
     ("games", "O'yinchi", "20 marta o'yna", "orange", lambda s: s["games"], 20),
     ("quiz", "Zukko", "10 ta savolga to'g'ri javob ber", "blue", lambda s: s["quiz_ok"], 10),
     ("streak7", "Haftalik qahramon", "7 kun ketma-ket kir", "red", lambda s: s["best_streak"], 7),

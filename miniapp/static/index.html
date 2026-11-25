@@ -114,7 +114,7 @@ const KIND = {
   video:{t:"Videolar",c:"green",i:"M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2zM10 9v6l5-3z"},
   game:{t:"O'yinlar",c:"orange",i:"M7 7h10a5 5 0 010 10H7A5 5 0 017 7zM7 10.5v3M5.5 12h3M16 11h.01M18 13h.01"},
   audio:{t:"Ertaklar",c:"blue",i:"M4 6c3-1.5 5.5-1.5 8 0v13c-2.5-1.5-5-1.5-8 0zM20 6c-3-1.5-5.5-1.5-8 0v13c2.5-1.5 5-1.5 8 0z"},
-  islamic:{t:"Islomiy",c:"green",i:"M12 3a9 9 0 108.5 12A7 7 0 1112 3zM18 4l.8 1.8 1.9.2-1.4 1.3.4 1.9-1.7-1-1.7 1 .4-1.9-1.4-1.3 1.9-.2z"},
+  islamic:{t:"Tarbiyaviy",c:"green",i:"M12 3a9 9 0 108.5 12A7 7 0 1112 3zM18 4l.8 1.8 1.9.2-1.4 1.3.4 1.9-1.7-1-1.7 1 .4-1.9-1.4-1.3 1.9-.2z"},
   music:{t:"Qo'shiqlar",c:"green",i:"M9 18V5l12-2v13M9 18a3 3 0 11-6 0 3 3 0 016 0zM21 16a3 3 0 11-6 0 3 3 0 016 0z"}
 };
 const INK = {red:"#B3201B",blue:"#2446A0",green:"#23721F",orange:"#A65400"};
@@ -177,7 +177,7 @@ function vHome(){
     <div id="homeTop" style="display:flex;flex-direction:column;gap:22px"></div>
     <div class="grid2">${tiles}</div>
     <div id="homeRows" style="display:flex;flex-direction:column;gap:22px"></div>
-    <button class="tile t-green" style="height:auto;flex-direction:row;align-items:center;gap:14px" onclick="go('list','islamic')">${ico(KIND.islamic.i, INK.green, 34)}<span style="display:flex;flex-direction:column;gap:2px"><span>Islomiy multfilmlar</span><small style="font-family:Nunito;font-size:13px;font-weight:600">Payg'ambarlar va Qur'on qissalari</small></span></button>
+    <button class="tile t-green" style="height:auto;flex-direction:row;align-items:center;gap:14px" onclick="go('list','islamic')">${ico(KIND.islamic.i, INK.green, 34)}<span style="display:flex;flex-direction:column;gap:2px"><span>Tarbiyaviy multfilmlar</span><small style="font-family:Nunito;font-size:13px;font-weight:600">Payg'ambarlar va Qur'on qissalari</small></span></button>
     <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px">
       <button class="mini t-blue" onclick="go('list','audio')">${ico(KIND.audio.i,INK.blue,28)}Ertaklar</button>
       <button class="mini t-green" onclick="go('list','music')">${ico(KIND.music.i,INK.green,28)}Qo'shiqlar</button>

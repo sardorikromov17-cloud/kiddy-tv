@@ -11,6 +11,7 @@ BTN_SITE = "Saytda ochish"
 
 # tugma matni -> bo'lim kaliti
 KIND_BY_TEXT = {v: k for k, v in config.KINDS.items()}
+KIND_BY_TEXT["Islomiy"] = "islamic"  # eski klaviaturalar uchun
 
 
 def main_menu() -> ReplyKeyboardMarkup:
