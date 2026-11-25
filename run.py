@@ -84,11 +84,20 @@ async def main():
                         handlers=[logging.StreamHandler(), logging.FileHandler("kiddy_tv.log", encoding="utf-8")])
     db = DB()
     await db.connect()
+    try:
+        n = await db.import_quiz_drafts(os.path.join(os.path.dirname(os.path.abspath(__file__)), "seed_data",
+                                                     "quiz_drafts.json"))
+        if n:
+            logging.info("Savollar qoralamasi yuklandi: %s ta (panelda tasdiqlash kerak)", n)
+    except Exception as e:
+        logging.warning("Savollar qoralamasi yuklanmadi: %s", e)
     bot = Bot(config.BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML)) if config.BOT_TOKEN else None
 
     cloud_port = os.getenv("PORT")  # Railway/Render kabi serverlar portni shu orqali beradi
     if cloud_port:
         await bootstrap(db)
+        await db.import_quiz_drafts(os.path.join(os.path.dirname(os.path.abspath(__file__)), "seed_data",
+                                                 "quiz_drafts.json"))
         dom = os.getenv("RAILWAY_PUBLIC_DOMAIN") or os.getenv("PUBLIC_DOMAIN", "")
         if dom and not os.getenv("WEBAPP_URL"):
             os.environ["WEBAPP_URL"] = f"https://{dom}/app"
@@ -117,7 +126,9 @@ async def main():
         dp = Dispatcher(storage=MemoryStorage(), db=db)
         dp.include_routers(admin.router, parent.router, user.router)
         try:
-            await bot.set_my_commands([BotCommand(command="start", description="Bosh menyu")])
+            await bot.set_my_commands([BotCommand(command="start", description="Bosh menyu"),
+                                       BotCommand(command="app", description="Kiddy TV ilovasini ochish"),
+                                       BotCommand(command="taklif", description="Do'stni taklif qilish — yulduz olish")])
         except Exception as e:  # menyu muhim emas, bot ishlayversin
             logging.warning("Menyu buyruqlari o'rnatilmadi: %s", e)
         tasks.append(asyncio.create_task(poll_forever(dp, bot)))

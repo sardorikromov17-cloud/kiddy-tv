@@ -142,7 +142,7 @@ function render(){
   if (!ME) return;
   if (!ME.active && name!=="addchild"){ VIEW=[["addchild",true]]; }
   const cur = VIEW[VIEW.length-1];
-  const fn = {home:vHome, list:vList, series:vSeries, letters:vLetters, shapes:vShapes, bigsmall:vBigSmall, oddone:vOddOne, simon:vSimon, math:vMath, pairs8:()=>vPairs(8), player:vPlayer, favs:vFavs, search:vSearch, profile:vProfile, quiz:vQuiz, addchild:vAddChild, kids:vKids, rewards:vRewards, colors:vColors, pairs:vPairs, count:vCount, coloring:vColoring, parent:vParent}[Array.isArray(cur)?cur[0]:cur];
+  const fn = {home:vHome, list:vList, series:vSeries, letters:vLetters, shapes:vShapes, bigsmall:vBigSmall, oddone:vOddOne, simon:vSimon, math:vMath, pairs8:()=>vPairs(8), player:vPlayer, invite:vInvite, favs:vFavs, search:vSearch, profile:vProfile, quiz:vQuiz, addchild:vAddChild, kids:vKids, rewards:vRewards, colors:vColors, pairs:vPairs, count:vCount, coloring:vColoring, parent:vParent}[Array.isArray(cur)?cur[0]:cur];
   fn(...(Array.isArray(cur)?cur.slice(1):[]));
 }
 
@@ -184,6 +184,7 @@ function vHome(){
       <button class="mini t-red" style="flex-direction:row;justify-content:center;padding:14px 8px" onclick="go('favs')">${ico("M12 21s-7-4.5-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.5-7 10-7 10z",INK.red,24)}Sevimlilarim</button>
       <button class="mini t-blue" style="flex-direction:row;justify-content:center;padding:14px 8px" onclick="go('profile')">${ico("M12 15a6 6 0 100-12 6 6 0 000 12zM8.2 13.9L7 23l5-3 5 3-1.2-9.1",INK.blue,24)}Yutuqlarim</button>
     </div>
+    <button class="banner" style="background:linear-gradient(120deg,#DDF3DA,#E1EAFF)" onclick="go('invite')"><span style="width:60px;height:60px;border-radius:18px;background:#fff;display:flex;align-items:center;justify-content:center;flex:none;font-size:32px">👫</span><span style="display:flex;flex-direction:column;gap:3px"><b style="font-size:17px">Do'stingni chaqir — yulduz ol!</b><span class="muted" style="font-size:14px">Har bir do'st uchun sovg'a yulduzlar</span></span></button>
     ${ME.children.length>1 || true ? `<button class="btn ghost" onclick="go('kids')">${ico("M9 11a4 4 0 100-8 4 4 0 000 8zM2 21v-1a6 6 0 0112 0v1M17 11a3 3 0 100-6M22 21v-1a5 5 0 00-4-4.9","#1F2A6B",22)} Kim tomosha qiladi?</button>`:""}
   </div>`;
   loadHome();
@@ -231,6 +232,42 @@ async function runSearch(){
   let items = []; try{ items = (await api("/api/search?q="+encodeURIComponent(SQ.trim()))).items; }catch(e){ return toast(e.message); }
   if (!document.getElementById("sres")) return;
   box.innerHTML = items.length ? `<div class="grid2">${items.map(it=>cardItem(it, KIND[it.kind]||KIND.video)).join("")}</div>` : `<div class="empty"><p>Hech narsa topilmadi.</p></div>`;
+}
+
+// ---------- do'st taklifi ----------
+async function vInvite(){
+  $app.innerHTML = kidHead("Do'st chaqirish") + `<div class="pad" id="inv"><div class="empty">Yuklanmoqda...</div></div>`;
+  let r; try{ r = await api("/api/invite"); }catch(e){ return toast(e.message); }
+  const box = document.getElementById("inv"); if (!box) return;
+  INV = r;
+  box.innerHTML = `<div style="display:flex;flex-direction:column;gap:16px">
+    <div style="background:var(--green-l);border-radius:26px;padding:20px;text-align:center">
+      <div style="font-size:56px;line-height:1">👫</div>
+      <h2 style="margin:10px 0 6px">Do'stlaringni Kiddy TV'ga chaqir!</h2>
+      <p style="margin:0;font-weight:600">Do'sting havolang orqali kirib, bolasini qo'shsa:<br>senga <b>+${r.bonus} yulduz</b>, do'stingga <b>+${r.new_bonus} yulduz</b></p>
+    </div>
+    ${r.link ? `<div style="background:var(--soft);border-radius:18px;padding:12px 14px;font-weight:700;word-break:break-all;font-size:15px">${esc(r.link)}</div>
+    <button class="btn green" onclick="shareInvite()">${ico("M4 12v7a2 2 0 002 2h12a2 2 0 002-2v-7M16 6l-4-4-4 4M12 2v13","#fff",22)} Do'stlarga yuborish</button>
+    <button class="btn ghost" onclick="copyInvite()">Havolani nusxalash</button>` : `<div class="empty">Havola hozircha tayyor emas.</div>`}
+    <div class="grid2">
+      <div style="background:var(--blue-l);border-radius:20px;padding:14px;text-align:center"><div class="big" style="font-size:32px;color:#2446A0">${r.joined}</div><div style="font-weight:700;font-size:14px">do'st qo'shildi</div></div>
+      <div style="background:var(--orange-l);border-radius:20px;padding:14px;text-align:center"><div class="big" style="font-size:32px;color:#A65400">${r.joined * r.bonus}</div><div style="font-weight:700;font-size:14px">yulduz olding</div></div>
+    </div>
+    <p class="muted" style="margin:0;font-size:13px">Yulduz do'sting birinchi bolasini qo'shganda beriladi. Bir oila faqat bir marta hisoblanadi.</p>
+  </div>`;
+}
+let INV = null;
+function inviteText(){ return `Kiddy TV — bolalar uchun bepul multfilm, ertak va o'yinlar! Shu havola orqali kiring, farzandingizga ${INV.new_bonus} yulduz sovg'a:`; }
+function shareInvite(){
+  if (!INV || !INV.link) return;
+  const u = "https://t.me/share/url?url=" + encodeURIComponent(INV.link) + "&text=" + encodeURIComponent(inviteText());
+  haptic();
+  if (tg && tg.openTelegramLink) tg.openTelegramLink(u); else window.open(u, "_blank");
+}
+async function copyInvite(){
+  if (!INV || !INV.link) return;
+  try{ await navigator.clipboard.writeText(INV.link); toast("Nusxalandi!"); }
+  catch(e){ const t = document.createElement("textarea"); t.value = INV.link; document.body.appendChild(t); t.select(); try{ document.execCommand("copy"); toast("Nusxalandi!"); }catch(_){ toast("Havolani bosib turib nusxalang"); } t.remove(); }
 }
 
 // ---------- yutuqlar: daraja, seriya, nishonlar ----------
@@ -471,7 +508,8 @@ function vAddChild(first){
 async function saveChild(){
   const name = document.getElementById("cn").value.trim(), d = document.getElementById("cb").value;
   if (!name || !d) return toast("Ism va sanani kiriting");
-  try{ await api("/api/child",{name, birth:d}); await refresh(); VIEW=["home"]; render(); toast(`Salom, ${name}!`); }catch(e){ toast(e.message); }
+  try{ const r = await api("/api/child",{name, birth:d}); await refresh(); VIEW=["home"]; render();
+    if (r.ref_bonus) showMsg(`Do'stingiz taklifi bilan kelganing uchun +${r.ref_bonus} yulduz sovg'a!`, `Salom, ${name}!`); else toast(`Salom, ${name}!`); }catch(e){ toast(e.message); }
 }
 
 // ---------- sovg'alar ----------
@@ -495,7 +533,8 @@ async function vRewards(){
       <span class="big" style="width:54px;height:54px;border-radius:16px;background:var(--green-l);color:var(--green-d);display:flex;align-items:center;justify-content:center;font-size:19px;flex:none">${t.percent}%</span>
       <div style="flex:1"><div style="font-weight:700">${t.percent}% chegirma</div><div class="muted" style="font-size:13px">${t.cost} yulduz</div></div>
       <button class="btn ${s>=t.cost?'red':'ghost'}" style="width:auto;min-height:44px;padding:0 16px;font-size:15px" ${s>=t.cost?"":"disabled"} onclick="redeem(${t.percent},${t.cost})">Olish</button></div>`).join("")}
-    <p class="muted" style="margin:4px 0 0;font-size:14px">Yulduz: videoning yarmini ko'rganda, o'yin, savollar va har kuni kirganing uchun.</p>
+    <p class="muted" style="margin:4px 0 0;font-size:14px">Yulduz: videoning yarmini ko'rganda, o'yin, savollar, har kuni kirganing va do'st chaqirganing uchun.</p>
+    <button class="btn ghost" onclick="go('invite')">👫 Do'stingni chaqir — yulduz ol</button>
     ${coupons.length?`<h2 style="margin-top:10px">Kuponlarim</h2>`+coupons.map(c=>`<div style="border:3px dashed var(--red);border-radius:18px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center"><div><div class="big" style="font-size:22px;color:var(--red-d)">${c.percent}%</div><div class="muted" style="font-size:12px">${c.until} gacha</div></div><div class="big" style="font-size:20px;letter-spacing:1px">${esc(c.code)}</div></div>`).join("")+`<p class="muted" style="margin:0;font-size:14px">Kiddy Toys do'konida kassirga kodni ko'rsating.</p>`:""}
   </div>`;
 }

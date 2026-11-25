@@ -171,6 +171,23 @@ def register(app, db, bot, auth, err, body, item_out, youtube_id):
             logging.warning("Rasm berilmadi: %s", e)
             return Response(status_code=502)
 
+    # ---------- do'st taklifi ----------
+    @app.get("/api/invite")
+    async def invite(request: Request):
+        p, c, _ = await child_ctx(request)
+        if not p:
+            return err("auth", 401)
+        username = ""
+        if bot:
+            try:
+                username = (await bot.me()).username
+            except Exception:
+                pass
+        link = f"https://t.me/{username}?start={db.ref_code(p['tg_id'])}" if username else ""
+        st = await db.ref_stats(p["tg_id"])
+        return {"ok": True, "link": link, **st, "bonus": int(await db.setting("ref_bonus")),
+                "new_bonus": int(await db.setting("ref_new_bonus"))}
+
     # ---------- savollar ----------
     @app.get("/api/quiz")
     async def quiz(request: Request, id: int = 0):

@@ -165,12 +165,57 @@ def register(app, db, bot, page, guard, flash, go):
         flash(request, "Savol qo'shildi.")
         return go(f"/content/{cid}#quiz")
 
+    @app.get("/quiz", response_class=HTMLResponse)
+    async def quiz_page(request: Request, status: str = "draft", series: str = ""):
+        if r := await guard(request, "quiz"):
+            return r
+        approved = 0 if status == "draft" else 1
+        sql = ("SELECT q.*, COALESCE(c.series, q.series) AS ser, c.title AS ctitle FROM quiz q "
+               "LEFT JOIN content c ON c.id=q.content_id WHERE q.approved=?")
+        a = [approved]
+        if series:
+            sql += " AND COALESCE(c.series, q.series)=?"
+            a.append(series)
+        rows = await db.all(sql + " ORDER BY ser, c.episode, q.id LIMIT 400", *a)
+        groups = await db.all("SELECT COALESCE(c.series, q.series) AS ser, COUNT(*) n FROM quiz q "
+                              "LEFT JOIN content c ON c.id=q.content_id WHERE q.approved=? GROUP BY ser ORDER BY n DESC",
+                              approved)
+        counts = {r["approved"]: r["n"] for r in await db.all("SELECT approved, COUNT(*) n FROM quiz GROUP BY approved")}
+        return await page(request, "quiz.html", "quiz", rows=rows, groups=groups, status=status, series=series,
+                          drafts=counts.get(0, 0), live=counts.get(1, 0))
+
+    @app.post("/quiz/approve")
+    async def quiz_approve(request: Request):
+        form = await request.form()
+        if r := await guard(request, "quiz", form.get("token", "")):
+            return r
+        ids = [int(x) for x in form.getlist("id") if str(x).isdigit()]
+        ser = str(form.get("series", ""))
+        if form.get("all_series") and ser:
+            cur = await db.conn.execute(
+                "UPDATE quiz SET approved=1 WHERE approved=0 AND (series=? OR content_id IN "
+                "(SELECT id FROM content WHERE series=?))", (ser, ser))
+            await db.conn.commit()
+            n = cur.rowcount
+        else:
+            for i in ids:
+                await db.run("UPDATE quiz SET approved=1 WHERE id=?", i)
+            n = len(ids)
+        flash(request, f"{n} ta savol tasdiqlandi — endi ilovada chiqadi.")
+        ref = request.headers.get("referer") or ""
+        if "/content/" in ref:
+            return go(ref[ref.index("/content/"):])
+        return go(f"/quiz?status=draft&series={ser}" if ser and not form.get("all_series") else "/quiz?status=draft")
+
     @app.post("/quiz/{qid}/delete")
     async def quiz_delete(request: Request, qid: int, token: str = Form(""), back: int = Form(0)):
         if r := await guard(request, "content", token):
             return r
         await db.run("DELETE FROM quiz WHERE id=?", qid)
-        return go(f"/content/{back}#quiz" if back else "/content")
+        ref = request.headers.get("referer") or ""
+        if "/quiz" in ref and not back:
+            return go(ref[ref.index("/quiz"):])
+        return go(f"/content/{back}#quiz" if back else "/quiz")
 
     # ---------- yangi qism xabari ----------
     async def notify_new_episodes(series: str, added: int):

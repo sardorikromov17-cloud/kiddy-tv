@@ -389,7 +389,7 @@ def create_app(db: DB, bot: Bot | None) -> FastAPI:
         if r := await guard(request, "ratings"):
             return r
         days = {"7": 7, "30": 30}.get(period)
-        return await page(request, "ratings.html", "ratings", period=period,
+        return await page(request, "ratings.html", "ratings", period=period, refs=await db.top_referrers(),
                           kids=await db.top_children(20, days=days),
                           views=await db.top_content(15, days=days, order="views"),
                           liked=await db.top_content(15, order="likes"))
@@ -554,6 +554,10 @@ def create_app(db: DB, bot: Bot | None) -> FastAPI:
             if v.isdigit() and lo <= int(v) <= hi:
                 await db.set_setting(key, int(v))
         await db.set_setting("notify_new", "1" if form.get("notify_new") else "0")
+        for key in ("ref_bonus", "ref_new_bonus"):
+            v = str(form.get(key, "")).strip()
+            if v.isdigit() and 0 <= int(v) <= 500:
+                await db.set_setting(key, int(v))
         flash(request, "Sozlamalar saqlandi. Bot darhol yangi qiymatlardan foydalanadi.")
         return go("/settings")
 

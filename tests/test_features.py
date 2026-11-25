@@ -209,6 +209,50 @@ async def main():
     r = await panel.get("/settings")
     check("Ketma-ket kirish bonusi" in _html.unescape(r.text), "sozlamalarda yangi bo'lim")
 
+    # --- do'st taklifi ---
+    code = db.ref_code(111)
+    check(db.ref_decode(code) == 111, "taklif kodi qaytariladi")
+    check(not await db.register_referral(111, "Aziz", db.ref_code(222)), "eski foydalanuvchi taklif bilan hisoblanmaydi")
+    check(not await db.register_referral(333, "O'zi", db.ref_code(333)), "o'zini taklif qilib bo'lmaydi")
+    check(await db.register_referral(444, "Do'st", code), "yangi do'st taklif bilan keldi")
+    ali_before = (await db.child(kid))["stars"]
+    H4 = {"X-Init-Data": init_data(444)}
+    bot.sent.clear()
+    r = (await mini.post("/api/child", headers=H4, json={"name": "Sardor", "birth": "2020-05-05"})).json()
+    check(r["ref_bonus"] == 10 and r["child"]["stars"] == 10, "do'stning bolasiga +10", r)
+    check((await db.child(kid))["stars"] == ali_before + 20, "taklif qilganning bolasiga +20")
+    check(any(cid == 111 and "taklif" in t for cid, t in bot.sent), "taklif qilganga xabar ketdi", bot.sent)
+    r = (await mini.post("/api/child", headers=H4, json={"name": "Ikkinchi", "birth": "2021-05-05"})).json()
+    check(r["ref_bonus"] == 0 and (await db.child(kid))["stars"] == ali_before + 20, "ikkinchi bola uchun qayta berilmaydi")
+    inv = (await mini.get("/api/invite", headers=H)).json()
+    check(inv["joined"] == 1 and inv["invited"] == 1 and inv["bonus"] == 20, "taklif statistikasi", inv)
+    r = await panel.get("/ratings")
+    check("Eng ko'p do'st taklif" in _html.unescape(r.text) and "Aziz" in _html.unescape(r.text), "reytingda takliflar", r.text[-1500:])
+
+    # --- savollar qoralamasi ---
+    import json as _j, tempfile
+    tmp = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8")
+    _j.dump([{"series": "Bek va Lola", "title": "3-qism Mevalar", "q": "Qaysi biri meva?", "a": "Olma", "b": "Sabzi",
+              "c": None, "correct": "a"},
+             {"series": "Bek va Lola", "title": None, "q": "Haftada necha kun?", "a": "5", "b": "7", "c": None,
+              "correct": "b"},
+             {"series": "Yo'q serial", "title": "Yo'q video", "q": "?", "a": "1", "b": "2", "c": None, "correct": "a"}],
+            tmp)
+    tmp.close()
+    n = await db.import_quiz_drafts(tmp.name, "t1")
+    check(n == 2 and await db.import_quiz_drafts(tmp.name, "t1") == 0, "qoralama yuklandi (topilmagan video tashlandi), qayta yuklanmaydi")
+    await db.set_parent(111, daily_limit=0)
+    o3 = (await mini.post("/api/open", headers=H, json={"id": eps[2]})).json()
+    check(o3["quiz"] == 1, "tasdiqlanmagan savol ilovada chiqmaydi")
+    r = await panel.get("/quiz?status=draft&series=Bek va Lola")
+    check("Qaysi biri meva?" in _html.unescape(r.text), "panel: tasdiqlanmaganlar ro'yxati")
+    r = await panel.post("/quiz/approve", data={"token": token(r.text), "series": "Bek va Lola", "all_series": "1"})
+    check("2 ta savol tasdiqlandi" in _html.unescape(r.text), "serial savollari bittada tasdiqlandi")
+    o3 = (await mini.post("/api/open", headers=H, json={"id": eps[2]})).json()
+    check(o3["quiz"] == 1, "3-qism: endi o'z savoli (serial savoli o'rniga)")
+    o0 = (await mini.post("/api/open", headers=H, json={"id": eps[0]})).json()
+    check(o0["quiz"] == 2, "1-qism: serial savollari (2 ta tasdiqlangan)", o0["quiz"])
+
     await db.close()
     print("\nYangi imkoniyatlar testlari o'tdi.")
     os._exit(0)

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head"><h1>Video savollari</h1></div>
+<section class="card" style="background:var(--cream);border-color:#F0E2D0">
+  <p style="margin:0">Savollar video <b>nomidagi mavzu</b> va umumiy bilim asosida tayyorlangan (masalan «Mevalar» → «Qaysi biri meva?»). Ilovada faqat <b>tasdiqlangan</b> savollar chiqadi. Tekshirib, to'g'rilarini tasdiqlang, keraksizini o'chiring. Savolni tahrirlash uchun videoning sahifasini oching.</p>
+</section>
+<div class="row">
+  <nav class="tabs" aria-label="Holat">
+    <a href="/quiz?status=draft" class="{{ 'on' if status == 'draft' }}">Tasdiqlanmagan ({{ drafts }})</a>
+    <a href="/quiz?status=live" class="{{ 'on' if status != 'draft' }}">Ilovada ({{ live }})</a>
+  </nav>
+</div>
+<div class="row" style="flex-wrap:wrap;gap:6px">
+  <nav class="tabs" aria-label="Serial" style="flex-wrap:wrap">
+    <a href="/quiz?status={{ status }}" class="{{ 'on' if not series }}">Hammasi</a>
+    {% for g in groups %}<a href="/quiz?status={{ status }}&series={{ g.ser|urlencode }}" class="{{ 'on' if series == g.ser }}">{{ g.ser or 'Alohida' }} ({{ g.n }})</a>{% endfor %}
+  </nav>
+</div>
+{% if status == 'draft' and series and rows %}
+<form method="post" action="/quiz/approve" class="row">
+  <input type="hidden" name="token" value="{{ csrf }}"><input type="hidden" name="series" value="{{ series }}"><input type="hidden" name="all_series" value="1">
+  <button class="btn green" type="submit">«{{ series }}» savollarining hammasini tasdiqlash ({{ rows|length }})</button>
+</form>
+{% endif %}
+<form method="post" action="/quiz/approve" id="qform">
+  <input type="hidden" name="token" value="{{ csrf }}"><input type="hidden" name="series" value="{{ series }}">
+</form>
+<section class="card tbl" style="padding:8px 12px">
+  <table>
+    <thead><tr>{% if status == 'draft' %}<th><input type="checkbox" aria-label="Hammasini belgilash" onclick="document.querySelectorAll('.qchk').forEach(c=>c.checked=this.checked)" style="width:auto;min-height:0"></th>{% endif %}<th>Video</th><th>Savol va javoblar</th><th></th></tr></thead>
+    <tbody>
+    {% for q in rows %}
+    <tr>
+      {% if status == 'draft' %}<td><input class="qchk" type="checkbox" name="id" value="{{ q.id }}" form="qform" style="width:auto;min-height:0"></td>{% endif %}
+      <td>{% if q.content_id %}<a href="/content/{{ q.content_id }}#quiz">{{ q.ctitle }}</a>{% else %}<b>{{ q.ser }}</b><br><span class="muted">butun serial</span>{% endif %}</td>
+      <td><b>{{ q.q }}</b><br>
+        {% for k in ['a','b','c'] %}{% if q[k] %}<span style="{{ 'color:var(--green-d);font-weight:800' if q.correct == k else 'color:var(--muted)' }}">{{ k|upper }}) {{ q[k] }}{{ ' ✓' if q.correct == k }}</span>{{ ' · ' if not loop.last }}{% endif %}{% endfor %}</td>
+      <td><form method="post" action="/quiz/{{ q.id }}/delete"><input type="hidden" name="token" value="{{ csrf }}"><button class="btn ghost sm" type="submit">O'chirish</button></form></td>
+    </tr>
+    {% else %}<tr><td colspan="4" class="muted">Savol yo'q.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</section>
+{% if status == 'draft' and rows %}<button class="btn green" type="submit" form="qform" style="align-self:flex-start">Belgilanganlarni tasdiqlash</button>{% endif %}
+{% endblock %}

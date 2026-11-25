@@ -2,7 +2,7 @@
 import os
 
 from aiogram import Bot, F, Router
-from aiogram.filters import Command, CommandStart
+from aiogram.filters import Command, CommandObject, CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import CallbackQuery, FSInputFile, Message
@@ -70,9 +70,44 @@ async def ask_child_name(message: Message, state: FSMContext, first=False):
     await message.answer(text)
 
 
+async def settle_and_notify(bot, db: DB, parent_id: int):
+    """Taklif bilan kelgan oila birinchi bolasini qo'shganda — ikkala tomonga yulduz va xabar."""
+    r = await db.settle_referral(parent_id)
+    if not r:
+        return None
+    try:
+        if r["bonus"]:
+            await bot.send_message(r["ref"], f"🎉 Siz taklif qilgan do'stingiz Kiddy TV'ga qo'shildi!\n"
+                                             f"{r['ref_child']}ga +{r['bonus']} yulduz sovg'a.")
+    except Exception:
+        pass
+    return r
+
+
+async def invite_text(bot, db: DB, tg_id: int):
+    me = await bot.me()
+    link = f"https://t.me/{me.username}?start={db.ref_code(tg_id)}"
+    st = await db.ref_stats(tg_id)
+    bonus, new_bonus = await db.setting("ref_bonus"), await db.setting("ref_new_bonus")
+    return link, (f"👫 <b>Do'stlaringizni Kiddy TV'ga taklif qiling!</b>\n\n"
+                  f"Har bir do'stingiz qo'shilib, bolasini ro'yxatdan o'tkazsa — farzandingizga <b>+{bonus} yulduz</b>, "
+                  f"do'stingizning bolasiga <b>+{new_bonus} yulduz</b>.\n\n"
+                  f"Sizning havolangiz:\n{link}\n\nTaklif qilganlar: {st['joined']} ta")
+
+
+@router.message(Command("taklif"))
+async def invite_cmd(message: Message, db: DB, bot: Bot):
+    await db.ensure_parent(message.from_user.id, message.from_user.full_name)
+    link, text = await invite_text(bot, db, message.from_user.id)
+    await message.answer(text, disable_web_page_preview=True)
+
+
 @router.message(CommandStart())
-async def start(message: Message, state: FSMContext, db: DB):
+async def start(message: Message, state: FSMContext, db: DB, command: CommandObject = None):
     await state.clear()
+    args = (command.args or "") if command else ""
+    if args.startswith("r"):
+        await db.register_referral(message.from_user.id, message.from_user.full_name, args)
     await db.ensure_parent(message.from_user.id, message.from_user.full_name)
     await send_welcome(message)
     if await offer_app(message, db):
@@ -97,7 +132,7 @@ async def child_name(message: Message, state: FSMContext):
 
 
 @router.message(AddChild.birth, F.text)
-async def child_birth(message: Message, state: FSMContext, db: DB):
+async def child_birth(message: Message, state: FSMContext, db: DB, bot: Bot):
     birth = parse_birth(message.text)
     if not birth:
         await message.answer("Sanani tushunmadim. Masalan: <b>25.03.2020</b>")
@@ -109,6 +144,9 @@ async def child_birth(message: Message, state: FSMContext, db: DB):
     age = age_of(birth, now().date())
     await message.answer(f"Ajoyib! {data['name']} — {age} yosh. Endi unga mos kontentni ko'rsataman.",
                          reply_markup=kb.main_menu())
+    r = await settle_and_notify(bot, db, message.from_user.id)
+    if r and r["new_bonus"]:
+        await message.answer(f"🎁 Do'stingiz taklifi bilan kelganingiz uchun {r['new_name']}ga +{r['new_bonus']} yulduz!")
 
 
 async def need_child(message: Message, state: FSMContext, db: DB):

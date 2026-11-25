@@ -46,4 +46,16 @@
     </tbody>
   </table></div>
 </section>
+<section class="card">
+  <h2>Eng ko'p do'st taklif qilganlar</h2>
+  <p class="muted" style="margin:4px 0 10px">«Qo'shildi» — taklif bilan kelib, bolasini ro'yxatdan o'tkazgan oilalar (shu uchun yulduz berilgan)</p>
+  <div class="tbl"><table>
+    <thead><tr><th>#</th><th>Oila</th><th>Havoladan kirgan</th><th>Qo'shildi</th></tr></thead>
+    <tbody>
+    {% for r in refs %}
+      <tr><td>{{ loop.index }}</td><td>{{ r.full_name or r.tg_id }}</td><td>{{ r.n }}</td><td><b>{{ r.ok or 0 }}</b></td></tr>
+    {% else %}<tr><td colspan="4" class="empty">Hali taklif yo'q</td></tr>{% endfor %}
+    </tbody>
+  </table></div>
+</section>
 {% endblock %}

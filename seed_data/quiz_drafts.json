@@ -1,0 +1,3053 @@
+[
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Badantarbiya",
+"q": "Badantarbiya nima uchun kerak?",
+"a": "Sog'lom va baquvvat bo'lish uchun",
+"b": "Uxlash uchun",
+"c": "Shirinlik yeyish uchun",
+"correct": "a"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - O'zbek Alifbosini O'rganamiz!",
+"q": "O'zbek alifbosi qaysi harf bilan boshlanadi?",
+"a": "Z",
+"b": "B",
+"c": "A",
+"correct": "c"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Birgalikda Sanaymiz",
+"q": "3 ta olmaga yana 1 ta olma qo'shsak, nechta bo'ladi?",
+"a": "3",
+"b": "4",
+"c": "5",
+"correct": "b"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Shakllar",
+"q": "Uchburchakning nechta burchagi bor?",
+"a": "4",
+"b": "5",
+"c": "3",
+"correct": "c"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Shakllar",
+"q": "Qaysi shaklning burchagi yo'q?",
+"a": "Doira",
+"b": "Uchburchak",
+"c": "Kvadrat",
+"correct": "a"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Yo'l Harakati",
+"q": "Svetoforning qaysi chirog'ida yo'ldan o'tamiz?",
+"a": "Qizil",
+"b": "Sariq",
+"c": "Yashil",
+"correct": "c"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Yo'l Harakati",
+"q": "Yo'lni qayerdan kesib o'tamiz?",
+"a": "Mashinalar orasidan",
+"b": "Istalgan joydan",
+"c": "Piyodalar o'tish joyidan",
+"correct": "c"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - O'lchovlar",
+"q": "Qaysi biri katta?",
+"a": "Sichqon",
+"b": "Fil",
+"c": "Chumoli",
+"correct": "b"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Ekologiya",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Ekologiya",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Dangasa",
+"q": "Yaxshi bola qanday bo'ladi?",
+"a": "Dangasa",
+"b": "Mehnatkash",
+"c": "Erinchoq",
+"correct": "b"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Hafta Kunlari",
+"q": "Haftada necha kun bor?",
+"a": "10",
+"b": "7",
+"c": "5",
+"correct": "b"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Hafta Kunlari",
+"q": "Dushanbadan keyin qaysi kun keladi?",
+"a": "Juma",
+"b": "Seshanba",
+"c": "Yakshanba",
+"correct": "b"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Top-Toza",
+"q": "Ovqatdan oldin nima qilamiz?",
+"a": "Uxlaymiz",
+"b": "Yuguramiz",
+"c": "Qo'limizni yuvamiz",
+"correct": "c"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Top-Toza",
+"q": "Qo'lni nima bilan yuvamiz?",
+"a": "Sut bilan",
+"b": "Qum bilan",
+"c": "Sovun bilan",
+"correct": "c"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Mevalar",
+"q": "Qaysi biri meva?",
+"a": "Piyoz",
+"b": "Olma",
+"c": "Sabzi",
+"correct": "b"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Mevalar",
+"q": "Qaysi meva sariq rangda?",
+"a": "Tarvuz ichi",
+"b": "Banan",
+"c": "Olcha",
+"correct": "b"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Kitoblar",
+"q": "Kitobni qanday asraymiz?",
+"a": "Toza qo'l bilan ushlaymiz",
+"b": "Yirtamiz",
+"c": "Suvga tashlaymiz",
+"correct": "a"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Mustaqillik",
+"q": "O'zbekiston Mustaqillik kuni qachon?",
+"a": "21-mart",
+"b": "1-sentabr",
+"c": "8-mart",
+"correct": "b"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Salom Maktab",
+"q": "Maktabga nima olib boramiz?",
+"a": "Kitob va daftar",
+"b": "Yostiq",
+"c": "Kastryulka",
+"correct": "a"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Kasblar",
+"q": "Kasal bo'lganda kimga boramiz?",
+"a": "Oshpazga",
+"b": "Haydovchiga",
+"c": "Shifokorga",
+"correct": "c"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Kasblar",
+"q": "Maktabda kim dars beradi?",
+"a": "O'qituvchi",
+"b": "Quruvchi",
+"c": "Sotuvchi",
+"correct": "a"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola – Doktorjon",
+"q": "Shifokor nima qiladi?",
+"a": "Non yopadi",
+"b": "Kasallarni davolaydi",
+"c": "Uy quradi",
+"correct": "b"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Maxsus mashinalar 4K",
+"q": "Yong'inni kim o'chiradi?",
+"a": "O't o'chiruvchilar",
+"b": "Oshpazlar",
+"c": "Sotuvchilar",
+"correct": "a"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Maxsus mashinalar 4K",
+"q": "Tez yordam mashinasining telefon raqami?",
+"a": "103",
+"b": "101",
+"c": "102",
+"correct": "a"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Koinotga sayohat 4k",
+"q": "Biz qaysi sayyorada yashaymiz?",
+"a": "Mars",
+"b": "Oy",
+"c": "Yer",
+"correct": "c"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Koinotga sayohat 4k",
+"q": "Kunduzi osmonda nima porlaydi?",
+"a": "Yulduzlar",
+"b": "Quyosh",
+"c": "Oy",
+"correct": "b"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Onajonlar Bayrami 4K",
+"q": "Xotin-qizlar bayrami qachon nishonlanadi?",
+"a": "1-iyun",
+"b": "8-mart",
+"c": "9-may",
+"correct": "b"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Navro'z 4K",
+"q": "Navro'z bayrami qachon nishonlanadi?",
+"a": "1-iyun",
+"b": "21-mart",
+"c": "1-sentabr",
+"correct": "b"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Suvni asrang",
+"q": "Suvni qanday asraymiz?",
+"a": "Jo'mrakni ochiq qoldiramiz",
+"b": "Suvni yerga to'kamiz",
+"c": "Jo'mrakni o'z vaqtida yopamiz",
+"correct": "c"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola – Bolalar kuni",
+"q": "Bolalarni himoya qilish kuni qachon?",
+"a": "1-iyun",
+"b": "8-mart",
+"c": "1-sentabr",
+"correct": "a"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Toza qo'llar!",
+"q": "Ovqatdan oldin nima qilamiz?",
+"a": "Uxlaymiz",
+"b": "Yuguramiz",
+"c": "Qo'limizni yuvamiz",
+"correct": "c"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Toza qo'llar!",
+"q": "Qo'lni nima bilan yuvamiz?",
+"a": "Sut bilan",
+"b": "Qum bilan",
+"c": "Sovun bilan",
+"correct": "c"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Erinchoq",
+"q": "Yaxshi bola qanday bo'ladi?",
+"a": "Dangasa",
+"b": "Mehnatkash",
+"c": "Erinchoq",
+"correct": "b"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Toza Qo'llar",
+"q": "Ovqatdan oldin nima qilamiz?",
+"a": "Uxlaymiz",
+"b": "Yuguramiz",
+"c": "Qo'limizni yuvamiz",
+"correct": "c"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Toza Qo'llar",
+"q": "Qo'lni nima bilan yuvamiz?",
+"a": "Sut bilan",
+"b": "Qum bilan",
+"c": "Sovun bilan",
+"correct": "c"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Badantarbiya 2",
+"q": "Badantarbiya nima uchun kerak?",
+"a": "Sog'lom va baquvvat bo'lish uchun",
+"b": "Uxlash uchun",
+"c": "Shirinlik yeyish uchun",
+"correct": "a"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Yo'l Harakati",
+"q": "Svetoforning qaysi chirog'ida yo'ldan o'tamiz?",
+"a": "Qizil",
+"b": "Sariq",
+"c": "Yashil",
+"correct": "c"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Yo'l Harakati",
+"q": "Yo'lni qayerdan kesib o'tamiz?",
+"a": "Mashinalar orasidan",
+"b": "Istalgan joydan",
+"c": "Piyodalar o'tish joyidan",
+"correct": "c"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Matematika",
+"q": "2 + 3 nechaga teng?",
+"a": "5",
+"b": "6",
+"c": "4",
+"correct": "a"
+},
+{
+"series": "Bek va Lola",
+"title": "Bek va Lola - Matematika",
+"q": "5 dan keyin qaysi son keladi?",
+"a": "4",
+"b": "7",
+"c": "6",
+"correct": "c"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Ranglar'",
+"q": "Osmon qanday rangda?",
+"a": "Qora",
+"b": "Qizil",
+"c": "Ko'k",
+"correct": "c"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Ranglar'",
+"q": "Maysa qanday rangda?",
+"a": "Yashil",
+"b": "Sariq",
+"c": "Binafsha",
+"correct": "a"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Sonlar'",
+"q": "3 ta olmaga yana 1 ta olma qo'shsak, nechta bo'ladi?",
+"a": "3",
+"b": "4",
+"c": "5",
+"correct": "b"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Gigiyena Qoidalari'",
+"q": "Ovqatdan oldin nima qilamiz?",
+"a": "Uxlaymiz",
+"b": "Yuguramiz",
+"c": "Qo'limizni yuvamiz",
+"correct": "c"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Gigiyena Qoidalari'",
+"q": "Qo'lni nima bilan yuvamiz?",
+"a": "Sut bilan",
+"b": "Qum bilan",
+"c": "Sovun bilan",
+"correct": "c"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - '8 Mart'",
+"q": "Xotin-qizlar bayrami qachon nishonlanadi?",
+"a": "1-iyun",
+"b": "8-mart",
+"c": "9-may",
+"correct": "b"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Yo'l Qoidalari'",
+"q": "Svetoforning qaysi chirog'ida yo'ldan o'tamiz?",
+"a": "Qizil",
+"b": "Sariq",
+"c": "Yashil",
+"correct": "c"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Yo'l Qoidalari'",
+"q": "Yo'lni qayerdan kesib o'tamiz?",
+"a": "Mashinalar orasidan",
+"b": "Istalgan joydan",
+"c": "Piyodalar o'tish joyidan",
+"correct": "c"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Hafta Kunlar'",
+"q": "Haftada necha kun bor?",
+"a": "10",
+"b": "7",
+"c": "5",
+"correct": "b"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Hafta Kunlar'",
+"q": "Dushanbadan keyin qaysi kun keladi?",
+"a": "Juma",
+"b": "Seshanba",
+"c": "Yakshanba",
+"correct": "b"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Doktor'",
+"q": "Shifokor nima qiladi?",
+"a": "Non yopadi",
+"b": "Kasallarni davolaydi",
+"c": "Uy quradi",
+"correct": "b"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Tabiatni Asraylik'",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Tabiatni Asraylik'",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Hayvonlar'",
+"q": "Sigir bizga nima beradi?",
+"a": "Sut",
+"b": "Jun",
+"c": "Asal",
+"correct": "a"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Hayvonlar'",
+"q": "Qaysi hayvon «miyov» deydi?",
+"a": "Sigir",
+"b": "Mushuk",
+"c": "It",
+"correct": "b"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Mevalar'",
+"q": "Qaysi biri meva?",
+"a": "Piyoz",
+"b": "Olma",
+"c": "Sabzi",
+"correct": "b"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Mevalar'",
+"q": "Qaysi meva sariq rangda?",
+"a": "Tarvuz ichi",
+"b": "Banan",
+"c": "Olcha",
+"correct": "b"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Sabzavotlar'",
+"q": "Qaysi biri sabzavot?",
+"a": "Olma",
+"b": "Uzum",
+"c": "Sabzi",
+"correct": "c"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Badantarbiya'",
+"q": "Badantarbiya nima uchun kerak?",
+"a": "Sog'lom va baquvvat bo'lish uchun",
+"b": "Uxlash uchun",
+"c": "Shirinlik yeyish uchun",
+"correct": "a"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Ranglar' 2-qism",
+"q": "Osmon qanday rangda?",
+"a": "Qora",
+"b": "Qizil",
+"c": "Ko'k",
+"correct": "c"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Ranglar' 2-qism",
+"q": "Maysa qanday rangda?",
+"a": "Yashil",
+"b": "Sariq",
+"c": "Binafsha",
+"correct": "a"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Kasblar'",
+"q": "Kasal bo'lganda kimga boramiz?",
+"a": "Oshpazga",
+"b": "Haydovchiga",
+"c": "Shifokorga",
+"correct": "c"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Kasblar'",
+"q": "Maktabda kim dars beradi?",
+"a": "O'qituvchi",
+"b": "Quruvchi",
+"c": "Sotuvchi",
+"correct": "a"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Maxsus Mashinalar'",
+"q": "Yong'inni kim o'chiradi?",
+"a": "O't o'chiruvchilar",
+"b": "Oshpazlar",
+"c": "Sotuvchilar",
+"correct": "a"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Maxsus Mashinalar'",
+"q": "Tez yordam mashinasining telefon raqami?",
+"a": "103",
+"b": "101",
+"c": "102",
+"correct": "a"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Matematika'",
+"q": "2 + 3 nechaga teng?",
+"a": "5",
+"b": "6",
+"c": "4",
+"correct": "a"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Matematika'",
+"q": "5 dan keyin qaysi son keladi?",
+"a": "4",
+"b": "7",
+"c": "6",
+"correct": "c"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - '21- Oktabr Ona Tilim'",
+"q": "O'zbek tili bayrami qachon nishonlanadi?",
+"a": "21-oktabr",
+"b": "21-mart",
+"c": "1-iyun",
+"correct": "a"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Shakllar'",
+"q": "Uchburchakning nechta burchagi bor?",
+"a": "4",
+"b": "5",
+"c": "3",
+"correct": "c"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Shakllar'",
+"q": "Qaysi shaklning burchagi yo'q?",
+"a": "Doira",
+"b": "Uchburchak",
+"c": "Kvadrat",
+"correct": "a"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Odobsiz Bola'",
+"q": "Biror narsa olganda nima deymiz?",
+"a": "Ket",
+"b": "Bermayman",
+"c": "Rahmat",
+"correct": "c"
+},
+{
+"series": "Hanifa",
+"title": "HANIFA - 'Odobsiz Bola'",
+"q": "Xato qilsak nima qilamiz?",
+"a": "Uzr so'raymiz",
+"b": "Yig'laymiz",
+"c": "Yashiramiz",
+"correct": "a"
+},
+{
+"series": "Dono va Momomo",
+"title": "O'YNAYMIZ va KUYLAYMIZ - Rangli Parovoz",
+"q": "Osmon qanday rangda?",
+"a": "Qora",
+"b": "Qizil",
+"c": "Ko'k",
+"correct": "c"
+},
+{
+"series": "Dono va Momomo",
+"title": "O'YNAYMIZ va KUYLAYMIZ - Rangli Parovoz",
+"q": "Maysa qanday rangda?",
+"a": "Yashil",
+"b": "Sariq",
+"c": "Binafsha",
+"correct": "a"
+},
+{
+"series": "Dono va Momomo",
+"title": "Rangli qalamlar bolalar uchun ajoyib multfilm 2021 Dono va Momomo",
+"q": "Osmon qanday rangda?",
+"a": "Qora",
+"b": "Qizil",
+"c": "Ko'k",
+"correct": "c"
+},
+{
+"series": "Dono va Momomo",
+"title": "Rangli qalamlar bolalar uchun ajoyib multfilm 2021 Dono va Momomo",
+"q": "Maysa qanday rangda?",
+"a": "Yashil",
+"b": "Sariq",
+"c": "Binafsha",
+"correct": "a"
+},
+{
+"series": "Dono va Momomo",
+"title": "Rangli qalamlar haqida multfim 2021 Bolalar uchun Dono va Momomo",
+"q": "Osmon qanday rangda?",
+"a": "Qora",
+"b": "Qizil",
+"c": "Ko'k",
+"correct": "c"
+},
+{
+"series": "Dono va Momomo",
+"title": "Rangli qalamlar haqida multfim 2021 Bolalar uchun Dono va Momomo",
+"q": "Maysa qanday rangda?",
+"a": "Yashil",
+"b": "Sariq",
+"c": "Binafsha",
+"correct": "a"
+},
+{
+"series": "Dono va Momomo",
+"title": "Rangli Qalamchalar - Havo shari 2021 Dono va Momomo Bolalar uchun",
+"q": "Osmon qanday rangda?",
+"a": "Qora",
+"b": "Qizil",
+"c": "Ko'k",
+"correct": "c"
+},
+{
+"series": "Dono va Momomo",
+"title": "Rangli Qalamchalar - Havo shari 2021 Dono va Momomo Bolalar uchun",
+"q": "Maysa qanday rangda?",
+"a": "Yashil",
+"b": "Sariq",
+"c": "Binafsha",
+"correct": "a"
+},
+{
+"series": "Dono va Momomo",
+"title": "Multfilm uzbek tilida Doktordan qo'rqaman - Dono va Momomo",
+"q": "Shifokor nima qiladi?",
+"a": "Non yopadi",
+"b": "Kasallarni davolaydi",
+"c": "Uy quradi",
+"correct": "b"
+},
+{
+"series": "Dono va Momomo",
+"title": "Dono, momomo va rangli qalmalar uchun bu yil qanday bo'ldi, qisqa sahnalarda ko'",
+"q": "Osmon qanday rangda?",
+"a": "Qora",
+"b": "Qizil",
+"c": "Ko'k",
+"correct": "c"
+},
+{
+"series": "Dono va Momomo",
+"title": "Dono, momomo va rangli qalmalar uchun bu yil qanday bo'ldi, qisqa sahnalarda ko'",
+"q": "Maysa qanday rangda?",
+"a": "Yashil",
+"b": "Sariq",
+"c": "Binafsha",
+"correct": "a"
+},
+{
+"series": "Dono va Momomo",
+"title": "Dono & Momomo - Ranglar qani",
+"q": "Osmon qanday rangda?",
+"a": "Qora",
+"b": "Qizil",
+"c": "Ko'k",
+"correct": "c"
+},
+{
+"series": "Dono va Momomo",
+"title": "Dono & Momomo - Ranglar qani",
+"q": "Maysa qanday rangda?",
+"a": "Yashil",
+"b": "Sariq",
+"c": "Binafsha",
+"correct": "a"
+},
+{
+"series": "Dono va Momomo",
+"title": "Dono & Momomo - Hayvonlar",
+"q": "Sigir bizga nima beradi?",
+"a": "Sut",
+"b": "Jun",
+"c": "Asal",
+"correct": "a"
+},
+{
+"series": "Dono va Momomo",
+"title": "Dono & Momomo - Hayvonlar",
+"q": "Qaysi hayvon «miyov» deydi?",
+"a": "Sigir",
+"b": "Mushuk",
+"c": "It",
+"correct": "b"
+},
+{
+"series": "Dono va Momomo",
+"title": "Yangi Ranglardan Parovoz - O'YNAYMIZ va KUYLAYMIZ",
+"q": "Osmon qanday rangda?",
+"a": "Qora",
+"b": "Qizil",
+"c": "Ko'k",
+"correct": "c"
+},
+{
+"series": "Dono va Momomo",
+"title": "Yangi Ranglardan Parovoz - O'YNAYMIZ va KUYLAYMIZ",
+"q": "Maysa qanday rangda?",
+"a": "Yashil",
+"b": "Sariq",
+"c": "Binafsha",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Sarguzashtlar boshlanishi",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Sarguzashtlar boshlanishi",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Xazonrezgilik",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Xazonrezgilik",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Eco mashinalar qanday yasaladi?",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Eco mashinalar qanday yasaladi?",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Chiqindilarni saralash kerakmi?| 4-qism |Яшил Макон - Чиқиндиларн",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Chiqindilarni saralash kerakmi?| 4-qism |Яшил Макон - Чиқиндиларн",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - 1-5 qismlar",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - 1-5 qismlar",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Avtomobilsiz kun",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Avtomobilsiz kun",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon – Yelim Xalta",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon – Yelim Xalta",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil makon - Tabiat chiqindi emas",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil makon - Tabiat chiqindi emas",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Yashil Makonga Aylantiraylik",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Yashil Makonga Aylantiraylik",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Suv - Hayot tomchisi",
+"q": "Suvni qanday asraymiz?",
+"a": "Jo'mrakni ochiq qoldiramiz",
+"b": "Suvni yerga to'kamiz",
+"c": "Jo'mrakni o'z vaqtida yopamiz",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Sariq O’rdakcha",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Sariq O’rdakcha",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Batareyalar zararlimi?",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Batareyalar zararlimi?",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon 6-10 qismlar",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon 6-10 qismlar",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - O'rmon yong'ini",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - O'rmon yong'ini",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Qadam-qadam",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Qadam-qadam",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Elektr energiyasi",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Elektr energiyasi",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Quyosh panellari",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Quyosh panellari",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Tabiat va arilat -1| Яшил Макон - Табиат ва арилар - 1",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Tabiat va arilat -1| Яшил Макон - Табиат ва арилар - 1",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Tabiat va arilat -2| Яшил Макон - Табиат ва арилар - 2| 15-qism",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Tabiat va arilat -2| Яшил Макон - Табиат ва арилар - 2| 15-qism",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Tabiat va arilat -3| Яшил Макон - Табиат ва арилар - 3",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Tabiat va arilat -3| Яшил Макон - Табиат ва арилар - 3",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Gaz quvuri muammosi",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Gaz quvuri muammosi",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Yerosti suvlarini tejash",
+"q": "Suvni qanday asraymiz?",
+"a": "Jo'mrakni ochiq qoldiramiz",
+"b": "Suvni yerga to'kamiz",
+"c": "Jo'mrakni o'z vaqtida yopamiz",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Ekologiya qo'riqchisi",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Yashil Makon - Ekologiya qo'riqchisi",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "YASHIL MAKON QAHRAMONLARI: SUVNI ISROF QILMASLIK",
+"q": "Suvni qanday asraymiz?",
+"a": "Jo'mrakni ochiq qoldiramiz",
+"b": "Suvni yerga to'kamiz",
+"c": "Jo'mrakni o'z vaqtida yopamiz",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "YASHIL MAKON QAHRAMONLARI: SARIQ O‘RDAKCHA VA BOLAJONLAR",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "YASHIL MAKON QAHRAMONLARI: SARIQ O‘RDAKCHA VA BOLAJONLAR",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Chip Chip Jo'jalarim Yashil makon multfilm",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Chip Chip Jo'jalarim Yashil makon multfilm",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Axlatni kim to’kdi - Yashil makon multfilm",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Axlatni kim to’kdi - Yashil makon multfilm",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Dam olishga chiqqanda - Yashil makon multfilm",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Dam olishga chiqqanda - Yashil makon multfilm",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Shuncha Changga - Yashil makon multfilm",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Shuncha Changga - Yashil makon multfilm",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yashil makon",
+"title": "Elektrni asraylik Yashil Makon multfilm 4K",
+"q": "Chiqindini qayerga tashlaymiz?",
+"a": "Ko'chaga",
+"b": "Ariqqa",
+"c": "Axlat qutisiga",
+"correct": "c"
+},
+{
+"series": "Yashil makon",
+"title": "Elektrni asraylik Yashil Makon multfilm 4K",
+"q": "Tabiatni qanday asraymiz?",
+"a": "Daraxt ekamiz",
+"b": "Axlat tashlaymiz",
+"c": "Gullarni yulamiz",
+"correct": "a"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Sabzavotlarni o‘rganamiz",
+"q": "«Sabzi» ingliz tilida qanday bo'ladi?",
+"a": "Potato",
+"b": "Tomato",
+"c": "Carrot",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Sabzavotlarni o‘rganamiz",
+"q": "«Pomidor» ingliz tilida qanday bo'ladi?",
+"a": "Carrot",
+"b": "Onion",
+"c": "Tomato",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Mevalarni o‘rganamiz",
+"q": "«Olma» ingliz tilida qanday bo'ladi?",
+"a": "Orange",
+"b": "Apple",
+"c": "Banana",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Mevalarni o‘rganamiz",
+"q": "«Banan» ingliz tilida qanday bo'ladi?",
+"a": "Grape",
+"b": "Apple",
+"c": "Banana",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Uy hayvonlarini o‘rganamiz",
+"q": "«Mushuk» ingliz tilida qanday bo'ladi?",
+"a": "Dog",
+"b": "Cat",
+"c": "Cow",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Uy hayvonlarini o‘rganamiz",
+"q": "«It» ingliz tilida qanday bo'ladi?",
+"a": "Cat",
+"b": "Horse",
+"c": "Dog",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Yovvoyi hayvonlarni o‘rganamiz",
+"q": "«Sher» ingliz tilida qanday bo'ladi?",
+"a": "Tiger",
+"b": "Lion",
+"c": "Bear",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Yovvoyi hayvonlarni o‘rganamiz",
+"q": "«Fil» ingliz tilida qanday bo'ladi?",
+"a": "Monkey",
+"b": "Elephant",
+"c": "Lion",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Hasharotlarni o‘rganamiz",
+"q": "«Asalari» ingliz tilida qanday bo'ladi?",
+"a": "Butterfly",
+"b": "Bee",
+"c": "Ant",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Hasharotlarni o‘rganamiz",
+"q": "«Kapalak» ingliz tilida qanday bo'ladi?",
+"a": "Bee",
+"b": "Fly",
+"c": "Butterfly",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Dengiz hayvonlarini o‘rganamiz",
+"q": "«Baliq» ingliz tilida qanday bo'ladi?",
+"a": "Fish",
+"b": "Whale",
+"c": "Crab",
+"correct": "a"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Dengiz hayvonlarini o‘rganamiz",
+"q": "«Kit» ingliz tilida qanday bo'ladi?",
+"a": "Shark",
+"b": "Fish",
+"c": "Whale",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Qushlarni o‘rganamiz",
+"q": "«Qush» ingliz tilida qanday bo'ladi?",
+"a": "Bird",
+"b": "Cat",
+"c": "Fish",
+"correct": "a"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Qushlarni o‘rganamiz",
+"q": "«Boyqush» ingliz tilida qanday bo'ladi?",
+"a": "Eagle",
+"b": "Owl",
+"c": "Duck",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Oziq-ovqatlarni o‘rganamiz",
+"q": "«Non» ingliz tilida qanday bo'ladi?",
+"a": "Egg",
+"b": "Milk",
+"c": "Bread",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Oziq-ovqatlarni o‘rganamiz",
+"q": "«Sut» ingliz tilida qanday bo'ladi?",
+"a": "Milk",
+"b": "Water",
+"c": "Bread",
+"correct": "a"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida O‘quv qurollarini o‘rganamiz",
+"q": "«Kitob» ingliz tilida qanday bo'ladi?",
+"a": "Book",
+"b": "Bag",
+"c": "Pen",
+"correct": "a"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida O‘quv qurollarini o‘rganamiz",
+"q": "«Ruchka» ingliz tilida qanday bo'ladi?",
+"a": "Book",
+"b": "Ruler",
+"c": "Pen",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Gadjetlarni o‘rganamiz",
+"q": "«Telefon» ingliz tilida qanday bo'ladi?",
+"a": "TV",
+"b": "Computer",
+"c": "Phone",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Gadjetlarni o‘rganamiz",
+"q": "«Kompyuter» ingliz tilida qanday bo'ladi?",
+"a": "Computer",
+"b": "Phone",
+"c": "Tablet",
+"correct": "a"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Yengil kiyimlarni o‘rganamiz",
+"q": "«Ko'ylak» ingliz tilida qanday bo'ladi?",
+"a": "Shoes",
+"b": "Shirt",
+"c": "Hat",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Yengil kiyimlarni o‘rganamiz",
+"q": "«Shapka» ingliz tilida qanday bo'ladi?",
+"a": "Shirt",
+"b": "Hat",
+"c": "Coat",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Issiq kiyimlarni o‘rganamiz",
+"q": "«Palto» ingliz tilida qanday bo'ladi?",
+"a": "Shirt",
+"b": "Hat",
+"c": "Coat",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Issiq kiyimlarni o‘rganamiz",
+"q": "«Sharf» ingliz tilida qanday bo'ladi?",
+"a": "Coat",
+"b": "Gloves",
+"c": "Scarf",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Uy texnikasini o‘rganamiz",
+"q": "«Muzlatgich» ingliz tilida qanday bo'ladi?",
+"a": "Fridge",
+"b": "Oven",
+"c": "Kettle",
+"correct": "a"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Uy texnikasini o‘rganamiz",
+"q": "«Choynak» ingliz tilida qanday bo'ladi?",
+"a": "Fridge",
+"b": "Kettle",
+"c": "Iron",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Transportlarni o‘rganamiz",
+"q": "«Avtobus» ingliz tilida qanday bo'ladi?",
+"a": "Bus",
+"b": "Car",
+"c": "Train",
+"correct": "a"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Transportlarni o‘rganamiz",
+"q": "«Samolyot» ingliz tilida qanday bo'ladi?",
+"a": "Plane",
+"b": "Ship",
+"c": "Bus",
+"correct": "a"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Oshxona anjomlarini o‘rganamiz",
+"q": "«Qoshiq» ingliz tilida qanday bo'ladi?",
+"a": "Cup",
+"b": "Fork",
+"c": "Spoon",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Oshxona anjomlarini o‘rganamiz",
+"q": "«Piyola» ingliz tilida qanday bo'ladi?",
+"a": "Spoon",
+"b": "Plate",
+"c": "Cup",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Uy jihozlarini o‘rganamiz",
+"q": "«Stol» ingliz tilida qanday bo'ladi?",
+"a": "Chair",
+"b": "Table",
+"c": "Bed",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Uy jihozlarini o‘rganamiz",
+"q": "«Stul» ingliz tilida qanday bo'ladi?",
+"a": "Table",
+"b": "Chair",
+"c": "Sofa",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Kasblarni o‘rganamiz",
+"q": "«Shifokor» ingliz tilida qanday bo'ladi?",
+"a": "Driver",
+"b": "Teacher",
+"c": "Doctor",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Kasblarni o‘rganamiz",
+"q": "«O'qituvchi» ingliz tilida qanday bo'ladi?",
+"a": "Doctor",
+"b": "Teacher",
+"c": "Cook",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Uy qismlarini o‘rganamiz",
+"q": "«Eshik» ingliz tilida qanday bo'ladi?",
+"a": "Roof",
+"b": "Window",
+"c": "Door",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz tilida Uy qismlarini o‘rganamiz",
+"q": "«Deraza» ingliz tilida qanday bo'ladi?",
+"a": "Wall",
+"b": "Window",
+"c": "Door",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Ingliz Alifbosini Misollar bilan o‘rganamiz",
+"q": "O'zbek alifbosi qaysi harf bilan boshlanadi?",
+"a": "Z",
+"b": "B",
+"c": "A",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Bolalar uchun Ramazon Odoblari ✨",
+"q": "Biror narsa olganda nima deymiz?",
+"a": "Ket",
+"b": "Bermayman",
+"c": "Rahmat",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Bolalar uchun Ramazon Odoblari ✨",
+"q": "Xato qilsak nima qilamiz?",
+"a": "Uzr so'raymiz",
+"b": "Yig'laymiz",
+"c": "Yashiramiz",
+"correct": "a"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "OISHA va Aziza — Uzr So‘rash Qiyinmas Ekan",
+"q": "Biror narsa olganda nima deymiz?",
+"a": "Ket",
+"b": "Bermayman",
+"c": "Rahmat",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "OISHA va Aziza — Uzr So‘rash Qiyinmas Ekan",
+"q": "Xato qilsak nima qilamiz?",
+"a": "Uzr so'raymiz",
+"b": "Yig'laymiz",
+"c": "Yashiramiz",
+"correct": "a"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Rus Alifbosini O‘rganamiz",
+"q": "O'zbek alifbosi qaysi harf bilan boshlanadi?",
+"a": "Z",
+"b": "B",
+"c": "A",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Rus Tilida 1 dan 100 gacha Sanash 🔢",
+"q": "3 ta olmaga yana 1 ta olma qo'shsak, nechta bo'ladi?",
+"a": "3",
+"b": "4",
+"c": "5",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Shakllar Rus Tilida",
+"q": "«Doira» rus tilida qanday bo'ladi?",
+"a": "Треугольник",
+"b": "Квадрат",
+"c": "Круг",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Ranglar Rus Tilida",
+"q": "«Qizil» rus tilida qanday bo'ladi?",
+"a": "Красный",
+"b": "Зелёный",
+"c": "Синий",
+"correct": "a"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Rus Tilida Sabzavotlarni O‘rganamiz 🥕🥦",
+"q": "«Sabzi» rus tilida qanday bo'ladi?",
+"a": "Лук",
+"b": "Картофель",
+"c": "Морковь",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Yusuf bilan Rus Tilida Mevalarni O‘rganamiz",
+"q": "«Olma» rus tilida qanday bo'ladi?",
+"a": "Яблоко",
+"b": "Банан",
+"c": "Груша",
+"correct": "a"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "👨‍👩‍👧‍👦 Rus Tilida Oila A’zolarini O‘rganamiz",
+"q": "«Ona» rus tilida qanday bo'ladi?",
+"a": "Брат",
+"b": "Мама",
+"c": "Папа",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Rus Tilida Uy Hayvonlarini O‘rganamiz 🐶🐱",
+"q": "«Mushuk» rus tilida qanday bo'ladi?",
+"a": "Собака",
+"b": "Корова",
+"c": "Кошка",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Rus Tilida Yovvoyi Hayvonlarni O‘rganamiz 🦁🐘",
+"q": "«Ayiq» rus tilida qanday bo'ladi?",
+"a": "Лиса",
+"b": "Волк",
+"c": "Медведь",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Rus Tilida Dengiz Hayvonlarini O‘rganamiz 🐳🐬",
+"q": "«Baliq» rus tilida qanday bo'ladi?",
+"a": "Краб",
+"b": "Кит",
+"c": "Рыба",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Rus Tilida Maktab Anjomlarini O‘rganamiz 🎒✏️",
+"q": "«Kitob» rus tilida qanday bo'ladi?",
+"a": "Тетрадь",
+"b": "Ручка",
+"c": "Книга",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Rus Tilida Hasharotlarni O‘rganamiz 🦋🐝",
+"q": "«Asalari» rus tilida qanday bo'ladi?",
+"a": "Муравей",
+"b": "Пчела",
+"c": "Бабочка",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Rus Tilida Qushlarni O‘rganamiz 🐦🦉",
+"q": "«Qush» rus tilida qanday bo'ladi?",
+"a": "Птица",
+"b": "Кошка",
+"c": "Рыба",
+"correct": "a"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Rus Tilida Oziq-ovqat Mahsulotlarini O‘rganamiz 🍎🥛",
+"q": "«Non» rus tilida qanday bo'ladi?",
+"a": "Молоко",
+"b": "Хлеб",
+"c": "Яйцо",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Rus Tilida Gadjetlarni O‘rganamiz 📱💻",
+"q": "«Telefon» rus tilida qanday bo'ladi?",
+"a": "Компьютер",
+"b": "Телефон",
+"c": "Планшет",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Rus Tilida Yengil Kiyimlarni O‘rganamiz 👕👗",
+"q": "«Ko'ylak» rus tilida qanday bo'ladi?",
+"a": "Обувь",
+"b": "Рубашка",
+"c": "Шапка",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Rus Tilida Issiq Kiyimlarni O‘rganamiz 🧥🧣",
+"q": "«Palto» rus tilida qanday bo'ladi?",
+"a": "Шапка",
+"b": "Пальто",
+"c": "Шарф",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Rus Tilida Maishiy Texnikalarni O‘rganamiz 🏠⚡",
+"q": "«Muzlatgich» rus tilida qanday bo'ladi?",
+"a": "Холодильник",
+"b": "Чайник",
+"c": "Плита",
+"correct": "a"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Rus Tilida Tana A’zolarini O‘rganamiz 🧒🖐️",
+"q": "«Qo'l» rus tilida qanday bo'ladi?",
+"a": "Голова",
+"b": "Нога",
+"c": "Рука",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Rus Tilida Transportlarni O‘rganamiz 🚗🚌🚆",
+"q": "«Mashina» rus tilida qanday bo'ladi?",
+"a": "Машина",
+"b": "Поезд",
+"c": "Автобус",
+"correct": "a"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Rus Tilida Oshxona Anjomlarini O‘rganamiz 🍳🥄",
+"q": "«Qoshiq» rus tilida qanday bo'ladi?",
+"a": "Вилка",
+"b": "Ложка",
+"c": "Чашка",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Rus Tilida Mebel va Uy Jihozlarini O‘rganamiz 🛋️🪑",
+"q": "«Stol» rus tilida qanday bo'ladi?",
+"a": "Стул",
+"b": "Стол",
+"c": "Кровать",
+"correct": "b"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Rus Tilida Kasblarni O‘rganamiz 👨‍⚕️👩‍🏫",
+"q": "«Shifokor» rus tilida qanday bo'ladi?",
+"a": "Учитель",
+"b": "Повар",
+"c": "Врач",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Rus Tilida Uy Qismlarini O‘rganamiz 🏠",
+"q": "«Eshik» rus tilida qanday bo'ladi?",
+"a": "Окно",
+"b": "Крыша",
+"c": "Дверь",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Odobnoma",
+"q": "Biror narsa olganda nima deymiz?",
+"a": "Ket",
+"b": "Bermayman",
+"c": "Rahmat",
+"correct": "c"
+},
+{
+"series": "Yusuf bilan o'rganamiz",
+"title": "Odobnoma",
+"q": "Xato qilsak nima qilamiz?",
+"a": "Uzr so'raymiz",
+"b": "Yig'laymiz",
+"c": "Yashiramiz",
+"correct": "a"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - A harfi",
+"q": "Qaysi so'z «A» harfi bilan boshlanadi?",
+"a": "Anor",
+"b": "Olma",
+"c": "Uzum",
+"correct": "a"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - B harfi",
+"q": "Qaysi so'z «B» harfi bilan boshlanadi?",
+"a": "Mushuk",
+"b": "Baliq",
+"c": "Ot",
+"correct": "b"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - D harfi",
+"q": "Qaysi so'z «D» harfi bilan boshlanadi?",
+"a": "Daraxt",
+"b": "Uy",
+"c": "Qush",
+"correct": "a"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - E harfi",
+"q": "Qaysi so'z «E» harfi bilan boshlanadi?",
+"a": "Eshik",
+"b": "Olma",
+"c": "Nok",
+"correct": "a"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - F harfi",
+"q": "Qaysi so'z «F» harfi bilan boshlanadi?",
+"a": "Sher",
+"b": "It",
+"c": "Fil",
+"correct": "c"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - G harfi",
+"q": "Qaysi so'z «G» harfi bilan boshlanadi?",
+"a": "Non",
+"b": "Suv",
+"c": "Gul",
+"correct": "c"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - H harfi",
+"q": "Qaysi so'z «H» harfi bilan boshlanadi?",
+"a": "Olma",
+"b": "Havo",
+"c": "Kitob",
+"correct": "b"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - I harfi",
+"q": "Qaysi so'z «I» harfi bilan boshlanadi?",
+"a": "Baliq",
+"b": "Ilon",
+"c": "Ot",
+"correct": "b"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - J harfi",
+"q": "Qaysi so'z «J» harfi bilan boshlanadi?",
+"a": "Qush",
+"b": "Jo'ja",
+"c": "Mushuk",
+"correct": "b"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - K harfi",
+"q": "Qaysi so'z «K» harfi bilan boshlanadi?",
+"a": "Daftar",
+"b": "Ruchka",
+"c": "Kitob",
+"correct": "c"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - L harfi",
+"q": "Qaysi so'z «L» harfi bilan boshlanadi?",
+"a": "Nok",
+"b": "Lola",
+"c": "Olma",
+"correct": "b"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - M harfi",
+"q": "Qaysi so'z «M» harfi bilan boshlanadi?",
+"a": "Ot",
+"b": "Mushuk",
+"c": "It",
+"correct": "b"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - N harfi",
+"q": "Qaysi so'z «N» harfi bilan boshlanadi?",
+"a": "Non",
+"b": "Suv",
+"c": "Choy",
+"correct": "a"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - O harfi",
+"q": "Qaysi so'z «O» harfi bilan boshlanadi?",
+"a": "Olma",
+"b": "Uzum",
+"c": "Nok",
+"correct": "a"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - P harfi",
+"q": "Qaysi so'z «P» harfi bilan boshlanadi?",
+"a": "Gul",
+"b": "Daraxt",
+"c": "Paxta",
+"correct": "c"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - Q harfi",
+"q": "Qaysi so'z «Q» harfi bilan boshlanadi?",
+"a": "Qush",
+"b": "Baliq",
+"c": "Ot",
+"correct": "a"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - R harfi",
+"q": "Qaysi so'z «R» harfi bilan boshlanadi?",
+"a": "Rasm",
+"b": "Uy",
+"c": "Kitob",
+"correct": "a"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - S harfi",
+"q": "Qaysi so'z «S» harfi bilan boshlanadi?",
+"a": "Non",
+"b": "Sut",
+"c": "Choy",
+"correct": "b"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - T harfi",
+"q": "Qaysi so'z «T» harfi bilan boshlanadi?",
+"a": "Olma",
+"b": "Tuxum",
+"c": "Non",
+"correct": "b"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - U harfi",
+"q": "Qaysi so'z «U» harfi bilan boshlanadi?",
+"a": "Olma",
+"b": "Uzum",
+"c": "Nok",
+"correct": "b"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - V harfi",
+"q": "Qaysi so'z «V» harfi bilan boshlanadi?",
+"a": "Avtobus",
+"b": "Velosiped",
+"c": "Mashina",
+"correct": "b"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - X harfi",
+"q": "Qaysi so'z «X» harfi bilan boshlanadi?",
+"a": "Mushuk",
+"b": "Xo'roz",
+"c": "It",
+"correct": "b"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - Y harfi",
+"q": "Qaysi so'z «Y» harfi bilan boshlanadi?",
+"a": "Oy",
+"b": "Quyosh",
+"c": "Yulduz",
+"correct": "c"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - Z harfi",
+"q": "Qaysi so'z «Z» harfi bilan boshlanadi?",
+"a": "Sher",
+"b": "Fil",
+"c": "Zebra",
+"correct": "c"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - O‘ harfi",
+"q": "Qaysi so'z «O'» harfi bilan boshlanadi?",
+"a": "Tovuq",
+"b": "O'rdak",
+"c": "G'oz",
+"correct": "b"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - G‘ harfi",
+"q": "Qaysi so'z «G'» harfi bilan boshlanadi?",
+"a": "O'rdak",
+"b": "G'oz",
+"c": "Tovuq",
+"correct": "b"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - Sh harfi",
+"q": "Qaysi so'z «Sh» harfi bilan boshlanadi?",
+"a": "Sher",
+"b": "Bo'ri",
+"c": "Fil",
+"correct": "a"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "O‘zbek alifbosi - Ch harfi",
+"q": "Qaysi so'z «Ch» harfi bilan boshlanadi?",
+"a": "Sut",
+"b": "Suv",
+"c": "Choy",
+"correct": "c"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "Sanashni o'rganamiz",
+"q": "3 ta olmaga yana 1 ta olma qo'shsak, nechta bo'ladi?",
+"a": "3",
+"b": "4",
+"c": "5",
+"correct": "b"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "Sonlarni o‘rganamiz",
+"q": "3 ta olmaga yana 1 ta olma qo'shsak, nechta bo'ladi?",
+"a": "3",
+"b": "4",
+"c": "5",
+"correct": "b"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "🐎🐑🐇🐓🐤 Hayvonlarning nomlarini birgalikda o'rganamiz",
+"q": "Sigir bizga nima beradi?",
+"a": "Sut",
+"b": "Jun",
+"c": "Asal",
+"correct": "a"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "🐎🐑🐇🐓🐤 Hayvonlarning nomlarini birgalikda o'rganamiz",
+"q": "Qaysi hayvon «miyov» deydi?",
+"a": "Sigir",
+"b": "Mushuk",
+"c": "It",
+"correct": "b"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "Mevalarning nomlarini o‘rganamiz",
+"q": "Qaysi biri meva?",
+"a": "Piyoz",
+"b": "Olma",
+"c": "Sabzi",
+"correct": "b"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "Mevalarning nomlarini o‘rganamiz",
+"q": "Qaysi meva sariq rangda?",
+"a": "Tarvuz ichi",
+"b": "Banan",
+"c": "Olcha",
+"correct": "b"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "Halollik — insonni bezaydigan eng katta boylik",
+"q": "Biror narsa olganda nima deymiz?",
+"a": "Ket",
+"b": "Bermayman",
+"c": "Rahmat",
+"correct": "c"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "Halollik — insonni bezaydigan eng katta boylik",
+"q": "Xato qilsak nima qilamiz?",
+"a": "Uzr so'raymiz",
+"b": "Yig'laymiz",
+"c": "Yashiramiz",
+"correct": "a"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "Uy hayvonlari nomlarini o'rganamiz",
+"q": "Sigir bizga nima beradi?",
+"a": "Sut",
+"b": "Jun",
+"c": "Asal",
+"correct": "a"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "Uy hayvonlari nomlarini o'rganamiz",
+"q": "Qaysi hayvon «miyov» deydi?",
+"a": "Sigir",
+"b": "Mushuk",
+"c": "It",
+"correct": "b"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "KELAJAKDA QAYSI KASB EGASI BO'LSAM EKAN",
+"q": "Kasal bo'lganda kimga boramiz?",
+"a": "Oshpazga",
+"b": "Haydovchiga",
+"c": "Shifokorga",
+"correct": "c"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "KELAJAKDA QAYSI KASB EGASI BO'LSAM EKAN",
+"q": "Maktabda kim dars beradi?",
+"a": "O'qituvchi",
+"b": "Quruvchi",
+"c": "Sotuvchi",
+"correct": "a"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "Qiziqarli o'rmon hayvonlari",
+"q": "Sigir bizga nima beradi?",
+"a": "Sut",
+"b": "Jun",
+"c": "Asal",
+"correct": "a"
+},
+{
+"series": "Dono TV — o'rganamiz",
+"title": "Qiziqarli o'rmon hayvonlari",
+"q": "Qaysi hayvon «miyov» deydi?",
+"a": "Sigir",
+"b": "Mushuk",
+"c": "It",
+"correct": "b"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Qizil olma 🍎 Ranglarni o'rganamiz",
+"q": "Osmon qanday rangda?",
+"a": "Qora",
+"b": "Qizil",
+"c": "Ko'k",
+"correct": "c"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Qizil olma 🍎 Ranglarni o'rganamiz",
+"q": "Maysa qanday rangda?",
+"a": "Yashil",
+"b": "Sariq",
+"c": "Binafsha",
+"correct": "a"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Hovlidagi do'stlar 🐮🐱🐶🐓 Hayvonlar ovozi",
+"q": "Sigir bizga nima beradi?",
+"a": "Sut",
+"b": "Jun",
+"c": "Asal",
+"correct": "a"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Hovlidagi do'stlar 🐮🐱🐶🐓 Hayvonlar ovozi",
+"q": "Qaysi hayvon «miyov» deydi?",
+"a": "Sigir",
+"b": "Mushuk",
+"c": "It",
+"correct": "b"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Bir, ikki, uch 🍑 Sanashni o'rganamiz",
+"q": "3 ta olmaga yana 1 ta olma qo'shsak, nechta bo'ladi?",
+"a": "3",
+"b": "4",
+"c": "5",
+"correct": "b"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Qo'l yuvishni o'rganamiz 🧼 Sovun bilan qo'l yuvamiz",
+"q": "Ovqatdan oldin nima qilamiz?",
+"a": "Uxlaymiz",
+"b": "Yuguramiz",
+"c": "Qo'limizni yuvamiz",
+"correct": "c"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Qo'l yuvishni o'rganamiz 🧼 Sovun bilan qo'l yuvamiz",
+"q": "Qo'lni nima bilan yuvamiz?",
+"a": "Sut bilan",
+"b": "Qum bilan",
+"c": "Sovun bilan",
+"correct": "c"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Rahmat, Buvi! 🙏 Odobni o'rganamiz",
+"q": "Biror narsa olganda nima deymiz?",
+"a": "Ket",
+"b": "Bermayman",
+"c": "Rahmat",
+"correct": "c"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Rahmat, Buvi! 🙏 Odobni o'rganamiz",
+"q": "Xato qilsak nima qilamiz?",
+"a": "Uzr so'raymiz",
+"b": "Yig'laymiz",
+"c": "Yashiramiz",
+"correct": "a"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Katta va kichkina 🍉 O'lchamlarni o'rganamiz",
+"q": "Qaysi biri katta?",
+"a": "Sichqon",
+"b": "Fil",
+"c": "Chumoli",
+"correct": "b"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Ob-havo bolalar uchun ☔ Quyosh, yomg'ir, shamol",
+"q": "Yomg'ir yog'sa nima olamiz?",
+"a": "Chana",
+"b": "Quyosh ko'zoynak",
+"c": "Soyabon",
+"correct": "c"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Shakllarni o'rganamiz 🔺 Doira, uchburchak, to'rtburchak",
+"q": "Uchburchakning nechta burchagi bor?",
+"a": "4",
+"b": "5",
+"c": "3",
+"correct": "c"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Shakllarni o'rganamiz 🔺 Doira, uchburchak, to'rtburchak",
+"q": "Qaysi shaklning burchagi yo'q?",
+"a": "Doira",
+"b": "Uchburchak",
+"c": "Kvadrat",
+"correct": "a"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Sanashni o'rganamiz 2 🔢 Anorlarni sanaymiz",
+"q": "3 ta olmaga yana 1 ta olma qo'shsak, nechta bo'ladi?",
+"a": "3",
+"b": "4",
+"c": "5",
+"correct": "b"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Hosil bayrami 🍇 Kuzgi meva va sabzavotlar",
+"q": "Qaysi biri meva?",
+"a": "Piyoz",
+"b": "Olma",
+"c": "Sabzi",
+"correct": "b"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Hosil bayrami 🍇 Kuzgi meva va sabzavotlar",
+"q": "Qaysi meva sariq rangda?",
+"a": "Tarvuz ichi",
+"b": "Banan",
+"c": "Olcha",
+"correct": "b"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Non qayerdan keladi? 🍞 Bug'doydan nongacha",
+"q": "Non nimadan tayyorlanadi?",
+"a": "Shakardan",
+"b": "Bug'doy unidan",
+"c": "Sutdan",
+"correct": "b"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Kuz fasli 🍂 Kuz keldi, issiq kiyinamiz",
+"q": "Kuzda daraxt barglari qanday bo'ladi?",
+"a": "Pushti",
+"b": "Ko'k",
+"c": "Sariq",
+"correct": "c"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Hayvonlar ovozi 2 🦁 Sher, fil, ayiq",
+"q": "Sigir bizga nima beradi?",
+"a": "Sut",
+"b": "Jun",
+"c": "Asal",
+"correct": "a"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Hayvonlar ovozi 2 🦁 Sher, fil, ayiq",
+"q": "Qaysi hayvon «miyov» deydi?",
+"a": "Sigir",
+"b": "Mushuk",
+"c": "It",
+"correct": "b"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Qushlar ovozi 🕊️ Kaptar, o'rdak, boyqush",
+"q": "Qaysi qush kechasi uxlamaydi?",
+"a": "Tovuq",
+"b": "Kaptar",
+"c": "Boyqush",
+"correct": "c"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Uy hayvonlari 2 🐴 Ot, echki, g'oz",
+"q": "Sigir bizga nima beradi?",
+"a": "Sut",
+"b": "Jun",
+"c": "Asal",
+"correct": "a"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Uy hayvonlari 2 🐴 Ot, echki, g'oz",
+"q": "Qaysi hayvon «miyov» deydi?",
+"a": "Sigir",
+"b": "Mushuk",
+"c": "It",
+"correct": "b"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Shakllar – 2 ⭐ Kvadrat, yulduz, yurak, oval",
+"q": "Uchburchakning nechta burchagi bor?",
+"a": "4",
+"b": "5",
+"c": "3",
+"correct": "c"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Shakllar – 2 ⭐ Kvadrat, yulduz, yurak, oval",
+"q": "Qaysi shaklning burchagi yo'q?",
+"a": "Doira",
+"b": "Uchburchak",
+"c": "Kvadrat",
+"correct": "a"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Sanashni o'rganamiz 3 🍎 6 dan 10 gacha sanaymiz",
+"q": "3 ta olmaga yana 1 ta olma qo'shsak, nechta bo'ladi?",
+"a": "3",
+"b": "4",
+"c": "5",
+"correct": "b"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Ranglarni o'rganamiz 2 💛💚💙 Sariq, yashil, ko'k",
+"q": "Osmon qanday rangda?",
+"a": "Qora",
+"b": "Qizil",
+"c": "Ko'k",
+"correct": "c"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Ranglarni o'rganamiz 2 💛💚💙 Sariq, yashil, ko'k",
+"q": "Maysa qanday rangda?",
+"a": "Yashil",
+"b": "Sariq",
+"c": "Binafsha",
+"correct": "a"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Sayohat 🚗🚌🚆 Mashina, avtobus, poyezd, samolyot, kema",
+"q": "Qaysi transport osmonda uchadi?",
+"a": "Samolyot",
+"b": "Poyezd",
+"c": "Kema",
+"correct": "a"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Ranglarni o'rganamiz 3 ❤️💗💜 Qizil, pushti, binafsha",
+"q": "Osmon qanday rangda?",
+"a": "Qora",
+"b": "Qizil",
+"c": "Ko'k",
+"correct": "c"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Ranglarni o'rganamiz 3 ❤️💗💜 Qizil, pushti, binafsha",
+"q": "Maysa qanday rangda?",
+"a": "Yashil",
+"b": "Sariq",
+"c": "Binafsha",
+"correct": "a"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Sayohat 2 🚢🚲🎈 Kema, velosiped, havo shari",
+"q": "Qaysi transport osmonda uchadi?",
+"a": "Samolyot",
+"b": "Poyezd",
+"c": "Kema",
+"correct": "a"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Hayvonlar ovozi 4 🐸🐒 Eshak, qurbaqa, maymun",
+"q": "Sigir bizga nima beradi?",
+"a": "Sut",
+"b": "Jun",
+"c": "Asal",
+"correct": "a"
+},
+{
+"series": "Momiq va do'stlari",
+"title": "Hayvonlar ovozi 4 🐸🐒 Eshak, qurbaqa, maymun",
+"q": "Qaysi hayvon «miyov» deydi?",
+"a": "Sigir",
+"b": "Mushuk",
+"c": "It",
+"correct": "b"
+},
+{
+"series": "Allohning habibi Muhammad (1-fasl)",
+"title": "02. Yaman podshohi Abraha",
+"q": "Abraha Ka'baga qaysi hayvon bilan kelgan?",
+"a": "Fil",
+"b": "Ot",
+"c": "Tuya",
+"correct": "a"
+},
+{
+"series": "Allohning habibi Muhammad (1-fasl)",
+"title": "03. Fil voqeasi",
+"q": "Abraha Ka'baga qaysi hayvon bilan kelgan?",
+"a": "Fil",
+"b": "Ot",
+"c": "Tuya",
+"correct": "a"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "01. Odam alayxissalomning ikki o'g'li - Qarg'a voqeasi (1-qism)",
+"q": "Bu qissada qaysi qush haqida so'z boradi?",
+"a": "Qarg'a",
+"b": "Kaptar",
+"c": "Burgut",
+"correct": "a"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "02. Odam alayxissalomning ikki o'g'li - Qarg'a voqeasi (2-qism)",
+"q": "Bu qissada qaysi qush haqida so'z boradi?",
+"a": "Qarg'a",
+"b": "Kaptar",
+"c": "Burgut",
+"correct": "a"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "03. Solih alayhissalomning tuyasi (1-qism)",
+"q": "Solih alayhissalomga mo'jiza qilib qaysi hayvon berilgan?",
+"a": "Tuya",
+"b": "Fil",
+"c": "Ot",
+"correct": "a"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "04. Solih alayhissalomning tuyasi (2-qism)",
+"q": "Solih alayhissalomga mo'jiza qilib qaysi hayvon berilgan?",
+"a": "Tuya",
+"b": "Fil",
+"c": "Ot",
+"correct": "a"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "05. Ibrohim alayhissalomning qushi (1-qism)",
+"q": "Bu qissa qaysi payg'ambar haqida?",
+"a": "Ibrohim alayhissalom",
+"b": "Muso alayhissalom",
+"c": "Nuh alayhissalom",
+"correct": "a"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "06. Ibrohim alayhissalomning qushi (2-qism)",
+"q": "Bu qissa qaysi payg'ambar haqida?",
+"a": "Ibrohim alayhissalom",
+"b": "Muso alayhissalom",
+"c": "Nuh alayhissalom",
+"correct": "a"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "07. Yusuf alayhissalom va bo'ri (1-qism)",
+"q": "Yusuf alayhissalomning akalari otalariga qaysi hayvonni bahona qilishgan?",
+"a": "Ayiq",
+"b": "Sher",
+"c": "Bo'ri",
+"correct": "c"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "08. Yusuf alayhissalom va bo'ri (2-qism)",
+"q": "Yusuf alayhissalomning akalari otalariga qaysi hayvonni bahona qilishgan?",
+"a": "Ayiq",
+"b": "Sher",
+"c": "Bo'ri",
+"correct": "c"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "09. Yunus alayhissalom va kit (1-qism)",
+"q": "Yunus alayhissalomni qaysi jonzot yutib yuborgan?",
+"a": "Fil",
+"b": "Kit (katta baliq)",
+"c": "Sher",
+"correct": "b"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "10. Yunus alayhissalom va kit (2-qism)",
+"q": "Yunus alayhissalomni qaysi jonzot yutib yuborgan?",
+"a": "Fil",
+"b": "Kit (katta baliq)",
+"c": "Sher",
+"correct": "b"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "11. Muso alayhissalomning hassasi (1-qism)",
+"q": "Muso alayhissalomning hassasi nimaga aylangan?",
+"a": "Qushga",
+"b": "Ilonga",
+"c": "Gulga",
+"correct": "b"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "12. Muso alayhissalomning hassasi (2-qism)",
+"q": "Muso alayhissalomning hassasi nimaga aylangan?",
+"a": "Qushga",
+"b": "Ilonga",
+"c": "Gulga",
+"correct": "b"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "13. Muso alayhissalomning hassasi (3-qism)",
+"q": "Muso alayhissalomning hassasi nimaga aylangan?",
+"a": "Qushga",
+"b": "Ilonga",
+"c": "Gulga",
+"correct": "b"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "14. Bani Isroil va sigir voqeasi (1-qism)",
+"q": "Bu qissada qaysi hayvon haqida so'z boradi?",
+"a": "Tuya",
+"b": "Sigir",
+"c": "Echki",
+"correct": "b"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "15. Bani Isroil va sigir voqeasi (2-qism)",
+"q": "Bu qissada qaysi hayvon haqida so'z boradi?",
+"a": "Tuya",
+"b": "Sigir",
+"c": "Echki",
+"correct": "b"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "18. Sulaymon alayhissalom va chumoli (1-qism)",
+"q": "Sulaymon alayhissalom qaysi jonzotning gapini eshitgan?",
+"a": "Fil",
+"b": "Baliq",
+"c": "Chumoli",
+"correct": "c"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "19. Sulaymon alayhissalom va chumoli (2-qism)",
+"q": "Sulaymon alayhissalom qaysi jonzotning gapini eshitgan?",
+"a": "Fil",
+"b": "Baliq",
+"c": "Chumoli",
+"correct": "c"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "20. Sulaymon alayhissalom va Hudhud (1-qism)",
+"q": "Hudhud qanday jonzot?",
+"a": "Baliq",
+"b": "Hasharot",
+"c": "Qush",
+"correct": "c"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "21. Sulaymon alayhissalom va Hudhud (2-qism)",
+"q": "Hudhud qanday jonzot?",
+"a": "Baliq",
+"b": "Hasharot",
+"c": "Qush",
+"correct": "c"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "23. Uzayr alayhissalomning eshagi (1-qism)",
+"q": "Uzayr alayhissalomning qaysi hayvoni bo'lgan?",
+"a": "Eshak",
+"b": "Tuya",
+"c": "Ot",
+"correct": "a"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "24. Uzayr alayhissalomning eshagi (2-qism)",
+"q": "Uzayr alayhissalomning qaysi hayvoni bo'lgan?",
+"a": "Eshak",
+"b": "Tuya",
+"c": "Ot",
+"correct": "a"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "25. As'hobul-Kahfning iti (1-qism)",
+"q": "As'hobul-Kahf bilan g'orda qaysi hayvon bo'lgan?",
+"a": "Qo'y",
+"b": "It",
+"c": "Mushuk",
+"correct": "b"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "26. As'hobul-Kahfning iti (2-qism)",
+"q": "As'hobul-Kahf bilan g'orda qaysi hayvon bo'lgan?",
+"a": "Qo'y",
+"b": "It",
+"c": "Mushuk",
+"correct": "b"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "27. Loydan yaralgan qush",
+"q": "Iso alayhissalom loydan nima yasagan?",
+"a": "Ot",
+"b": "Baliq",
+"c": "Qush",
+"correct": "c"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "28. Abrahaning fili va abobil qushlari (1-qism)",
+"q": "Abraha Ka'baga qaysi hayvon bilan kelgan?",
+"a": "Fil",
+"b": "Ot",
+"c": "Tuya",
+"correct": "a"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "29. Abrahaning fili va abobil qushlari (2-qism)",
+"q": "Abraha Ka'baga qaysi hayvon bilan kelgan?",
+"a": "Fil",
+"b": "Ot",
+"c": "Tuya",
+"correct": "a"
+},
+{
+"series": "Qur'onda nomi kelgan jonzotlar",
+"title": "30. G'or og'zidagi o'rgimchak",
+"q": "G'or og'ziga qaysi jonzot to'r to'qigan?",
+"a": "Asalari",
+"b": "Chumoli",
+"c": "O'rgimchak",
+"correct": "c"
+},
+{
+"series": "Payg'ambarlar qissasi: Ibrohim",
+"title": "13. Zamzam qudug'i",
+"q": "Makkadagi muborak quduq nomi nima?",
+"a": "Zamzam",
+"b": "Kavsar",
+"c": "Salsabil",
+"correct": "a"
+},
+{
+"series": "Payg'ambarlar qissasi: Ibrohim",
+"title": "15. Ka'ba",
+"q": "Ka'bani qaysi payg'ambar o'g'li bilan qurgan?",
+"a": "Ibrohim alayhissalom",
+"b": "Nuh alayhissalom",
+"c": "Muso alayhissalom",
+"correct": "a"
+},
+{
+"series": "Yunus alayhissalom qissasi",
+"title": null,
+"q": "Yunus alayhissalom qaysi jonzotning qornida qolgan?",
+"a": "Kit (katta baliq)",
+"b": "Sher",
+"c": "Tuya",
+"correct": "a"
+},
+{
+"series": "Yunus alayhissalom qissasi",
+"title": null,
+"q": "Yunus alayhissalom qiyinchilikda nima qilgan?",
+"a": "Uxlagan",
+"b": "Yig'lab o'tirgan",
+"c": "Allohga duo qilgan",
+"correct": "c"
+},
+{
+"series": "Payg'ambarlar qissasi: Ibrohim",
+"title": null,
+"q": "Ibrohim alayhissalomni olovga tashlashganda olov qanday bo'ldi?",
+"a": "Juda issiq",
+"b": "O'chmadi",
+"c": "Salqin va salomat",
+"correct": "c"
+},
+{
+"series": "Payg'ambarlar qissasi: Ibrohim",
+"title": null,
+"q": "Ibrohim alayhissalomning o'g'li kim?",
+"a": "Yusuf alayhissalom",
+"b": "Muso alayhissalom",
+"c": "Ismoil alayhissalom",
+"correct": "c"
+},
+{
+"series": "Imom al-Buxoriy",
+"title": null,
+"q": "Imom Buxoriy qaysi shaharda tug'ilgan?",
+"a": "Samarqand",
+"b": "Buxoro",
+"c": "Toshkent",
+"correct": "b"
+},
+{
+"series": "Imom al-Buxoriy",
+"title": null,
+"q": "Imom Buxoriyning mashhur kitobi qanday nomlanadi?",
+"a": "Boburnoma",
+"b": "Qobusnoma",
+"c": "Sahihi Buxoriy",
+"correct": "c"
+},
+{
+"series": "Allohning habibi Muhammad (1-fasl)",
+"title": null,
+"q": "Payg'ambarimiz Muhammad alayhissalom qaysi shaharda tug'ilganlar?",
+"a": "Madina",
+"b": "Makka",
+"c": "Buxoro",
+"correct": "b"
+},
+{
+"series": "Allohning habibi Muhammad (1-fasl)",
+"title": null,
+"q": "Payg'ambarimizning onalari kim?",
+"a": "Omina",
+"b": "Oysha",
+"c": "Xadicha",
+"correct": "a"
+},
+{
+"series": "Allohning habibi Muhammad (2-fasl)",
+"title": null,
+"q": "Payg'ambarimiz Makkadan qaysi shaharga hijrat qilganlar?",
+"a": "Damashq",
+"b": "Bag'dod",
+"c": "Madina",
+"correct": "c"
+},
+{
+"series": "Allohning habibi Muhammad (3-fasl)",
+"title": null,
+"q": "Musulmonlarning muqaddas kitobi qanday nomlanadi?",
+"a": "Qur'on",
+"b": "Zabur",
+"c": "Tavrot",
+"correct": "a"
+},
+{
+"series": "Islom qissalari",
+"title": null,
+"q": "Musulmonlar kuniga necha mahal namoz o'qiydi?",
+"a": "5",
+"b": "3",
+"c": "7",
+"correct": "a"
+},
+{
+"series": "Qur'onda kelgan insonlar qissasi",
+"title": null,
+"q": "Qur'on qaysi tilda nozil bo'lgan?",
+"a": "Fors",
+"b": "Turk",
+"c": "Arab",
+"correct": "c"
+},
+{
+"series": "Tobeinlar hayotidan qissalar",
+"title": null,
+"q": "Salomlashganda nima deymiz?",
+"a": "Assalomu alaykum",
+"b": "Rahmat",
+"c": "Xayr",
+"correct": "a"
+},
+{
+"series": "Qur'ondagi oyat-belgilar qissalari",
+"title": null,
+"q": "Qur'onda nechta sura bor?",
+"a": "114",
+"b": "99",
+"c": "30",
+"correct": "a"
+},
+{
+"series": "Qur'onda zikri kelgan ajoyibotlar",
+"title": null,
+"q": "Nuh alayhissalom to'fondan qutulish uchun nima yasagan?",
+"a": "Ko'prik",
+"b": "Kema",
+"c": "Uy",
+"correct": "b"
+},
+{
+"series": "Qur'onda zikri kelgan ayollar qissasi",
+"title": null,
+"q": "Iso alayhissalomning onalari kim?",
+"a": "Maryam",
+"b": "Fotima",
+"c": "Oysha",
+"correct": "a"
+}
+]

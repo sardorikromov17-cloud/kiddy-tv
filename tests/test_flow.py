@@ -34,6 +34,8 @@ class FakeSession(BaseSession):
         if ret is bool:
             return True
         name = getattr(ret, "__name__", str(ret))
+        if type(method).__name__ == "GetMe":
+            return User(id=42, is_bot=True, first_name="Kiddy", username="kiddytvbot")
         if "Message" in name:
             chat_id = getattr(method, "chat_id", 1) or 1
             return Message(message_id=len(SENT), date=datetime.now(), chat=Chat(id=chat_id, type="private"),
@@ -250,6 +252,21 @@ async def main():
     await feed(msg(ADMIN, f"/del {zid}"))
     await feed(msg(PARENT, "Multfilmlar"))
     check("mos kontent yo'q" in texts()[-1], "o'chirilgan kontent ko'rinmaydi")
+
+    # do'st taklifi botda
+    await feed(msg(PARENT, "/taklif"))
+    code = db.ref_code(PARENT.id)
+    check(f"t.me/kiddytvbot?start={code}" in texts()[-1], "/taklif: shaxsiy havola")
+    ali = await db.active_child(PARENT.id)
+    s0 = ali["stars"]
+    FRIEND = User(id=555, is_bot=False, first_name="Do'st")
+    await feed(msg(FRIEND, f"/start {code}"))
+    check((await db.get_parent(555))["referred_by"] == PARENT.id, "do'st havola bilan keldi")
+    await feed(msg(FRIEND, "Sardor"))
+    await feed(msg(FRIEND, "01.02.2020"))
+    check((await db.active_child(PARENT.id))["stars"] == s0 + 20 and (await db.active_child(555))["stars"] == 10,
+          "do'st bolasini qo'shdi: +20 taklif qilganga, +10 yangi bolaga")
+    check(any("+10 yulduz" in t for t in texts()[-4:]), "yangi oilaga bonus xabari")
 
     await db.close()
     print("\nHamma testlar o'tdi.")

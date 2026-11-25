@@ -28,9 +28,10 @@
   <p class="muted" style="margin:4px 0 14px">Bola videoni ko'rgach shu savollarga javob beradi, har to'g'ri javobga yulduz oladi. {% if it.series %}«Butun serial uchun» belgilansa — savol serialning savoli bo'lmagan barcha qismlarida chiqadi.{% endif %}</p>
   {% for q in quiz %}
   <div class="row" style="justify-content:space-between;border-top:1px solid var(--line);padding:10px 0">
-    <div><b>{{ q.q }}</b>{% if not q.content_id %} <span class="muted">(butun serial)</span>{% endif %}<br>
+    <div><b>{{ q.q }}</b>{% if not q.content_id %} <span class="muted">(butun serial)</span>{% endif %}{% if not q.approved %} <span style="color:var(--orange-d)">· tasdiqlanmagan</span>{% endif %}<br>
       <span class="muted">A) {{ q.a }} · B) {{ q.b }}{% if q.c %} · C) {{ q.c }}{% endif %} — to'g'ri: <b>{{ q.correct|upper }}</b></span></div>
-    <form method="post" action="/quiz/{{ q.id }}/delete"><input type="hidden" name="token" value="{{ csrf }}"><input type="hidden" name="back" value="{{ it.id }}"><button class="btn ghost sm" type="submit">O'chirish</button></form>
+    <div class="row">{% if not q.approved %}<form method="post" action="/quiz/approve"><input type="hidden" name="token" value="{{ csrf }}"><input type="hidden" name="id" value="{{ q.id }}"><button class="btn green sm" type="submit">Tasdiqlash</button></form>{% endif %}
+    <form method="post" action="/quiz/{{ q.id }}/delete"><input type="hidden" name="token" value="{{ csrf }}"><input type="hidden" name="back" value="{{ it.id }}"><button class="btn ghost sm" type="submit">O'chirish</button></form></div>
   </div>
   {% else %}<p class="muted">Hali savol yo'q.</p>{% endfor %}
   <form method="post" action="/content/{{ it.id }}/quiz" class="form" style="margin-top:12px">

@@ -1,5 +1,6 @@
 """SQLite ma'lumotlar bazasi va asosiy mantiq (bot handlerlaridan mustaqil, test qilish oson)."""
 import hashlib
+import os
 import re
 import secrets
 from datetime import date, datetime, time, timedelta
@@ -213,7 +214,10 @@ DEFAULT_SETTINGS = {
     "streak_bonus": "3:5,7:15,14:25,30:50",   # ketma-ket kun:yulduz
     "quiz_stars": "2",
     "gift_days": "30",
-    "notify_new": "1",  # 1 = yosh chegarasi yoqilgan, 0 = hamma kontent hammaga ochiq
+    "notify_new": "1",
+    "ref_bonus": "20",        # do'stini taklif qilganga
+    "ref_new_bonus": "10",    # taklif bilan kelgan yangi bolaga
+    "quiz_drafts": "",  # 1 = yosh chegarasi yoqilgan, 0 = hamma kontent hammaga ochiq
 }
 
 
@@ -275,7 +279,10 @@ class DB:
                     "ALTER TABLE content ADD COLUMN series TEXT",
                     "ALTER TABLE content ADD COLUMN episode INTEGER",
                     "ALTER TABLE views ADD COLUMN pos INTEGER DEFAULT 0",
-                    "ALTER TABLE children ADD COLUMN total_stars INTEGER"]:
+                    "ALTER TABLE children ADD COLUMN total_stars INTEGER",
+                    "ALTER TABLE quiz ADD COLUMN approved INTEGER DEFAULT 1",
+                    "ALTER TABLE parents ADD COLUMN referred_by INTEGER",
+                    "ALTER TABLE parents ADD COLUMN ref_awarded INTEGER DEFAULT 0"]:
             try:
                 await self.conn.execute(sql)
             except Exception:
@@ -905,9 +912,10 @@ class DB:
 
     # --- savollar ---
     async def quiz_for(self, item):
-        rows = await self.all("SELECT * FROM quiz WHERE content_id=? ORDER BY id", item["id"])
+        rows = await self.all("SELECT * FROM quiz WHERE content_id=? AND approved=1 ORDER BY id", item["id"])
         if not rows and item["series"]:
-            rows = await self.all("SELECT * FROM quiz WHERE series=? AND content_id IS NULL ORDER BY id", item["series"])
+            rows = await self.all("SELECT * FROM quiz WHERE series=? AND content_id IS NULL AND approved=1 ORDER BY id",
+                                  item["series"])
         return rows
 
     async def answer_quiz(self, child_id, quiz_id, choice):
@@ -929,3 +937,89 @@ class DB:
         return await self.all(
             "SELECT DISTINCT ch.parent_id, ch.name FROM views v JOIN content c ON c.id=v.content_id "
             "JOIN children ch ON ch.id=v.child_id WHERE c.series=?", series)
+
+    async def import_quiz_drafts(self, path, version="1"):
+        """Tayyorlangan savollar qoralamasi (tasdiqlanmagan holda) — bir marta."""
+        import json as _json
+        if await self.setting("quiz_drafts") == version or not os.path.exists(path):
+            return 0
+        if (await self.one("SELECT COUNT(*) c FROM content"))["c"] == 0:
+            return 0  # kontent hali yuklanmagan — keyingi ishga tushishda
+        with open(path, encoding="utf-8") as f:
+            items = _json.load(f)
+        n = 0
+        for q in items:
+            if q.get("title"):
+                c = await self.one("SELECT id FROM content WHERE series IS ? AND title=? ORDER BY id LIMIT 1",
+                                   q["series"], q["title"])
+                if not c:
+                    continue
+                if await self.one("SELECT 1 FROM quiz WHERE content_id=? AND q=?", c["id"], q["q"]):
+                    continue
+                cid, series = c["id"], None
+            else:
+                if await self.one("SELECT 1 FROM quiz WHERE series=? AND content_id IS NULL AND q=?", q["series"], q["q"]):
+                    continue
+                cid, series = None, q["series"]
+            await self.conn.execute("INSERT INTO quiz (content_id, series, q, a, b, c, correct, approved) "
+                                    "VALUES (?,?,?,?,?,?,?,0)", (cid, series, q["q"], q["a"], q["b"], q["c"], q["correct"]))
+            n += 1
+        await self.conn.commit()
+        await self.set_setting("quiz_drafts", version)
+        return n
+
+    # --- do'st taklifi ---
+    @staticmethod
+    def ref_code(tg_id: int) -> str:
+        n, s = int(tg_id), ""
+        while n:
+            n, r = divmod(n, 36)
+            s = "0123456789abcdefghijklmnopqrstuvwxyz"[r] + s
+        return "r" + (s or "0")
+
+    @staticmethod
+    def ref_decode(code: str):
+        try:
+            return int(code[1:], 36) if code and code.startswith("r") else None
+        except ValueError:
+            return None
+
+    async def register_referral(self, new_tg_id, full_name, code):
+        """Yangi foydalanuvchi taklif havolasi bilan keldi. Faqat haqiqatan yangi bo'lsa yoziladi."""
+        ref = self.ref_decode(code)
+        if await self.get_parent(new_tg_id):
+            return False
+        await self.ensure_parent(new_tg_id, full_name)
+        if ref and ref != new_tg_id and await self.get_parent(ref):
+            await self.set_parent(new_tg_id, referred_by=ref)
+            return True
+        return False
+
+    async def settle_referral(self, parent_id):
+        """Taklif bilan kelgan oila birinchi bolasini qo'shdi -> ikkala tomonga yulduz.
+        -> None yoki {"ref": taklif qilgan tg_id, "ref_child": ism, "bonus": n, "new_bonus": m}"""
+        p = await self.get_parent(parent_id)
+        if not p or not p["referred_by"] or p["ref_awarded"]:
+            return None
+        cur = await self.conn.execute("UPDATE parents SET ref_awarded=1 WHERE tg_id=? AND ref_awarded=0", (parent_id,))
+        await self.conn.commit()
+        if cur.rowcount != 1:
+            return None
+        bonus, new_bonus = int(await self.setting("ref_bonus")), int(await self.setting("ref_new_bonus"))
+        ref_child = await self.active_child(p["referred_by"])
+        if ref_child:
+            await self.add_stars(ref_child["id"], bonus)
+        new_child = await self.active_child(parent_id)
+        if new_child:
+            await self.add_stars(new_child["id"], new_bonus)
+        return {"ref": p["referred_by"], "ref_child": ref_child["name"] if ref_child else "", "bonus": bonus if ref_child else 0,
+                "new_bonus": new_bonus if new_child else 0, "new_name": new_child["name"] if new_child else ""}
+
+    async def ref_stats(self, tg_id):
+        r = await self.one("SELECT COUNT(*) n, SUM(ref_awarded) ok FROM parents WHERE referred_by=?", tg_id)
+        return {"invited": r["n"] or 0, "joined": r["ok"] or 0}
+
+    async def top_referrers(self, limit=15):
+        return await self.all(
+            "SELECT p.tg_id, p.full_name, COUNT(r.tg_id) n, SUM(r.ref_awarded) ok FROM parents r "
+            "JOIN parents p ON p.tg_id=r.referred_by GROUP BY p.tg_id ORDER BY ok DESC, n DESC LIMIT ?", limit)

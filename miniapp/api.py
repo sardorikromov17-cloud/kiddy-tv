@@ -148,7 +148,14 @@ def create_miniapp(db: DB, bot: Bot | None, token: str) -> FastAPI:
         if len(await db.children(p["tg_id"])) >= 8:
             return err("Ko'pi bilan 8 ta bola.")
         cid = await db.add_child(p["tg_id"], name, birth)
-        return {"ok": True, "child": child_out(await db.child(cid))}
+        r = await db.settle_referral(p["tg_id"])
+        if r and bot and r["bonus"]:
+            try:
+                await bot.send_message(r["ref"], f"🎉 Siz taklif qilgan do'stingiz Kiddy TV'ga qo'shildi!\n"
+                                                 f"{r['ref_child']}ga +{r['bonus']} yulduz sovg'a.")
+            except Exception:
+                pass
+        return {"ok": True, "child": child_out(await db.child(cid)), "ref_bonus": r["new_bonus"] if r else 0}
 
     @app.post("/api/child/active")
     async def set_active(request: Request):
