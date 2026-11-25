@@ -55,6 +55,13 @@ async def bootstrap(db):
     """Bulutda birinchi ishga tushishda: admin hisob va kontentni yuklash."""
     import gzip, json
     u, pw = os.getenv("ADMIN_USER", "").strip(), os.getenv("ADMIN_PASS", "").strip()
+    staff_seed = os.getenv("STAFF_SEED", "").strip()  # kompyuterdagi xodimlar (parol xeshlari bilan)
+    if staff_seed and await db.staff_count() == 0:
+        from db import iso, now
+        for r in json.loads(staff_seed):
+            await db.run("INSERT INTO staff (username, full_name, pw_hash, role, created_at) VALUES (?,?,?,?,?)",
+                         r["username"], r.get("full_name", ""), r["pw_hash"], r.get("role", "kassir"), iso(now()))
+        logging.info("Xodimlar ko'chirildi: %s ta", len(json.loads(staff_seed)))
     if u and pw and await db.staff_count() == 0:
         await db.add_staff(u, pw, "admin", "Admin")
         logging.info("Birinchi admin yaratildi: %s", u)
