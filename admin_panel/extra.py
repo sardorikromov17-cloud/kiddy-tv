@@ -274,6 +274,17 @@ p{{font-size:24px}}svg{{width:420px;height:420px}}.big{{font-size:30px;font-weig
             flash(request, "Xarita havolasi https:// bilan boshlansin.", "err")
             return go("/store")
         await db.set_setting("store_map", m)
+        ad = str(form.get("store_ad_text", "")).strip()[:700]
+        if ad:
+            await db.set_setting("store_ad_text", ad)
+        await db.set_setting("store_ad_on", "1" if form.get("store_ad_on") else "0")
+        ph = form.get("store_photo")
+        if ph is not None and getattr(ph, "filename", ""):
+            try:
+                await db.set_setting("store_photo", await save_image(ph, ""))
+            except ValueError as e:
+                flash(request, str(e), "err")
+                return go("/store")
         for key, (lo, hi) in {"checkin_stars": (0, 200), "checkin_days": (1, 60), "remind_days": (1, 30)}.items():
             v = str(form.get(key, "")).strip()
             if v.isdigit() and lo <= int(v) <= hi:

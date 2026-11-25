@@ -17,13 +17,16 @@
 <section class="card">
   <h2>Do'kon ma'lumotlari</h2>
   <p class="muted" style="margin:6px 0 14px">Ilovadagi «Do'konimiz» sahifasida, botdagi /dokon buyrug'ida va eslatmalarda ko'rinadi.</p>
-  <form method="post" class="form">
+  <form method="post" class="form" enctype="multipart/form-data">
     <input type="hidden" name="token" value="{{ csrf }}">
     <label class="f" style="grid-column:span 2">Nomi<input name="store_name" value="{{ st.store_name }}" maxlength="60"></label>
     <label class="f" style="grid-column:span 2">Manzil<input name="store_address" value="{{ st.store_address }}" maxlength="160" placeholder="Qo'qon sh., ... ko'chasi, ..."></label>
     <label class="f">Ish vaqti<input name="store_hours" value="{{ st.store_hours }}" maxlength="80" placeholder="Har kuni 9:00–21:00"></label>
     <label class="f">Telefon<input name="store_phone" value="{{ st.store_phone }}" maxlength="40" placeholder="+998 ..."></label>
     <label class="f" style="grid-column:span 2">Xarita havolasi (Yandex yoki Google xarita)<input name="store_map" type="url" value="{{ st.store_map }}" placeholder="https://yandex.uz/maps/..."></label>
+    <label class="f" style="grid-column:span 2">Reklama matni (/start da rasm bilan chiqadi)<textarea name="store_ad_text" rows="4" maxlength="700">{{ st.store_ad_text }}</textarea></label>
+    <label class="f">Reklama rasmi (yangisini yuklash)<input name="store_photo" type="file" accept="image/*"></label>
+    <label class="row" style="gap:8px"><input type="checkbox" name="store_ad_on" value="1" {{ 'checked' if st.store_ad_on == '1' }} style="width:auto;min-height:0"> /start da do'kon reklamasi ko'rinsin</label>
     <label class="f">QR uchun yulduz<input name="checkin_stars" type="number" min="0" max="200" value="{{ st.checkin_stars }}"></label>
     <label class="f">Necha kunda bir marta<input name="checkin_days" type="number" min="1" max="60" value="{{ st.checkin_days }}"></label>
     <label class="f">Kupon/sovg'a eslatmasi (muddatdan necha kun oldin)<input name="remind_days" type="number" min="1" max="30" value="{{ st.remind_days }}"></label>

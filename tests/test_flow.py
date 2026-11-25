@@ -274,8 +274,16 @@ async def main():
     await feed(msg(PARENT, f"/start qr_{qr}"))
     check(any("+15 yulduz" in t for t in texts()[-3:]) and (await db.active_child(PARENT.id))["stars"] == s1 + 15,
           "bot: do'kon QR skanerlandi, +15 yulduz")
+    n0 = len(SENT)
     await feed(msg(PARENT, "/dokon"))
-    check("Kiddy Toys" in texts()[-1], "/dokon: do'kon ma'lumoti")
+    check(any(type(m).__name__ == "SendPhoto" and "Kiddy Toys" in (m.caption or "") for m in SENT[n0:]),
+          "/dokon: do'kon reklamasi rasm bilan")
+    n0 = len(SENT)
+    await feed(msg(PARENT, "/start"))
+    kinds = [type(m).__name__ for m in SENT[n0:]]
+    print("   ", kinds)
+    check(kinds.count("SendPhoto") == 2 and "QR" in (SENT[n0:][1].caption or ""),
+          "/start: salomlashuv + do'kon reklamasi")
 
     await db.close()
     print("\nHamma testlar o'tdi.")

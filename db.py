@@ -235,7 +235,10 @@ DEFAULT_SETTINGS = {
     "store_hours": "",
     "store_phone": "",
     "store_map": "",
-    "remind_days": "3",  # 1 = yosh chegarasi yoqilgan, 0 = hamma kontent hammaga ochiq
+    "remind_days": "3",
+    "store_ad_on": "1",           # /start da do'kon reklamasi
+    "store_ad_text": "🧸 Kiddy Toys — Qo'qondagi eng katta bolalar o'yinchoqlari do'koni!\n\nMinglab o'yinchoqlar, konstruktorlar, qo'g'irchoqlar va sovg'alar. Kiddy TV'da yig'ilgan yulduzlarni do'konimizda chegirma va sovg'aga almashtiring!",
+    "store_photo": "",            # panelda yuklangan rasm (telegram file_id); bo'sh bo'lsa assets/store.jpg  # 1 = yosh chegarasi yoqilgan, 0 = hamma kontent hammaga ochiq
 }
 
 

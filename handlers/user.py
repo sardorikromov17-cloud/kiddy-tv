@@ -30,6 +30,45 @@ WELCOME = ("Assalomu alaykum! <b>Kiddy TV</b>ga xush kelibsiz.\n\n"
 
 
 _logo_file_id = None
+STORE_IMG = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "store.jpg")
+
+
+async def store_ad_caption(db: DB) -> str:
+    i = await db.store_info()
+    lines = [await db.setting("store_ad_text")]
+    if i["address"]:
+        lines.append(f"📍 {i['address']}")
+    if i["hours"]:
+        lines.append(f"🕘 {i['hours']}")
+    if i["phone"]:
+        lines.append(f"📞 {i['phone']}")
+    lines.append(f"\n⭐ Do'kondagi QR kodni skanerlang — har safar +{await db.setting('checkin_stars')} yulduz!")
+    return "\n".join(x for x in lines if x)[:1000]
+
+
+async def send_store_ad(message: Message, db: DB, force=False):
+    """Do'kon reklamasi: rasm + manzil + xarita tugmasi. Internet sekin bo'lsa ham matn albatta boradi."""
+    if not force and await db.setting("store_ad_on") != "1":
+        return
+    from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+    caption = await store_ad_caption(db)
+    mp = await db.setting("store_map")
+    kb_ = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="📍 Xaritada ochish", url=mp)]]) \
+        if mp.startswith("https://") else None
+    photo = await db.setting("store_photo")
+    try:
+        if photo:
+            await message.answer_photo(photo, caption=caption, reply_markup=kb_, request_timeout=25)
+            return
+        if os.path.exists(STORE_IMG):
+            m = await message.answer_photo(FSInputFile(STORE_IMG), caption=caption, reply_markup=kb_,
+                                           request_timeout=25)
+            if m.photo:  # keyingi safar qayta yuklamaymiz
+                await db.set_setting("store_photo", m.photo[-1].file_id)
+            return
+    except Exception:
+        pass
+    await message.answer(caption, reply_markup=kb_, disable_web_page_preview=True)
 
 
 async def send_welcome(message: Message):
@@ -97,18 +136,7 @@ async def invite_text(bot, db: DB, tg_id: int):
 
 @router.message(Command("dokon"))
 async def store_cmd(message: Message, db: DB):
-    i = await db.store_info()
-    lines = [f"🏬 <b>{i['name']}</b>"]
-    if i["address"]:
-        lines.append(f"📍 {i['address']}")
-    if i["hours"]:
-        lines.append(f"🕘 {i['hours']}")
-    if i["phone"]:
-        lines.append(f"📞 {i['phone']}")
-    if i["map"]:
-        lines.append(f"🗺 Xarita: {i['map']}")
-    lines.append("\nDo'kondagi QR kodni skanerlang — har hafta yulduz sovg'a!")
-    await message.answer("\n".join(lines), disable_web_page_preview=True)
+    await send_store_ad(message, db, force=True)
 
 
 @router.message(Command("taklif"))
@@ -138,6 +166,7 @@ async def start(message: Message, state: FSMContext, db: DB, command: CommandObj
         await db.register_referral(message.from_user.id, message.from_user.full_name, args)
     await db.ensure_parent(message.from_user.id, message.from_user.full_name)
     await send_welcome(message)
+    await send_store_ad(message, db)
     if await offer_app(message, db):
         return
     if not await db.children(message.from_user.id):
