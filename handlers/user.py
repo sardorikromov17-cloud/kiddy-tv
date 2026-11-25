@@ -95,6 +95,22 @@ async def invite_text(bot, db: DB, tg_id: int):
                   f"Sizning havolangiz:\n{link}\n\nTaklif qilganlar: {st['joined']} ta")
 
 
+@router.message(Command("dokon"))
+async def store_cmd(message: Message, db: DB):
+    i = await db.store_info()
+    lines = [f"🏬 <b>{i['name']}</b>"]
+    if i["address"]:
+        lines.append(f"📍 {i['address']}")
+    if i["hours"]:
+        lines.append(f"🕘 {i['hours']}")
+    if i["phone"]:
+        lines.append(f"📞 {i['phone']}")
+    if i["map"]:
+        lines.append(f"🗺 Xarita: {i['map']}")
+    lines.append("\nDo'kondagi QR kodni skanerlang — har hafta yulduz sovg'a!")
+    await message.answer("\n".join(lines), disable_web_page_preview=True)
+
+
 @router.message(Command("taklif"))
 async def invite_cmd(message: Message, db: DB, bot: Bot):
     await db.ensure_parent(message.from_user.id, message.from_user.full_name)
@@ -106,6 +122,18 @@ async def invite_cmd(message: Message, db: DB, bot: Bot):
 async def start(message: Message, state: FSMContext, db: DB, command: CommandObject = None):
     await state.clear()
     args = (command.args or "") if command else ""
+    if args.startswith("qr_"):  # do'kondagi QR kod skanerlandi
+        await db.ensure_parent(message.from_user.id, message.from_user.full_name)
+        child = await db.active_child(message.from_user.id)
+        if not child:
+            await message.answer("Kiddy Toys'ga xush kelibsiz! Yulduz olish uchun avval farzandingizni qo'shing.")
+            await ask_child_name(message, state, first=True)
+            return
+        stars, text = await db.checkin(message.from_user.id, child["id"], args)
+        child = await db.child(child["id"])
+        await message.answer(("⭐ " if stars else "") + text + (f"\nJami: {child['stars']} yulduz." if stars else ""))
+        await offer_app(message, db)
+        return
     if args.startswith("r"):
         await db.register_referral(message.from_user.id, message.from_user.full_name, args)
     await db.ensure_parent(message.from_user.id, message.from_user.full_name)

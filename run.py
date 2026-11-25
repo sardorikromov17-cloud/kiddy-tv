@@ -128,7 +128,8 @@ async def main():
         try:
             await bot.set_my_commands([BotCommand(command="start", description="Bosh menyu"),
                                        BotCommand(command="app", description="Kiddy TV ilovasini ochish"),
-                                       BotCommand(command="taklif", description="Do'stni taklif qilish — yulduz olish")])
+                                       BotCommand(command="taklif", description="Do'stni taklif qilish — yulduz olish"),
+                                       BotCommand(command="dokon", description="Kiddy Toys do'koni: manzil va ish vaqti")])
         except Exception as e:  # menyu muhim emas, bot ishlayversin
             logging.warning("Menyu buyruqlari o'rnatilmadi: %s", e)
         tasks.append(asyncio.create_task(poll_forever(dp, bot)))

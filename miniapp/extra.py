@@ -190,6 +190,27 @@ def register(app, db, bot, auth, err, body, item_out, youtube_id):
         return {"ok": True, "link": link, **st, "bonus": int(await db.setting("ref_bonus")),
                 "new_bonus": int(await db.setting("ref_new_bonus"))}
 
+    # ---------- do'kon: QR tashrif va ma'lumot ----------
+    @app.post("/api/checkin")
+    async def checkin(request: Request):
+        p, c, _ = await child_ctx(request)
+        if not p:
+            return err("auth", 401)
+        d = await body(request)
+        raw = str(d.get("code", ""))[:300]
+        m = __import__("re").search(r"qr_([A-Za-z0-9]+)", raw)
+        stars, text = await db.checkin(p["tg_id"], c["id"] if c else None, m.group(0) if m else raw)
+        return {"ok": True, "stars_added": stars, "text": text,
+                "stars": (await db.child(c["id"]))["stars"] if c else 0}
+
+    @app.get("/api/store")
+    async def store(request: Request):
+        p, _, _ = await child_ctx(request)
+        if not p:
+            return err("auth", 401)
+        return {"ok": True, **await db.store_info(), "checkin_stars": int(await db.setting("checkin_stars")),
+                "checkin_days": int(await db.setting("checkin_days"))}
+
     # ---------- savollar ----------
     @app.get("/api/quiz")
     async def quiz(request: Request, id: int = 0):

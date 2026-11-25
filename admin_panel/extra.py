@@ -1,5 +1,6 @@
 """Admin panel: sovg'alar katalogi, kassada sovg'a kodi, banner, video savollari, yangi qism xabari."""
 import asyncio
+import html as _h
 import logging
 import os
 import re
@@ -216,6 +217,119 @@ def register(app, db, bot, page, guard, flash, go):
         if "/quiz" in ref and not back:
             return go(ref[ref.index("/quiz"):])
         return go(f"/content/{back}#quiz" if back else "/quiz")
+
+    # ---------- do'kon: ma'lumot va QR ----------
+    async def qr_link():
+        code = await db.store_qr()
+        user = "kiddytvbot"
+        if bot:
+            try:
+                user = (await bot.me()).username
+            except Exception:
+                pass
+        return f"https://t.me/{user}?start=qr_{code}"
+
+    def qr_svg(text: str) -> str:
+        import io
+        import qrcode
+        import qrcode.image.svg
+        img = qrcode.make(text, image_factory=qrcode.image.svg.SvgPathImage, box_size=20, border=2)
+        buf = io.BytesIO()
+        img.save(buf)
+        return buf.getvalue().decode().split("?>", 1)[-1]
+
+    @app.get("/store", response_class=HTMLResponse)
+    async def store_page(request: Request):
+        if r := await guard(request, "store"):
+            return r
+        link = await qr_link()
+        return await page(request, "store.html", "store", st=await db.settings(), link=link, svg=qr_svg(link),
+                          stats=await db.checkin_stats())
+
+    @app.get("/store/print", response_class=HTMLResponse)
+    async def store_print(request: Request):
+        if r := await guard(request, "store"):
+            return r
+        link = await qr_link()
+        st = await db.settings()
+        return HTMLResponse(f"""<!doctype html><html lang="uz"><head><meta charset="utf-8"><title>Kiddy TV QR</title>
+<style>body{{font-family:system-ui,sans-serif;text-align:center;color:#1F2A6B;margin:30px}}h1{{font-size:44px;margin:0}}
+p{{font-size:24px}}svg{{width:420px;height:420px}}.big{{font-size:30px;font-weight:800;color:#E0312B}}
+@media print{{button{{display:none}}}}</style></head><body>
+<img src="/logo.png" width="110" alt=""><h1>Kiddy TV</h1>
+<p class="big">Skanerlang — har hafta +{st['checkin_stars']} yulduz!</p>{qr_svg(link)}
+<p>Telefon kamerasini QR kodga qarating yoki Kiddy TV ilovasida «Do'kon QR» tugmasini bosing.</p>
+<p><b>{_h.escape(st['store_name'])}</b></p><button onclick="print()" style="font-size:20px;padding:12px 28px">Chop etish</button>
+</body></html>""")
+
+    @app.post("/store")
+    async def store_save(request: Request):
+        form = await request.form()
+        if r := await guard(request, "store", form.get("token", "")):
+            return r
+        for k, lim in (("store_name", 60), ("store_address", 160), ("store_hours", 80), ("store_phone", 40)):
+            await db.set_setting(k, str(form.get(k, "")).strip()[:lim])
+        m = str(form.get("store_map", "")).strip()
+        if m and not URL_RE.match(m):
+            flash(request, "Xarita havolasi https:// bilan boshlansin.", "err")
+            return go("/store")
+        await db.set_setting("store_map", m)
+        for key, (lo, hi) in {"checkin_stars": (0, 200), "checkin_days": (1, 60), "remind_days": (1, 30)}.items():
+            v = str(form.get(key, "")).strip()
+            if v.isdigit() and lo <= int(v) <= hi:
+                await db.set_setting(key, int(v))
+        flash(request, "Saqlandi.")
+        return go("/store")
+
+    @app.post("/store/regenerate")
+    async def store_regen(request: Request, token: str = Form("")):
+        if r := await guard(request, "store", token):
+            return r
+        await db.store_qr(regenerate=True)
+        flash(request, "Yangi QR yaratildi. Eskisi endi ishlamaydi — yangisini chop etib, almashtiring.")
+        return go("/store")
+
+    # ---------- tanlov ko'rgazmasi ----------
+    @app.post("/contest/{eid}/exhibit")
+    async def contest_exhibit(request: Request, eid: int, token: str = Form("")):
+        if r := await guard(request, "contest", token):
+            return r
+        e = await db.one("SELECT * FROM contest WHERE id=?", eid)
+        if not e:
+            return go("/contest")
+        await db.run("UPDATE contest SET exhibit=1 WHERE id=?", eid)
+        c = await db.child(e["child_id"]) if e["child_id"] else None
+        info = await db.store_info()
+        where = f"\n📍 {info['address']}" if info["address"] else ""
+        if bot and not e["exhibit"]:
+            try:
+                await bot.send_message(e["parent_id"], f"🖼 <b>{c['name'] if c else 'Farzandingiz'}ning rasmi Kiddy Toys "
+                                                       f"do'konida ko'rgazmaga qo'yildi!</b>\n\nKelib, birga ko'ring — "
+                                                       f"rasmingiz devorimizda!{where}")
+            except Exception:
+                pass
+        flash(request, "Ko'rgazmaga qo'shildi, oilaga xabar yuborildi.")
+        return go("/contest")
+
+    @app.get("/contest/gallery", response_class=HTMLResponse)
+    async def contest_gallery(request: Request):
+        if r := await guard(request, "contest"):
+            return r
+        from db import age_of
+        st = await db.settings()
+        cards = "".join(
+            f"<figure><img src='/tg-file/{_h.escape(e['file_id'])}' alt=''><figcaption><b>{_h.escape(e['child_name'] or 'Bola')}</b>"
+            f"{', ' + str(age_of(e['birth_date'], now().date())) + ' yosh' if e['birth_date'] else ''}"
+            f"{' · 🏆 G‘olib' if e['winner'] else ''}</figcaption></figure>" for e in await db.exhibit_entries())
+        return HTMLResponse(f"""<!doctype html><html lang="uz"><head><meta charset="utf-8"><title>Ko'rgazma</title>
+<style>body{{font-family:system-ui,sans-serif;color:#1F2A6B;margin:24px}}h1{{text-align:center;font-size:40px;margin:0}}
+.sub{{text-align:center;font-size:20px;margin:6px 0 24px}}.g{{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}}
+figure{{margin:0;border:6px solid #F28C1E;border-radius:22px;padding:10px;break-inside:avoid}}
+img{{width:100%;aspect-ratio:1;object-fit:contain;border-radius:12px;background:#fff}}
+figcaption{{text-align:center;font-size:20px;margin-top:8px}}@media print{{button{{display:none}}}}</style></head><body>
+<h1>Kiddy TV ijod ko'rgazmasi</h1><p class="sub">Mavzu: «{_h.escape(st['contest_title'])}»</p>
+<div class="g">{cards or "<p>Hali ko'rgazmaga rasm qo'yilmagan.</p>"}</div>
+<p style="text-align:center"><button onclick="print()" style="font-size:20px;padding:12px 28px">Chop etish</button></p></body></html>""")
 
     # ---------- yangi qism xabari ----------
     async def notify_new_episodes(series: str, added: int):

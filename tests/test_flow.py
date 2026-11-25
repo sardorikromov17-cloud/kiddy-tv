@@ -268,6 +268,15 @@ async def main():
           "do'st bolasini qo'shdi: +20 taklif qilganga, +10 yangi bolaga")
     check(any("+10 yulduz" in t for t in texts()[-4:]), "yangi oilaga bonus xabari")
 
+    # do'kondagi QR botda
+    qr = await db.store_qr()
+    s1 = (await db.active_child(PARENT.id))["stars"]
+    await feed(msg(PARENT, f"/start qr_{qr}"))
+    check(any("+15 yulduz" in t for t in texts()[-3:]) and (await db.active_child(PARENT.id))["stars"] == s1 + 15,
+          "bot: do'kon QR skanerlandi, +15 yulduz")
+    await feed(msg(PARENT, "/dokon"))
+    check("Kiddy Toys" in texts()[-1], "/dokon: do'kon ma'lumoti")
+
     await db.close()
     print("\nHamma testlar o'tdi.")
     os._exit(0)

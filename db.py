@@ -174,6 +174,13 @@ CREATE TABLE IF NOT EXISTS notified (
     content_id INTEGER NOT NULL,
     PRIMARY KEY (parent_id, content_id)
 );
+CREATE TABLE IF NOT EXISTS checkins (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    child_id INTEGER NOT NULL,
+    parent_id INTEGER NOT NULL,
+    stars INTEGER NOT NULL,
+    created_at TEXT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS report_sent (
     parent_id INTEGER NOT NULL,
     week TEXT NOT NULL,
@@ -219,7 +226,16 @@ DEFAULT_SETTINGS = {
     "show_recent": "1",       # ilova bosh ekranida «Oxirgi ko'rganlaring» qatori
     "ref_bonus": "20",        # do'stini taklif qilganga
     "ref_new_bonus": "10",    # taklif bilan kelgan yangi bolaga
-    "quiz_drafts": "",  # 1 = yosh chegarasi yoqilgan, 0 = hamma kontent hammaga ochiq
+    "quiz_drafts": "",
+    "store_qr": "",               # do'kondagi QR kod kaliti (birinchi marta o'zi yaratiladi)
+    "checkin_stars": "15",
+    "checkin_days": "7",
+    "store_name": "Kiddy Toys Kokand",
+    "store_address": "",
+    "store_hours": "",
+    "store_phone": "",
+    "store_map": "",
+    "remind_days": "3",  # 1 = yosh chegarasi yoqilgan, 0 = hamma kontent hammaga ochiq
 }
 
 
@@ -284,7 +300,10 @@ class DB:
                     "ALTER TABLE children ADD COLUMN total_stars INTEGER",
                     "ALTER TABLE quiz ADD COLUMN approved INTEGER DEFAULT 1",
                     "ALTER TABLE parents ADD COLUMN referred_by INTEGER",
-                    "ALTER TABLE parents ADD COLUMN ref_awarded INTEGER DEFAULT 0"]:
+                    "ALTER TABLE parents ADD COLUMN ref_awarded INTEGER DEFAULT 0",
+                    "ALTER TABLE contest ADD COLUMN exhibit INTEGER DEFAULT 0",
+                    "ALTER TABLE coupons ADD COLUMN reminded INTEGER DEFAULT 0",
+                    "ALTER TABLE gift_orders ADD COLUMN reminded INTEGER DEFAULT 0"]:
             try:
                 await self.conn.execute(sql)
             except Exception:
@@ -1025,3 +1044,66 @@ class DB:
         return await self.all(
             "SELECT p.tg_id, p.full_name, COUNT(r.tg_id) n, SUM(r.ref_awarded) ok FROM parents r "
             "JOIN parents p ON p.tg_id=r.referred_by GROUP BY p.tg_id ORDER BY ok DESC, n DESC LIMIT ?", limit)
+
+    # --- do'kondagi QR (tashrif) ---
+    async def store_qr(self, regenerate=False):
+        code = await self.setting("store_qr")
+        if not code or regenerate:
+            code = secrets.token_urlsafe(9).replace("-", "x").replace("_", "y")
+            await self.set_setting("store_qr", code)
+        return code
+
+    async def checkin(self, parent_id, child_id, code, at: datetime | None = None):
+        """Do'kondagi QR skanerlandi. -> (yulduz, xabar)"""
+        code = (code or "").strip()
+        if code.startswith("qr_"):
+            code = code[3:]
+        if not code or code != await self.store_qr():
+            return 0, "Bu Kiddy Toys do'konining QR kodi emas."
+        c = await self.child(child_id) if child_id else None
+        if not c or c["parent_id"] != parent_id:
+            return 0, "Avval bolani qo'shing."
+        at = at or now()
+        days = int(await self.setting("checkin_days"))
+        last = await self.one("SELECT created_at FROM checkins WHERE child_id=? ORDER BY id DESC LIMIT 1", child_id)
+        if last:
+            nxt = datetime.fromisoformat(last["created_at"]) + timedelta(days=days)
+            if at < nxt:
+                left = (nxt.date() - at.date()).days
+                return 0, (f"Bu hafta yulduz olingan. Keyingisi {left} kundan keyin — yana do'konga keling!"
+                           if left > 0 else "Bugun yulduz olingan. Ertaga yana keling!")
+        stars = int(await self.setting("checkin_stars"))
+        await self.run("INSERT INTO checkins (child_id, parent_id, stars, created_at) VALUES (?,?,?,?)",
+                       child_id, parent_id, stars, iso(at))
+        await self.add_stars(child_id, stars)
+        return stars, f"Kiddy Toys'ga xush kelibsiz! {c['name']}ga +{stars} yulduz!"
+
+    async def checkin_stats(self):
+        n = now()
+        today = iso(datetime.combine(n.date(), time()))
+        week = iso(datetime.combine(n.date() - timedelta(days=6), time()))
+        r = await self.one("SELECT (SELECT COUNT(*) FROM checkins WHERE created_at>=?) t, "
+                           "(SELECT COUNT(*) FROM checkins WHERE created_at>=?) w, (SELECT COUNT(*) FROM checkins) a",
+                           today, week)
+        return {"today": r["t"], "week": r["w"], "all": r["a"]}
+
+    async def store_info(self):
+        st = await self.settings()
+        return {k: st[f"store_{k}"] for k in ("name", "address", "hours", "phone", "map")}
+
+    # --- kupon va sovg'a kodi eslatmasi ---
+    async def due_reminders(self, at: datetime | None = None):
+        at = at or now()
+        soon = iso(at + timedelta(days=int(await self.setting("remind_days"))))
+        cps = await self.all("SELECT cp.*, ch.name AS child_name FROM coupons cp LEFT JOIN children ch ON "
+                             "ch.id=cp.child_id WHERE cp.used_at IS NULL AND COALESCE(cp.reminded,0)=0 "
+                             "AND cp.expires_at>? AND cp.expires_at<=?", iso(at), soon)
+        gos = await self.all("SELECT o.*, g.title, ch.name AS child_name FROM gift_orders o JOIN gifts g ON "
+                             "g.id=o.gift_id LEFT JOIN children ch ON ch.id=o.child_id WHERE o.issued_at IS NULL "
+                             "AND COALESCE(o.reminded,0)=0 AND o.expires_at>? AND o.expires_at<=?", iso(at), soon)
+        return cps, gos
+
+    # --- tanlov ko'rgazmasi ---
+    async def exhibit_entries(self):
+        return await self.all("SELECT e.*, ch.name AS child_name, ch.birth_date FROM contest e LEFT JOIN children ch "
+                              "ON ch.id=e.child_id WHERE e.exhibit=1 OR e.winner=1 ORDER BY e.winner DESC, e.id DESC")

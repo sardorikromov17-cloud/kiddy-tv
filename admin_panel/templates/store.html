@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head"><h1>Do'kon va QR</h1><span class="sp"></span><a class="btn" href="/store/print" target="_blank">QR ni chop etish</a></div>
+<div class="grid">
+  <div class="stat t-green"><b>{{ stats.today }}</b><span>bugun skanerladi</span></div>
+  <div class="stat t-blue"><b>{{ stats.week }}</b><span>7 kunda</span></div>
+  <div class="stat t-orange"><b>{{ stats.all }}</b><span>jami tashrif</span></div>
+</div>
+<div style="display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));align-items:start">
+<section class="card" style="text-align:center">
+  <h2>Do'kondagi QR kod</h2>
+  <p class="muted" style="margin:6px 0 10px">Kassa yoniga osib qo'ying. Ota-ona telefon kamerasi yoki ilovadagi «Do'kon QR» tugmasi bilan skanerlasa, bolaga <b>+{{ st.checkin_stars }} yulduz</b> ({{ st.checkin_days }} kunda bir marta).</p>
+  <div style="max-width:280px;margin:0 auto">{{ svg|safe }}</div>
+  <p class="muted" style="font-size:12px;word-break:break-all">{{ link }}</p>
+  <form method="post" action="/store/regenerate" onsubmit="return confirm('Eski QR ishlamay qoladi. Davom etasizmi?')"><input type="hidden" name="token" value="{{ csrf }}"><button class="btn ghost sm" type="submit">Yangi QR yaratish (eski rasmi tarqalib ketsa)</button></form>
+</section>
+<section class="card">
+  <h2>Do'kon ma'lumotlari</h2>
+  <p class="muted" style="margin:6px 0 14px">Ilovadagi «Do'konimiz» sahifasida, botdagi /dokon buyrug'ida va eslatmalarda ko'rinadi.</p>
+  <form method="post" class="form">
+    <input type="hidden" name="token" value="{{ csrf }}">
+    <label class="f" style="grid-column:span 2">Nomi<input name="store_name" value="{{ st.store_name }}" maxlength="60"></label>
+    <label class="f" style="grid-column:span 2">Manzil<input name="store_address" value="{{ st.store_address }}" maxlength="160" placeholder="Qo'qon sh., ... ko'chasi, ..."></label>
+    <label class="f">Ish vaqti<input name="store_hours" value="{{ st.store_hours }}" maxlength="80" placeholder="Har kuni 9:00–21:00"></label>
+    <label class="f">Telefon<input name="store_phone" value="{{ st.store_phone }}" maxlength="40" placeholder="+998 ..."></label>
+    <label class="f" style="grid-column:span 2">Xarita havolasi (Yandex yoki Google xarita)<input name="store_map" type="url" value="{{ st.store_map }}" placeholder="https://yandex.uz/maps/..."></label>
+    <label class="f">QR uchun yulduz<input name="checkin_stars" type="number" min="0" max="200" value="{{ st.checkin_stars }}"></label>
+    <label class="f">Necha kunda bir marta<input name="checkin_days" type="number" min="1" max="60" value="{{ st.checkin_days }}"></label>
+    <label class="f">Kupon/sovg'a eslatmasi (muddatdan necha kun oldin)<input name="remind_days" type="number" min="1" max="30" value="{{ st.remind_days }}"></label>
+    <button class="btn" type="submit">Saqlash</button>
+  </form>
+</section>
+</div>
+{% endblock %}

@@ -266,6 +266,66 @@ async def main():
     o0 = (await mini.post("/api/open", headers=H, json={"id": eps[0]})).json()
     check(o0["quiz"] == 2, "1-qism: serial savollari (2 ta tasdiqlangan)", o0["quiz"])
 
+    # --- do'kon QR tashrifi ---
+    r = await panel.get("/store")
+    check("<svg" in r.text and "start=qr_" in r.text, "panel: do'kon QR sahifasi (SVG)")
+    qr = await db.store_qr()
+    r = await panel.post("/store", data={"token": token(r.text), "store_name": "Kiddy Toys Kokand",
+                                         "store_address": "Qo'qon, Turkiston ko'chasi 1", "store_hours": "9:00–21:00",
+                                         "store_phone": "+998 90 000 00 00", "store_map": "https://yandex.uz/maps/x",
+                                         "checkin_stars": "15", "checkin_days": "7", "remind_days": "3"})
+    check("Saqlandi" in _html.unescape(r.text), "do'kon ma'lumotlari saqlandi")
+    st = (await mini.get("/api/store", headers=H)).json()
+    check(st["address"].startswith("Qo'qon") and st["map"] and st["checkin_stars"] == 15, "ilovada do'kon ma'lumoti")
+    s0 = (await db.child(kid))["stars"]
+    c1 = (await mini.post("/api/checkin", headers=H, json={"code": "https://t.me/kiddytvbot?start=qr_XXXX"})).json()
+    check(c1["stars_added"] == 0 and "emas" in c1["text"], "boshqa QR rad etildi")
+    c1 = (await mini.post("/api/checkin", headers=H, json={"code": f"https://t.me/kiddytvbot?start=qr_{qr}"})).json()
+    check(c1["stars_added"] == 15 and c1["stars"] == s0 + 15, "do'kon QR: +15 yulduz", c1)
+    c2 = (await mini.post("/api/checkin", headers=H, json={"code": f"qr_{qr}"})).json()
+    check(c2["stars_added"] == 0 and "kundan keyin" in c2["text"], "bir haftada ikkinchi marta berilmaydi", c2)
+    ok, _ = await db.checkin(111, kid, f"qr_{qr}", at=dbm.now() + timedelta(days=7, minutes=1))
+    check(ok == 15, "7 kundan keyin yana beriladi")
+    r = await panel.get("/store")
+    r = await panel.post("/store/regenerate", data={"token": token(r.text)})
+    check(await db.store_qr() != qr, "QR yangilandi")
+    ok, _ = await db.checkin(111, kid, f"qr_{qr}", at=dbm.now() + timedelta(days=30))
+    check(ok == 0, "eski QR endi ishlamaydi")
+    r = await panel.get("/store/print")
+    check("<svg" in r.text and "Chop etish" in r.text, "QR chop etish sahifasi")
+
+    # --- ko'rgazma ---
+    eid = await db.run("INSERT INTO contest (parent_id, child_id, file_id, created_at) VALUES (111,?,?,?)",
+                       kid, "FILE1", dbm.iso(dbm.now()))
+    bot.sent.clear()
+    r = await panel.get("/contest")
+    check("Ko'rgazmaga qo'yish" in _html.unescape(r.text), "tanlovda ko'rgazma tugmasi")
+    r = await panel.post(f"/contest/{eid}/exhibit", data={"token": token(r.text)})
+    check(any("ko'rgazmaga" in t for _, t in bot.sent) and "Ko'rgazmada" in _html.unescape(r.text),
+          "ko'rgazmaga qo'yildi, oilaga xabar", bot.sent)
+    r = await panel.get("/contest/gallery")
+    check("FILE1" in r.text and "Ali" in r.text, "ko'rgazma chop etish sahifasi")
+
+    # --- kupon eslatmasi ---
+    import scheduler
+    code_c = await db.make_coupon(111, kid, 10, 0, "manual")
+    await db.run("UPDATE coupons SET expires_at=? WHERE code=?", dbm.iso(dbm.now() + timedelta(days=2)), code_c)
+    gcode = (await db.one("SELECT code FROM gift_orders LIMIT 1"))["code"]
+    await db.run("UPDATE gift_orders SET issued_at=NULL, expires_at=? WHERE code=?",
+                 dbm.iso(dbm.now() + timedelta(days=1)), gcode)
+    bot.sent.clear()
+
+    class Clock:
+        pass
+    real_now = scheduler.now
+    scheduler.now = lambda: real_now().replace(hour=11)
+    await scheduler.reminders(bot, db)
+    await scheduler.reminders(bot, db)
+    scheduler.now = real_now
+    msgs = [t for _, t in bot.sent]
+    check(sum(code_c in t for t in msgs) == 1 and sum(gcode in t for t in msgs) == 1 and "Turkiston" in msgs[0],
+          "kupon va sovg'a eslatmasi bir martadan, manzil bilan", msgs)
+
     await db.close()
     print("\nYangi imkoniyatlar testlari o'tdi.")
     os._exit(0)
