@@ -78,6 +78,11 @@ input:focus{outline:none;border-color:var(--blue)}
 <div class="app" id="app"><div class="empty">Yuklanmoqda...</div></div>
 <div class="toast" id="toast" role="status"></div>
 <script>
+// xatolarni serverga yuborish (telefondagi muammolarni topish uchun)
+function _rep(kind, msg){ try{ fetch("/api/clientlog",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({k:kind,m:String(msg).slice(0,500),ua:navigator.userAgent,v:(window.Telegram&&Telegram.WebApp&&Telegram.WebApp.version)||""})}); }catch(e){} }
+window.addEventListener("error", e=>_rep("error", (e.message||"")+" @"+(e.lineno||"")+":"+(e.colno||"")));
+window.addEventListener("unhandledrejection", e=>_rep("promise", e.reason&&e.reason.stack||e.reason));
+document.addEventListener("click", e=>{ const b=e.target.closest&&e.target.closest("button"); _rep("tap", (b?("btn:"+(b.textContent||"").trim().slice(0,20)):("el:"+e.target.tagName))); }, true);
 const tg = window.Telegram ? Telegram.WebApp : null;
 const INIT = tg ? tg.initData : "";
 let ME = null, PKEY = "", VIEW = ["home"];

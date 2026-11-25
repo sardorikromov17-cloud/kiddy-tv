@@ -252,6 +252,16 @@ def create_miniapp(db: DB, bot: Bot | None, token: str) -> FastAPI:
             logging.warning("Media yuborilmadi: %s", e)
             return Response("Fayl 20 MB dan katta bo'lsa Telegram uni bermaydi", status_code=502)
 
+    @app.post("/api/clientlog")
+    async def clientlog(request: Request):
+        try:
+            d = await request.json()
+            logging.warning("MINIAPP %s: %s | v=%s | %s", str(d.get("k"))[:10], str(d.get("m"))[:500],
+                            str(d.get("v"))[:10], str(d.get("ua"))[:160])
+        except Exception:
+            pass
+        return {"ok": True}
+
     @app.post("/api/like")
     async def like(request: Request):
         user, p = await auth(request)
