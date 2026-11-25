@@ -1,0 +1,10 @@
+{% extends "_auth.html" %}
+{% block title %}Birinchi sozlash — Kiddy TV{% endblock %}
+{% block heading %}Birinchi admin{% endblock %}
+{% block fields %}
+<p class="muted" style="margin:0;text-align:center">Panelga birinchi kirish. O'zingiz uchun admin hisob yarating.</p>
+<label class="f">Ismingiz<input name="full_name" placeholder="Ikromov"></label>
+<label class="f">Login (lotin harf)<input name="username" required pattern="[a-zA-Z0-9_.]{3,30}" autocomplete="username"></label>
+<label class="f">Parol (kamida 6 belgi)<input name="password" type="password" minlength="6" required autocomplete="new-password"></label>
+<button class="btn" type="submit">Yaratish</button>
+{% endblock %}

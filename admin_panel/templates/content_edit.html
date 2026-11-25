@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head"><a href="/content" class="btn ghost sm">« Orqaga</a><h1>{{ it.title }}</h1></div>
+<div class="grid">
+  <div class="stat t-red"><b>{{ it.views }}</b><span>ko'rish</span></div>
+  <div class="stat t-green"><b>{{ it.likes }}</b><span>yoqdi</span></div>
+  <div class="stat t-blue"><b>{{ KINDS[it.kind] }}</b><span>ID {{ it.id }} · {{ it.created_at[:10] }}</span></div>
+</div>
+<section class="card">
+  <form method="post" class="form">
+    <input type="hidden" name="token" value="{{ csrf }}">
+    <label class="f" style="grid-column:span 2">Nomi<input name="title" value="{{ it.title }}" required maxlength="80"></label>
+    <label class="f">Bo'lim<select name="kind">{% for k, v in KINDS.items() %}<option value="{{ k }}" {{ 'selected' if k == it.kind }}>{{ v }}</option>{% endfor %}</select></label>
+    <label class="f">Yoshdan<input name="age_min" type="number" min="0" max="14" value="{{ it.age_min }}" required></label>
+    <label class="f">Yoshgacha<input name="age_max" type="number" min="0" max="14" value="{{ it.age_max }}" required></label>
+    <label class="f">Daqiqa<input name="minutes" type="number" min="1" max="300" value="{{ it.minutes }}" required></label>
+    {% if it.source_type != 'file' %}
+    <label class="f" style="grid-column:span 2">Havola<input name="link" type="url" value="{{ it.source }}"></label>
+    {% else %}
+    <div class="f muted" style="grid-column:span 2">Manba: Telegram fayl ({{ it.file_type }}). Faylni almashtirish uchun yangisini qo'shing va buni yashiring.</div>
+    {% endif %}
+    <label class="row" style="gap:8px"><input type="checkbox" name="active" value="1" {{ 'checked' if it.active }}> Botda ko'rinadi</label>
+    <button class="btn" type="submit">Saqlash</button>
+  </form>
+</section>
+{% endblock %}

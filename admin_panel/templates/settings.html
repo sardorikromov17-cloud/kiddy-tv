@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head"><h1>Sozlamalar</h1></div>
+<form method="post" style="display:flex;flex-direction:column;gap:18px;max-width:900px">
+  <input type="hidden" name="token" value="{{ csrf }}">
+  <section class="card">
+    <h2>Yulduzlar va chegirmalar</h2>
+    <div class="form" style="margin-top:14px">
+      <label class="f">Bir ko'rish uchun yulduz<input name="stars_per_view" type="number" min="1" max="100" value="{{ st.stars_per_view }}" required></label>
+      <label class="f">Kupon amal qilish muddati (kun)<input name="coupon_days" type="number" min="1" max="365" value="{{ st.coupon_days }}" required></label>
+    </div>
+    <h3 style="margin-top:18px;font-size:16px">Yulduzni chegirmaga almashtirish tariflari</h3>
+    <p class="muted" style="margin:4px 0 10px">Bo'sh qatorlar hisobga olinmaydi.</p>
+    {% for p, c in tiers %}
+    <div class="form" style="margin-bottom:8px">
+      <label class="f">Chegirma %<input name="tp{{ loop.index0 }}" type="number" min="1" max="50" value="{{ p }}"></label>
+      <label class="f">Kerakli yulduz<input name="tc{{ loop.index0 }}" type="number" min="1" value="{{ c }}"></label>
+    </div>
+    {% endfor %}
+  </section>
+  <section class="card">
+    <h2>Tug'ilgan kun va tanlov</h2>
+    <div class="form" style="margin-top:14px">
+      <label class="f">Tug'ilgan kun kuponi %<input name="birthday_percent" type="number" min="0" max="50" value="{{ st.birthday_percent }}" required></label>
+      <label class="f">Tanlov g'olibi kuponi %<input name="contest_percent" type="number" min="0" max="50" value="{{ st.contest_percent }}" required></label>
+      <label class="f" style="grid-column:span 2">Tanlov mavzusi<input name="contest_title" maxlength="80" value="{{ st.contest_title }}"></label>
+    </div>
+  </section>
+  <section class="card">
+    <h2>Yangi oilalar uchun</h2>
+    <div class="form" style="margin-top:14px">
+      <label class="f">Standart kunlik vaqt (daqiqa)<input name="default_daily_limit" type="number" min="15" max="240" value="{{ st.default_daily_limit }}" required></label>
+    </div>
+  </section>
+  <button class="btn" type="submit" style="align-self:flex-start">Saqlash</button>
+</form>
+{% endblock %}

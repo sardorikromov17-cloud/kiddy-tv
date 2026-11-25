@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head"><h1>Reytinglar</h1><span class="sp"></span>
+  <nav class="tabs" aria-label="Davr">
+    {% for k, v in [("7","7 kun"),("30","30 kun"),("all","Hammasi")] %}<a href="/ratings?period={{ k }}" class="{{ 'on' if period == k }}">{{ v }}</a>{% endfor %}
+  </nav>
+</div>
+{% set medal = ['t-orange','t-blue','t-red'] %}
+<div class="grid2">
+  <section class="card">
+    <h2>Eng faol bolalar</h2>
+    <p class="muted" style="margin:4px 0 10px">{{ "Tanlangan davrda yig'ilgan" if period != 'all' else 'Hozirgi' }} yulduzlar bo'yicha</p>
+    <div class="tbl"><table>
+      <thead><tr><th>#</th><th>Bola</th><th>Yosh</th><th>Yulduz</th><th>Ko'rish</th></tr></thead>
+      <tbody>
+      {% for k in kids %}
+        <tr><td><span class="rank {{ medal[loop.index0] if loop.index0 < 3 else '' }}" style="{{ '' if loop.index0 < 3 else 'background:var(--bg)' }}">{{ loop.index }}</span></td>
+          <td>{{ k.name }}</td><td>{{ k.birth_date|age }}</td><td><b>{{ k.earned }}</b></td><td>{{ k.cnt }}</td></tr>
+      {% else %}<tr><td colspan="5" class="empty">Ma'lumot yo'q</td></tr>{% endfor %}
+      </tbody>
+    </table></div>
+  </section>
+  <section class="card">
+    <h2>Eng ko'p ko'rilgan</h2>
+    <p class="muted" style="margin:4px 0 10px">Ko'rishlar soni bo'yicha</p>
+    <div class="tbl"><table>
+      <thead><tr><th>#</th><th>Nomi</th><th>Bo'lim</th><th>Ko'rish</th><th>Yoqdi</th></tr></thead>
+      <tbody>
+      {% for c in views %}
+        <tr><td><span class="rank {{ medal[loop.index0] if loop.index0 < 3 else '' }}" style="{{ '' if loop.index0 < 3 else 'background:var(--bg)' }}">{{ loop.index }}</span></td>
+          <td><a href="/content/{{ c.id }}">{{ c.title }}</a></td><td>{{ KINDS[c.kind] }}</td><td><b>{{ c.views }}</b></td><td>{{ c.likes }}</td></tr>
+      {% else %}<tr><td colspan="5" class="empty">Ma'lumot yo'q</td></tr>{% endfor %}
+      </tbody>
+    </table></div>
+  </section>
+</div>
+<section class="card">
+  <h2>Bolalarga eng yoqqan</h2>
+  <p class="muted" style="margin:4px 0 10px">Botdagi «Yoqdi» tugmasi bo'yicha (butun vaqt)</p>
+  <div class="tbl"><table>
+    <thead><tr><th>#</th><th>Nomi</th><th>Bo'lim</th><th>Yosh</th><th>Yoqdi</th><th>Ko'rish</th></tr></thead>
+    <tbody>
+    {% for c in liked %}
+      <tr><td>{{ loop.index }}</td><td><a href="/content/{{ c.id }}">{{ c.title }}</a></td><td>{{ KINDS[c.kind] }}</td><td>{{ c.age_min }}–{{ c.age_max }}</td><td><b>{{ c.likes }}</b></td><td>{{ c.views }}</td></tr>
+    {% else %}<tr><td colspan="6" class="empty">Ma'lumot yo'q</td></tr>{% endfor %}
+    </tbody>
+  </table></div>
+</section>
+{% endblock %}

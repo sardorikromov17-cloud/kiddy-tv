@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head"><a href="/content" class="btn ghost sm">« Kontent</a><h1>YouTube'dan import</h1></div>
+
+<section class="card">
+  <h2>Havola</h2>
+  <p class="muted" style="margin:6px 0 14px">Bitta video, pleylist yoki butun kanal havolasini qo'ying. Ro'yxat chiqadi — keraklilarini belgilab qo'shasiz. Videolar yuklab olinmaydi, YouTube'dan ko'rsatiladi.</p>
+  <form method="post" action="/import/preview" class="form">
+    <input type="hidden" name="token" value="{{ csrf }}">
+    <label class="f" style="grid-column:1/-1">YouTube havolasi<input name="url" type="url" required value="{{ url }}" placeholder="https://www.youtube.com/playlist?list=... yoki https://www.youtube.com/@kanal"></label>
+    <label class="f">Bo'lim<select name="kind">{% for k, v in KINDS.items() %}<option value="{{ k }}" {{ 'selected' if k == kind }}>{{ v }}</option>{% endfor %}</select></label>
+    <label class="f">Yoshdan<input name="a" type="number" min="0" max="14" value="{{ a }}"></label>
+    <label class="f">Yoshgacha<input name="b" type="number" min="0" max="14" value="{{ b }}"></label>
+    <button class="btn" type="submit" onclick="this.textContent='Yuklanmoqda...'">Ro'yxatni olish</button>
+  </form>
+</section>
+
+{% if preview %}
+<section class="card">
+  <form method="post" action="/import/save" style="display:flex;flex-direction:column;gap:14px">
+    <input type="hidden" name="token" value="{{ csrf }}"><input type="hidden" name="key" value="{{ key }}">
+    <div class="row" style="justify-content:space-between">
+      <h2>{{ preview.title or 'Videolar' }}</h2>
+      <span class="muted">{{ preview['items']|length }} ta video · {{ new_n }} tasi yangi</span>
+    </div>
+    <div class="form">
+      <label class="f">Bo'lim<select name="kind">{% for k, v in KINDS.items() %}<option value="{{ k }}" {{ 'selected' if k == kind }}>{{ v }}</option>{% endfor %}</select></label>
+      <label class="f">Yoshdan<input name="a" type="number" min="0" max="14" value="{{ a }}"></label>
+      <label class="f">Yoshgacha<input name="b" type="number" min="0" max="14" value="{{ b }}"></label>
+      <label class="f">Davomiylik noma'lum bo'lsa (daq)<input name="minutes" type="number" min="1" max="300" value="5"></label>
+      <label class="f" style="grid-column:span 2">Serial nomi (bo'sh qolsa — alohida videolar)<input name="series" maxlength="60" value="{{ preview.title if preview['items']|length > 1 else '' }}"></label>
+    </div>
+    <div class="row">
+      <button type="button" class="btn ghost sm" onclick="document.querySelectorAll('input[name=v]:not(:disabled)').forEach(c=>c.checked=true)">Hammasini belgilash</button>
+      <button type="button" class="btn ghost sm" onclick="document.querySelectorAll('input[name=v]').forEach(c=>c.checked=false)">Belgini olib tashlash</button>
+    </div>
+    <div class="tbl" style="max-height:520px;overflow:auto;border:1px solid var(--line);border-radius:14px">
+      <table>
+        <thead><tr><th></th><th>#</th><th>Rasm</th><th>Nomi</th><th>Daq</th><th></th></tr></thead>
+        <tbody>
+        {% for it in preview['items'] %}
+          <tr style="{{ 'opacity:.5' if it.exists }}">
+            <td><input type="checkbox" name="v" value="{{ it.id }}" {{ 'disabled' if it.exists else 'checked' }} aria-label="{{ it.title }}"></td>
+            <td class="muted">{{ loop.index }}</td>
+            <td><img src="https://i.ytimg.com/vi/{{ it.id }}/default.jpg" alt="" width="80" height="45" loading="lazy" style="border-radius:8px;object-fit:cover;background:var(--bg)"></td>
+            <td><a href="https://www.youtube.com/watch?v={{ it.id }}" target="_blank" rel="noopener">{{ it.title or it.id }}</a></td>
+            <td>{{ it.minutes or '—' }}</td>
+            <td>{% if it.exists %}<span class="pill" style="background:var(--bg)">Bor</span>{% endif %}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="muted" style="margin:0">Qo'shishdan oldin videolarni ko'rib chiqing: faqat bolalarga mos va ruxsat etilgan kontent. Ba'zi kanallar videoni boshqa saytlarda ko'rsatishni taqiqlaydi — bunday videolar ilovada "YouTube'da ochish" tugmasi bilan ochiladi.</p>
+    <button class="btn green" type="submit" style="align-self:flex-start">Belgilanganlarni qo'shish</button>
+  </form>
+</section>
+{% endif %}
+
+<section class="card">
+  <h2>Tavsiya etilgan o'zbekcha kanallar</h2>
+  <p class="muted" style="margin:6px 0 14px">Taniqli bolalar kanallari. Bosing — havola, bo'lim va yosh avtomatik to'ldiriladi.</p>
+  <div class="grid2">
+    {% for r in rec %}
+    <a href="/import?url={{ r.url|urlencode }}&kind={{ r.kind }}&a={{ r.a }}&b={{ r.b }}" class="card" style="text-decoration:none;color:inherit;background:var(--bg);border:0">
+      <b style="font-size:17px">{{ r.name }}</b>
+      <span class="muted" style="font-size:14px">{{ r.note }}</span>
+      <span style="font-size:13px">{{ KINDS[r.kind] }} · {{ r.a }}–{{ r.b }} yosh</span>
+    </a>
+    {% endfor %}
+  </div>
+  <p class="muted" style="margin:14px 0 0;font-size:14px">Yana: Maktabgacha va maktab ta'limi vazirligi tavsiya qilgan o'zbekcha multfilmlar — «Quyosh yurti pahlavoni», «G'ildirakli uy», «Quvvat», «Dovyurak oshpaz», «To'g'rivoy va Egrivoy», «Afandi va laqma boy». YouTube'da nomi bilan qidirib, havolasini shu yerga qo'ying.</p>
+</section>
+{% endblock %}

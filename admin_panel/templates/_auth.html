@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block bare %}
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--cream)">
+  <form method="post" class="card" style="width:100%;max-width:380px;display:flex;flex-direction:column;gap:14px;padding:30px">
+    <div style="text-align:center"><img src="/logo.png" alt="Kiddy Toys" style="width:96px;height:96px;border-radius:50%"></div>
+    <h1 style="text-align:center">{% block heading %}{% endblock %}</h1>
+    {% for kind, text in flashes %}<div class="flash {{ kind }}" role="alert">{{ text }}</div>{% endfor %}
+    {% block fields %}{% endblock %}
+  </form>
+</div>
+{% endblock %}

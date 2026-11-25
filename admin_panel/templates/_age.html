@@ -1,0 +1,12 @@
+<section class="card" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px;border-left:6px solid {{ 'var(--green-d)' if age_on else '#C8231D' }}">
+  <div style="flex:1 1 260px">
+    <h2 style="margin:0">Yosh chegarasi: {{ 'YOQILGAN' if age_on else "O'CHIRILGAN" }}</h2>
+    <p class="muted" style="margin:4px 0 0">{% if age_on %}Har bir bolaga faqat o'z yoshiga mos kontent ko'rinadi.{% else %}Hamma kontent hamma bolalarga ochiq — yoshdan qat'i nazar.{% endif %}</p>
+  </div>
+  <form method="post" action="/age-limit">
+    <input type="hidden" name="token" value="{{ csrf }}">
+    <input type="hidden" name="back" value="{{ request.url.path }}">
+    {% if age_on %}<button class="btn red" type="submit">Yosh chegarasini olib tashlash</button>
+    {% else %}<button class="btn green" type="submit">Yosh chegarasini qo'yish</button>{% endif %}
+  </form>
+</section>

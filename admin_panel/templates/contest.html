@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head"><h1>Ijod tanlovi</h1><span class="sp"></span><a class="btn ghost" href="/settings">Tanlov sozlamalari</a></div>
+<p class="muted" style="margin:0">Mavzu: <b>«{{ st.contest_title }}»</b> · G'olibga {{ st.contest_percent }}% kupon avtomatik beriladi va botga xabar yuboriladi.</p>
+<div style="display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+  {% for e in rows %}
+  <article class="card" style="padding:10px;display:flex;flex-direction:column;gap:10px;{{ 'border:3px solid var(--orange)' if e.winner }}">
+    <img src="/tg-file/{{ e.file_id }}" alt="{{ e.child_name or 'Bola' }} rasmi" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:14px;background:var(--bg)">
+    <div><b>{{ e.child_name or '—' }}</b> <span class="muted">· {{ e.birth_date|age }} yosh</span><div class="muted" style="font-size:12px">{{ e.created_at[:16] }}</div></div>
+    {% if e.winner %}<span class="pill t-orange" style="align-self:flex-start">G'olib</span>
+    {% else %}<form method="post" action="/contest/{{ e.id }}/win"><input type="hidden" name="token" value="{{ csrf }}"><button class="btn sm" type="submit" style="width:100%">G'olib deb belgilash</button></form>{% endif %}
+  </article>
+  {% else %}
+  <div class="card empty" style="grid-column:1/-1">Hali rasm yuborilmagan. Bolalar botdagi «Ijod tanlovi» tugmasi orqali yuboradi.</div>
+  {% endfor %}
+</div>
+{% endblock %}

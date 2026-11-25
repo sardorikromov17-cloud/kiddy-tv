@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head"><h1>Xabar yuborish</h1></div>
+<section class="card" style="max-width:720px">
+  <p class="muted" style="margin-top:0">Xabar botdan foydalanadigan barcha <b>{{ total }}</b> ota-onaga yuboriladi. Masalan: yangi multfilm, aksiya, tanlov natijasi.</p>
+  <form method="post" style="display:flex;flex-direction:column;gap:12px">
+    <input type="hidden" name="token" value="{{ csrf }}">
+    <label class="f">Matn<textarea name="text" rows="6" maxlength="3500" required placeholder="Assalomu alaykum! Kiddy TV'ga yangi ertaklar qo'shildi..."></textarea></label>
+    <button class="btn" type="submit" style="align-self:flex-start" {{ 'disabled' if not bot_ok }} onclick="return confirm('{{ total }} ta ota-onaga yuborilsinmi?')">Yuborish</button>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head"><h1>Kuponlar</h1></div>
+
+<section class="card" style="background:var(--cream);border-color:#F0E2D0">
+  <h2>Kassada tekshirish</h2>
+  <form method="get" class="row" style="margin-top:12px">
+    <input name="check" value="{{ check }}" placeholder="KIDDY-AB12CD" aria-label="Kupon kodi" style="flex:1 1 220px;max-width:340px;text-transform:uppercase;font-size:18px" autofocus>
+    <button class="btn" type="submit">Tekshirish</button>
+  </form>
+  {% if check %}
+  <div style="margin-top:14px">
+    {% if not found %}
+      <div class="flash err">«{{ check|upper }}» — bunday kupon yo'q.</div>
+    {% elif found.used_at %}
+      <div class="flash err">{{ found.code }} — allaqachon ishlatilgan ({{ found.used_at }}, {{ found.used_by }}).</div>
+    {% elif found.expires_at < now_s %}
+      <div class="flash err">{{ found.code }} — muddati o'tgan ({{ found.expires_at[:10] }}).</div>
+    {% else %}
+      <div class="card row" style="justify-content:space-between">
+        <div><div style="font-family:Fredoka,Nunito,system-ui,sans-serif;font-size:34px;color:var(--red-d)">{{ found.percent }}% chegirma</div>
+          <div class="muted">{{ found.code }} · {{ found.child_name or '—' }} · {{ REASONS.get(found.reason, found.reason) }} · {{ found.expires_at[:10] }} gacha</div></div>
+        <form method="post" action="/coupons/use"><input type="hidden" name="token" value="{{ csrf }}"><input type="hidden" name="code" value="{{ found.code }}"><button class="btn green" type="submit">Ishlatildi deb belgilash</button></form>
+      </div>
+    {% endif %}
+  </div>
+  {% endif %}
+</section>
+
+<div class="row">
+  <nav class="tabs" aria-label="Holat">
+    {% for k, v in [("active","Faol"),("used","Ishlatilgan"),("expired","Muddati o'tgan"),("all","Hammasi")] %}
+    <a href="/coupons?status={{ k }}&q={{ q }}" class="{{ 'on' if status == k }}">{{ v }}</a>{% endfor %}
+  </nav>
+  <span style="flex:1"></span>
+  <form method="get" class="row"><input type="hidden" name="status" value="{{ status }}"><input name="q" value="{{ q }}" placeholder="Kod yoki bola ismi" aria-label="Qidirish"><button class="btn ghost" type="submit">Qidirish</button></form>
+</div>
+
+<section class="card tbl" style="padding:8px 12px">
+  <table>
+    <thead><tr><th>Kod</th><th>Chegirma</th><th>Bola</th><th>Sabab</th><th>Berilgan</th><th>Muddati</th><th>Holat</th></tr></thead>
+    <tbody>
+    {% for c in rows %}
+      <tr>
+        <td><code>{{ c.code }}</code></td>
+        <td><b>{{ c.percent }}%</b>{% if c.stars_cost %} <span class="muted">· {{ c.stars_cost }} yulduz</span>{% endif %}</td>
+        <td>{{ c.child_name or '—' }}</td>
+        <td>{{ REASONS.get(c.reason, c.reason) }}</td>
+        <td class="muted">{{ c.created_at[:16] }}</td>
+        <td class="muted">{{ c.expires_at[:10] }}</td>
+        <td>{% if c.used_at %}<span class="pill t-green">Ishlatilgan {{ c.used_at[:10] }}</span>
+            {% elif c.expires_at < now_s %}<span class="pill" style="background:var(--bg)">Muddati o'tgan</span>
+            {% else %}<span class="pill t-orange">Faol</span>{% endif %}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="7" class="empty">Kupon topilmadi</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

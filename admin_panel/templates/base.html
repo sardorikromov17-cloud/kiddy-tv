@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Kiddy TV — admin{% endblock %}</title>
+<link rel="icon" href="/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1F2A6B;--muted:#4A5580;--line:#E6EAF3;--bg:#F6F7FB;--red:#E0312B;--red-d:#B3201B;--red-l:#FFE1DE;--blue:#2F55B4;--blue-d:#2446A0;--blue-l:#E1EAFF;--green:#3DAA3A;--green-d:#23721F;--green-l:#DDF3DA;--orange:#F28C1E;--orange-d:#A65400;--orange-l:#FFE9CC;--cream:#FFF4E6}
+*{box-sizing:border-box}
+body{margin:0;font-family:Nunito,system-ui,sans-serif;color:var(--navy);background:var(--bg);font-weight:600;font-size:15px}
+a{color:var(--blue-d)}
+h1,h2,h3{font-family:Fredoka,Nunito,system-ui,sans-serif;font-weight:600;margin:0}
+h1{font-size:28px}h2{font-size:20px}
+.layout{display:flex;flex-wrap:wrap;min-height:100vh}
+.side{flex:0 0 240px;background:#fff;border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:4px}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px 16px;text-decoration:none;color:var(--navy)}
+.brand img{width:44px;height:44px;border-radius:50%}
+.brand b{font-family:Fredoka,Nunito,system-ui,sans-serif;font-weight:600;font-size:22px}
+.brand small{display:block;color:var(--muted);font-size:12px;font-weight:600}
+.nav a{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:12px;text-decoration:none;color:var(--navy);font-weight:600}
+.nav a:hover{background:var(--bg)}
+.nav a.on{background:var(--blue-l);color:var(--blue-d)}
+.nav svg{width:20px;height:20px;flex:none}
+.me{margin-top:auto;padding:12px;border-radius:14px;background:var(--bg);font-size:13px}
+.me a{font-weight:700}
+.main{flex:999 1 600px;min-width:0;padding:28px clamp(16px,3vw,40px) 60px;display:flex;flex-direction:column;gap:22px}
+.head{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.head .sp{flex:1}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.grid2{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.stat{border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:4px}
+.stat b{font-family:Fredoka,Nunito,system-ui,sans-serif;font-weight:600;font-size:32px;line-height:1.1}
+.stat span{font-size:14px}
+.t-red{background:var(--red-l);color:var(--red-d)}.t-blue{background:var(--blue-l);color:var(--blue-d)}.t-green{background:var(--green-l);color:var(--green-d)}.t-orange{background:var(--orange-l);color:var(--orange-d)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:42px;padding:0 18px;border-radius:12px;border:0;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;background:var(--blue);color:#fff}
+.btn:hover{background:var(--blue-d)}
+.btn.red{background:#C8231D}.btn.red:hover{background:#A81E19}
+.btn.green{background:var(--green-d)}
+.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}.btn.ghost:hover{background:var(--bg)}
+.btn.sm{min-height:34px;padding:0 12px;font-size:13px;border-radius:10px}
+input,select,textarea{font:inherit;font-weight:600;color:var(--navy);border:2px solid var(--line);border-radius:12px;padding:9px 12px;background:#fff;min-height:42px;width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue)}
+input[type=checkbox]{width:20px;min-height:20px;height:20px}
+input[type=file]{padding:7px}
+label.f{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)}
+.form{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));align-items:end}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs a{padding:8px 14px;border-radius:999px;text-decoration:none;background:#fff;border:1px solid var(--line);color:var(--navy);font-weight:600;font-size:14px}
+.tabs a.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em;padding:10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
+.muted{color:var(--muted)}
+.flash{padding:12px 16px;border-radius:14px;font-weight:700}
+.flash.ok{background:var(--green-l);color:var(--green-d)}.flash.err{background:var(--red-l);color:var(--red-d)}
+.warn{background:var(--orange-l);color:var(--orange-d);padding:12px 16px;border-radius:14px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+form.row{flex-wrap:nowrap}
+.row > input[name=q],.row > input[name=check]{flex:1 1 160px;width:auto;min-width:0}
+code{font-family:ui-monospace,Menlo,monospace;font-weight:700;background:var(--bg);padding:2px 6px;border-radius:6px}
+.rank{width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-family:Fredoka,Nunito,system-ui,sans-serif;font-weight:600}
+.empty{padding:30px;text-align:center;color:var(--muted)}
+@media(max-width:760px){.side{flex:1 1 100%;flex-direction:row;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--line);padding:12px}.brand{padding:0 8px 0 0}.nav{display:flex;flex-wrap:wrap;gap:4px}.nav a{padding:8px 10px;font-size:13px}.nav svg{display:none}.me{margin:0 0 0 auto}}
+</style>
+</head>
+<body>
+{% if user %}
+<div class="layout">
+  <aside class="side">
+    <a class="brand" href="/"><img src="/logo.png" alt="Kiddy Toys"><span><b>Kiddy TV</b><small>Boshqaruv paneli</small></span></a>
+    <nav class="nav" aria-label="Bo'limlar">
+      {% set items = [
+        ("dashboard","/","Bosh sahifa","M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1z"),
+        ("content","/content","Kontent","M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2zM10 9v6l5-3z"),
+        ("coupons","/coupons","Kuponlar","M3 8a2 2 0 002-2h14a2 2 0 002 2v2a2 2 0 000 4v2a2 2 0 00-2 2H5a2 2 0 00-2-2v-2a2 2 0 000-4zM9 6v12"),
+        ("ratings","/ratings","Reytinglar","M12 2l3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21l1.5-7L2 9.3l7-.8z"),
+        ("families","/families","Oilalar","M9 11a4 4 0 100-8 4 4 0 000 8zM2 21v-1a6 6 0 0112 0v1M17 11a3 3 0 100-6M22 21v-1a5 5 0 00-4-4.9"),
+        ("contest","/contest","Ijod tanlovi","M12 3a9 9 0 100 18c1.2 0 1.8-.8 1.8-1.6 0-1.2-1-1.4-1-2.4s.8-1.6 1.8-1.6H17a4 4 0 004-4c0-4.6-4-8.4-9-8.4z"),
+        ("broadcast","/broadcast","Xabar yuborish","M21 4L3 11l6 2 2 6 3-4 5 4z"),
+        ("settings","/settings","Sozlamalar","M12 15a3 3 0 100-6 3 3 0 000 6zM19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"),
+        ("staff","/staff","Xodimlar","M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM19 8v6M22 11h-6")
+      ] %}
+      {% for key, href, label, icon in items %}
+        {% if user.role == 'admin' or key == 'coupons' %}
+        <a href="{{ href }}" class="{{ 'on' if section == key else '' }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ icon }}"/></svg>{{ label }}</a>
+        {% endif %}
+      {% endfor %}
+    </nav>
+    <div class="me">{{ user.full_name or user.username }} · <span class="muted">{{ 'Admin' if user.role == 'admin' else 'Kassir' }}</span><br><a href="/logout">Chiqish</a></div>
+  </aside>
+  <main class="main">
+    {% for kind, text in flashes %}<div class="flash {{ kind }}" role="status">{{ text }}</div>{% endfor %}
+    {% if not bot_ok %}<div class="warn">Bot ulanmagan (.env da BOT_TOKEN yo'q): fayl yuklash va xabar yuborish ishlamaydi.</div>{% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+{% else %}
+{% block bare %}{% endblock %}
+{% endif %}
+</body>
+</html>

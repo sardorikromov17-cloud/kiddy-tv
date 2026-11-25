@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Kiddy TV</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1F2A6B;--muted:#4A5580;--red:#E0312B;--red-d:#B3201B;--red-l:#FFE1DE;--red-s:#F4B9B3;--blue:#2F55B4;--blue-d:#2446A0;--blue-l:#E1EAFF;--blue-s:#B9CBF2;--green:#3DAA3A;--green-d:#23721F;--green-l:#DDF3DA;--green-s:#B5DFAF;--orange:#F28C1E;--orange-d:#A65400;--orange-l:#FFE9CC;--orange-s:#F3CC95;--cream:#FFF4E6;--soft:#F4F6FB}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:#fff;color:var(--navy);font-family:Nunito,system-ui,sans-serif;font-weight:600;font-size:16px;overscroll-behavior:none}
+h1,h2,h3{font-family:Fredoka,Nunito,sans-serif;font-weight:600;margin:0}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+input{font:inherit;color:var(--navy);border:2px solid #E3E7F1;border-radius:16px;padding:12px 14px;width:100%;min-height:50px;background:#fff}
+input:focus{outline:none;border-color:var(--blue)}
+.app{max-width:520px;margin:0 auto;min-height:100vh;position:relative;padding-bottom:28px}
+.hero{background:var(--cream);border-radius:0 0 34px 34px;padding:16px 18px 22px;position:relative;overflow:hidden}
+.top{display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+.brand{font-family:Fredoka,sans-serif;font-weight:600;font-size:24px;display:flex;align-items:center;gap:1px}
+.tv{margin-left:6px;background:var(--blue);color:#fff;border-radius:9px;padding:0 8px;font-size:17px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border-radius:999px;height:44px;padding:0 14px;font-weight:700;box-shadow:0 3px 0 #EBDCC6}
+.round{width:44px;height:44px;border-radius:50%;background:#fff;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 3px 0 #EBDCC6}
+.sp{flex:1}
+.pad{padding:18px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.tile{border-radius:26px;padding:16px;height:118px;display:flex;flex-direction:column;justify-content:space-between;text-align:left;width:100%}
+.tile span{font-family:Fredoka,sans-serif;font-weight:600;font-size:21px}
+.mini{border-radius:22px;padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;font-weight:700;font-size:14px;width:100%}
+.t-red{background:var(--red-l);color:var(--red-d);box-shadow:0 6px 0 var(--red-s)}
+.t-blue{background:var(--blue-l);color:var(--blue-d);box-shadow:0 6px 0 var(--blue-s)}
+.t-green{background:var(--green-l);color:var(--green-d);box-shadow:0 6px 0 var(--green-s)}
+.t-orange{background:var(--orange-l);color:var(--orange-d);box-shadow:0 6px 0 var(--orange-s)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 22px;border-radius:18px;background:var(--blue);color:#fff;font-weight:700;font-size:17px;width:100%}
+.btn.red{background:#C8231D}.btn.green{background:var(--green-d)}.btn.ghost{background:var(--soft);color:var(--navy)}
+.btn:disabled{opacity:.5}
+.bar{height:10px;background:#fff;border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--green);border-radius:999px}
+.card{display:flex;flex-direction:column;gap:8px;text-align:left;width:100%}
+.thumb{position:relative;aspect-ratio:16/10;border-radius:20px;overflow:hidden;display:flex;align-items:center;justify-content:center;background-size:cover;background-position:center}
+.play{width:46px;height:46px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.dur{position:absolute;right:8px;bottom:8px;background:rgba(31,42,107,.85);color:#fff;font-size:12px;padding:2px 8px;border-radius:999px}
+.ttl{font-weight:700;font-size:15px;line-height:1.25}
+.head{display:flex;align-items:center;gap:12px;padding:14px 18px}
+.head h1{font-size:24px}
+.muted{color:var(--muted)}
+.empty{text-align:center;padding:40px 20px;color:var(--muted)}
+.toast{position:fixed;left:50%;top:18px;transform:translateX(-50%) translateY(-120px);background:var(--navy);color:#fff;padding:12px 18px;border-radius:16px;font-weight:700;z-index:50;transition:transform .3s;max-width:90vw;text-align:center}
+.toast.on{transform:translateX(-50%) translateY(0)}
+.modal{position:fixed;inset:0;background:rgba(31,42,107,.45);display:flex;align-items:flex-end;justify-content:center;z-index:40}
+.sheet{background:#fff;border-radius:28px 28px 0 0;padding:24px 20px 30px;width:100%;max-width:520px;display:flex;flex-direction:column;gap:14px;text-align:center}
+.keys{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.key{height:64px;border-radius:20px;background:var(--soft);font-family:Fredoka,sans-serif;font-size:28px;font-weight:600}
+.dots{display:flex;gap:14px;justify-content:center}
+.dots i{width:18px;height:18px;border-radius:50%;border:3px solid var(--blue)}
+.dots i.on{background:var(--blue)}
+.row{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid #EEF1F7}
+.row:last-child{border-bottom:0}
+.sw{width:56px;height:34px;border-radius:999px;background:#D3D9E8;padding:3px;display:flex;flex:none}
+.sw.on{background:var(--green);justify-content:flex-end}
+.sw b{width:28px;height:28px;border-radius:50%;background:#fff;display:block}
+.box{background:#fff;border-radius:24px;padding:4px 16px}
+.pal{display:flex;justify-content:space-between;gap:6px}
+.pal button{width:46px;height:46px;border-radius:50%;border:4px solid #fff;box-shadow:0 3px 0 rgba(31,42,107,.2)}
+.pal button.on{border-color:var(--navy)}
+.swatch{height:96px;border-radius:24px;box-shadow:0 5px 0 rgba(31,42,107,.15)}
+.big{font-family:Fredoka,sans-serif;font-weight:600}
+.vid{width:100%;aspect-ratio:16/9;border:0;border-radius:22px;background:#000;display:block}
+.memory{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.memory button{aspect-ratio:1;border-radius:18px;background:var(--blue-l);box-shadow:0 4px 0 var(--blue-s);display:flex;align-items:center;justify-content:center}
+.memory button.open{background:#fff;box-shadow:0 0 0 3px var(--blue-l) inset}
+.memory button.done{background:var(--green-l);box-shadow:none}
+</style>
+</head>
+<body>
+<div class="app" id="app"><div class="empty">Yuklanmoqda...</div></div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const tg = window.Telegram ? Telegram.WebApp : null;
+const INIT = tg ? tg.initData : "";
+let ME = null, PKEY = "", VIEW = ["home"];
+const SER = []; // serial nomlari (apostrofli nomlar onclick'ni buzmasligi uchun indeks orqali)
+function openSeries(i){ haptic(); go("series", SER[i][0], SER[i][1]); }
+const $app = document.getElementById("app");
+const KIND = {
+  cartoon:{t:"Multfilmlar",c:"red",i:"M12 3a9 9 0 100 18 9 9 0 000-18zM9 10h.01M15 10h.01M8.5 14.5c1.8 2 5.2 2 7 0"},
+  film:{t:"Kinolar",c:"blue",i:"M3 8h18v12H3zM3 8l3-4h3L6 8M11 8l3-4h3l-3 4"},
+  video:{t:"Videolar",c:"green",i:"M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2zM10 9v6l5-3z"},
+  game:{t:"O'yinlar",c:"orange",i:"M7 7h10a5 5 0 010 10H7A5 5 0 017 7zM7 10.5v3M5.5 12h3M16 11h.01M18 13h.01"},
+  audio:{t:"Ertaklar",c:"blue",i:"M4 6c3-1.5 5.5-1.5 8 0v13c-2.5-1.5-5-1.5-8 0zM20 6c-3-1.5-5.5-1.5-8 0v13c2.5-1.5 5-1.5 8 0z"},
+  islamic:{t:"Islomiy",c:"green",i:"M12 3a9 9 0 108.5 12A7 7 0 1112 3zM18 4l.8 1.8 1.9.2-1.4 1.3.4 1.9-1.7-1-1.7 1 .4-1.9-1.4-1.3 1.9-.2z"},
+  music:{t:"Qo'shiqlar",c:"green",i:"M9 18V5l12-2v13M9 18a3 3 0 11-6 0 3 3 0 016 0zM21 16a3 3 0 11-6 0 3 3 0 016 0z"}
+};
+const INK = {red:"#B3201B",blue:"#2446A0",green:"#23721F",orange:"#A65400"};
+const BG = {red:"#FFE1DE",blue:"#E1EAFF",green:"#DDF3DA",orange:"#FFE9CC"};
+const ico = (d, c="currentColor", s=28, w=2.2) => `<svg aria-hidden="true" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
+const STAR = (s=20) => `<svg aria-hidden="true" width="${s}" height="${s}" viewBox="0 0 24 24"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21l1.5-7L2 9.3l7-.8z" fill="#F28C1E"/></svg>`;
+const BACK = ico("M15 5l-7 7 7 7", "#1F2A6B", 22, 2.6);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function haptic(t="light"){ try{ tg.HapticFeedback.impactOccurred(t) }catch(e){} }
+function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("on"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("on"),2600); }
+async function api(path, data, method){
+  const opt = {method: method || (data ? "POST" : "GET"), headers: {"X-Init-Data": INIT, "X-Parent-Key": PKEY}};
+  if (data){ opt.headers["Content-Type"]="application/json"; opt.body=JSON.stringify(data); }
+  const r = await fetch(path, opt);
+  let j = {}; try{ j = await r.json() }catch(e){}
+  if (!r.ok || j.ok === false) throw Object.assign(new Error(j.error || "Xatolik"), {code:r.status});
+  return j;
+}
+function go(...v){ VIEW.push(v); render(); window.scrollTo(0,0); }
+function back(){ if (VIEW.length>1){ VIEW.pop(); render(); window.scrollTo(0,0);} }
+function head(title){ return `<div class="head"><button class="round" onclick="back()" aria-label="Orqaga">${BACK}</button><h1>${title}</h1></div>`; }
+async function refresh(){ ME = await api("/api/me"); }
+
+function render(){
+  const v = VIEW[VIEW.length-1]; const name = Array.isArray(v) ? v[0] : v;
+  if (tg){ if (VIEW.length>1){ tg.BackButton.show(); } else { tg.BackButton.hide(); } }
+  if (!ME) return;
+  if (!ME.active && name!=="addchild"){ VIEW=[["addchild",true]]; }
+  const cur = VIEW[VIEW.length-1];
+  const fn = {home:vHome, list:vList, series:vSeries, letters:vLetters, shapes:vShapes, bigsmall:vBigSmall, oddone:vOddOne, simon:vSimon, math:vMath, pairs8:()=>vPairs(8), player:vPlayer, addchild:vAddChild, kids:vKids, rewards:vRewards, colors:vColors, pairs:vPairs, count:vCount, coloring:vColoring, parent:vParent}[Array.isArray(cur)?cur[0]:cur];
+  fn(...(Array.isArray(cur)?cur.slice(1):[]));
+}
+
+// ---------- bosh sahifa ----------
+function vHome(){
+  const c = ME.active, left = Math.max(0, ME.limit - ME.used), pct = Math.min(100, Math.round(ME.used / Math.max(1,ME.limit) * 100));
+  const tiles = ["cartoon","film","video","game"].map(k=>{const K=KIND[k];return `<button class="tile t-${K.c}" onclick="go('list','${k}')">${ico(K.i, INK[K.c], 32)}<span>${K.t}</span></button>`}).join("");
+  $app.innerHTML = `
+  <div class="hero">
+    <svg aria-hidden="true" width="120" height="70" viewBox="0 0 120 70" style="position:absolute;right:6px;bottom:4px;pointer-events:none"><path d="M96 14c6 8 8 12 8 15a8 8 0 01-16 0c0-3 2-7 8-15z" fill="#3DAA3A" transform="rotate(30 96 22)"/><circle cx="112" cy="56" r="5" fill="#2F55B4"/><circle cx="70" cy="60" r="4" fill="#F28C1E"/></svg>
+    <div class="top">
+      <img src="/logo.png" alt="Kiddy" width="44" height="44" style="border-radius:50%">
+      <span class="brand"><span style="color:#E0312B">K</span><span style="color:#3DAA3A">i</span><span style="color:#F28C1E">d</span><span style="color:#2F55B4">d</span><span style="color:#E0312B">y</span><span class="tv">TV</span></span>
+      <span class="sp"></span>
+      <button class="chip" onclick="go('rewards')" aria-label="Yulduzlar">${STAR()} ${c.stars}</button>
+      <button class="round" onclick="go('parent')" aria-label="Ota-ona bo'limi">${ico("M12 3l8 3v6c0 4.5-3.5 8-8 9-4.5-1-8-4.5-8-9V6zM9 12l2 2 4-4","#1F2A6B",22)}</button>
+    </div>
+    <div style="position:relative;margin-top:16px;display:flex;flex-direction:column;gap:8px">
+      <button onclick="go('kids')" style="text-align:left"><h1 style="font-size:30px">Salom, ${esc(c.name)}!</h1></button>
+      ${ME.blocked_reason ? `<div class="muted" style="font-weight:700">${esc(ME.blocked_reason)}</div>` :
+      `<div class="muted" style="font-weight:700">Bugun yana <b style="color:#B3201B">${left} daqiqa</b> ko'rishing mumkin</div>
+       <div class="bar"><i style="width:${pct}%"></i></div>`}
+    </div>
+  </div>
+  <div class="pad" style="display:flex;flex-direction:column;gap:22px">
+    <div class="grid2">${tiles}</div>
+    <button class="tile t-green" style="height:auto;flex-direction:row;align-items:center;gap:14px" onclick="go('list','islamic')">${ico(KIND.islamic.i, INK.green, 34)}<span style="display:flex;flex-direction:column;gap:2px"><span>Islomiy multfilmlar</span><small style="font-family:Nunito;font-size:13px;font-weight:600">Payg'ambarlar va Qur'on qissalari</small></span></button>
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px">
+      <button class="mini t-blue" onclick="go('list','audio')">${ico(KIND.audio.i,INK.blue,28)}Ertaklar</button>
+      <button class="mini t-green" onclick="go('list','music')">${ico(KIND.music.i,INK.green,28)}Qo'shiqlar</button>
+      <button class="mini t-red" onclick="go('coloring')">${ico("M12 3a9 9 0 100 18c1.2 0 1.8-.8 1.8-1.6 0-1.2-1-1.4-1-2.4s.8-1.6 1.8-1.6H17a4 4 0 004-4c0-4.6-4-8.4-9-8.4z",INK.red,28)}Bo'yash</button>
+      <button class="mini t-orange" onclick="go('rewards')">${STAR(28)}Sovg'alar</button>
+    </div>
+    ${ME.children.length>1 || true ? `<button class="btn ghost" onclick="go('kids')">${ico("M9 11a4 4 0 100-8 4 4 0 000 8zM2 21v-1a6 6 0 0112 0v1M17 11a3 3 0 100-6M22 21v-1a5 5 0 00-4-4.9","#1F2A6B",22)} Kim tomosha qiladi?</button>`:""}
+  </div>`;
+}
+
+// ---------- ro'yxat ----------
+const GAMES = [
+  {id:"colors", t:"Rangni top", c:"red", a:"2+"},
+  {id:"shapes", t:"Shakllar", c:"blue", a:"2+"},
+  {id:"pairs", t:"Juftini top", c:"green", a:"3+"},
+  {id:"count", t:"Sanaymiz", c:"orange", a:"3+"},
+  {id:"bigsmall", t:"Katta-kichik", c:"blue", a:"2+"},
+  {id:"oddone", t:"Farqli", c:"red", a:"3+"},
+  {id:"letters", t:"Harflar", c:"green", a:"4+"},
+  {id:"simon", t:"Eslab qol", c:"orange", a:"4+"},
+  {id:"math", t:"Qo'shamiz", c:"red", a:"5+"},
+  {id:"pairs8", t:"Katta juftlik", c:"blue", a:"5+"},
+  {id:"coloring", t:"Bo'yash", c:"green", a:"2+"}
+];
+const GICON = {colors:"M12 3a9 9 0 100 18c1.2 0 1.8-.8 1.8-1.6 0-1.2-1-1.4-1-2.4s.8-1.6 1.8-1.6H17a4 4 0 004-4c0-4.6-4-8.4-9-8.4z",
+  shapes:"M4 14h7v7H4zM17.5 3l4.5 8h-9zM17.5 14a3.5 3.5 0 110 7 3.5 3.5 0 010-7z", pairs:"M3 4h8v10H3zM13 10h8v10h-8z",
+  count:"M4 7h3v10M10 7h4l-4 10h4M17 7h3l-2 5a2.5 2.5 0 11-1 4.5", bigsmall:"M3 9h12v12H3zM17 3h4v4h-4z",
+  oddone:"M5 5h4v4H5zM15 5h4v4h-4zM5 15h4v4H5zM17 15a2 2 0 110 4 2 2 0 010-4z", letters:"M4 20L10 4l6 16M6.5 14h7M17 9h4M19 7v4",
+  simon:"M12 3v4M12 17v4M3 12h4M17 12h4M12 12h.01", math:"M12 5v14M5 12h14", pairs8:"M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z",
+  coloring:"M12 3a9 9 0 100 18c1.2 0 1.8-.8 1.8-1.6 0-1.2-1-1.4-1-2.4s.8-1.6 1.8-1.6H17a4 4 0 004-4c0-4.6-4-8.4-9-8.4z"};
+function cardItem(it, K){
+  return `<button class="card" onclick="openItem(${it.id})">
+    <div class="thumb" style="background-color:${BG[K.c]};${it.thumb?`background-image:url('${esc(it.thumb)}')`:""}">
+      <span class="play">${ico("M8 5v14l11-7z","#1F2A6B",20)}</span><span class="dur">${it.minutes} daq</span>
+    </div>
+    <span class="ttl">${esc(it.title)}</span>${it.series?`<span class="muted" style="font-size:12px;margin-top:-4px">${it.episode}-qism</span>`:""}
+  </button>`;
+}
+function cardSeries(g, K, kind){
+  const si = SER.push([kind, g.series]) - 1;
+  return `<button class="card" onclick="openSeries(${si})">
+    <div style="position:relative;padding-top:8px">
+      <div style="position:absolute;left:10px;right:10px;top:0;height:20px;border-radius:14px 14px 0 0;background:${INK[K.c]};opacity:.35"></div>
+      <div class="thumb" style="background-color:${BG[K.c]};${g.thumb?`background-image:url('${esc(g.thumb)}')`:""}">
+        <span class="play" style="width:auto;padding:0 12px;border-radius:999px;gap:6px;font-weight:700;font-size:14px">${ico("M3 6a2 2 0 012-2h4l2 2h8a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z","#1F2A6B",18)} ${g.count} qism</span>
+      </div>
+    </div>
+    <span class="ttl">${esc(g.series)}</span><span class="muted" style="font-size:12px;margin-top:-4px">Serial · ${Math.round(g.minutes)} daq</span>
+  </button>`;
+}
+async function vList(kind){
+  const K = KIND[kind];
+  $app.innerHTML = head(K.t) + `<div class="pad" id="lst"><div class="empty">Yuklanmoqda...</div></div>`;
+  let items = [];
+  try { items = (await api("/api/content?kind="+kind)).items; } catch(e){ toast(e.message); }
+  let html = "";
+  if (kind === "game"){
+    html += `<h2 style="font-size:20px;margin-bottom:12px">Kiddy o'yinlari</h2><div class="grid2" style="margin-bottom:24px">` +
+      GAMES.map(g=>`<button class="tile t-${g.c}" style="height:108px" onclick="startGame('${g.id}')">${ico(GICON[g.id], INK[g.c], 30)}<span style="display:flex;justify-content:space-between;align-items:baseline;width:100%">${g.t}<small style="font-family:Nunito;font-size:12px;opacity:.8">${g.a}</small></span></button>`).join("") + `</div>`;
+    if (items.length) html += `<h2 style="font-size:20px;margin-bottom:12px">Yana o'yinlar</h2>`;
+  }
+  if (!items.length && kind !== "game"){
+    html += `<div class="empty">${ico(K.i,"#4A5580",56,1.6)}<p>${esc(ME.active.name)} yoshiga mos ${K.t.toLowerCase()} hali qo'shilmagan.<br>Tez orada!</p></div>`;
+  } else {
+    html += `<div class="grid2">` + items.map(g => g.t==="series" ? cardSeries(g, K, kind) : cardItem(g, K)).join("") + `</div>`;
+  }
+  document.getElementById("lst").innerHTML = html;
+}
+async function vSeries(kind, name){
+  const K = KIND[kind] || KIND.cartoon;
+  $app.innerHTML = head(esc(name)) + `<div class="pad" id="lst"><div class="empty">Yuklanmoqda...</div></div>`;
+  let items = [];
+  try { items = (await api("/api/series?name="+encodeURIComponent(name))).items; } catch(e){ toast(e.message); }
+  document.getElementById("lst").innerHTML = items.length ? `<p class="muted" style="margin:0 0 14px">${items.length} ta qism</p><div class="grid2">` + items.map(it=>cardItem(it, K)).join("") + `</div>` : `<div class="empty">Qismlar topilmadi</div>`;
+}
+
+async function openItem(id){
+  haptic();
+  try {
+    const r = await api("/api/open", {id});
+    ME.active.stars = r.stars; ME.used += r.item.minutes;
+    if (r.item.type === "link"){ tg ? tg.openLink(r.url) : window.open(r.url); toast(`+${r.stars_added} yulduz!`); return; }
+    go("player", r);
+  } catch(e){ showMsg(e.message); }
+}
+
+// ---------- pleyer ----------
+function openYT(id){ const u = "https://www.youtube.com/watch?v=" + id; if (tg && tg.openLink) tg.openLink(u); else window.open(u, "_blank"); }
+function vPlayer(r){
+  const it = r.item; const K = KIND[it.kind] || KIND.video;
+  let media;
+  if (r.youtube) media = `<iframe class="vid" src="https://www.youtube.com/embed/${r.youtube}?autoplay=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="${esc(it.title)}"></iframe>`;
+  else if (it.file_type === "audio") media = `<div class="swatch" style="height:180px;background:${BG.blue};display:flex;align-items:center;justify-content:center">${ico(KIND.audio.i,INK.blue,90,1.6)}</div><audio controls autoplay style="width:100%;margin-top:12px" src="${r.media}?init=${encodeURIComponent(INIT)}"></audio>`;
+  else media = `<video class="vid" controls autoplay playsinline src="${r.media}?init=${encodeURIComponent(INIT)}"></video>`;
+  $app.innerHTML = head(K.t) + `<div class="pad" style="padding-top:0;display:flex;flex-direction:column;gap:14px">
+    ${media}
+    ${r.series?`<div class="muted" style="font-weight:700;margin-bottom:-8px">${esc(r.series.name)} · ${r.series.episode}-qism</div>`:""}
+    <h1 style="font-size:26px">${esc(it.title)}</h1>
+    ${r.next?`<button class="btn green" onclick="VIEW.pop();openItem(${r.next.id})">${ico("M5 4l10 8-10 8zM19 5v14","#fff",22)} Keyingi qism</button>`:""}
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <span class="chip" style="height:34px;box-shadow:none;background:${BG[K.c]};color:${INK[K.c]}">${K.t}</span>
+      <span class="chip" style="height:34px;box-shadow:none;background:var(--soft)">${it.age_min}–${it.age_max} yosh</span>
+      <span class="chip" style="height:34px;box-shadow:none;background:var(--orange-l)">${STAR(16)} +${r.stars_added}</span>
+    </div>
+    <div class="grid2">
+      <button class="btn ${r.liked?'red':'ghost'}" id="likeBtn" onclick="likeItem(${it.id})">${ico("M12 21s-7-4.5-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.5-7 10-7 10z", r.liked?"#fff":"#1F2A6B", 22)} Yoqdi</button>
+      <button class="btn ghost" onclick="back()">Boshqasi</button>
+    </div>
+  </div>`;
+  if (r.stars_added) toast(`+${r.stars_added} yulduz! Jami: ${r.stars}`);
+}
+async function likeItem(id){
+  haptic();
+  try{ const r = await api("/api/like",{id}); const v = VIEW[VIEW.length-1]; v[1].liked = r.liked; render(); if(r.liked) toast("Yoqdi! Rahmat."); }catch(e){ toast(e.message); }
+}
+
+// ---------- bolalar ----------
+function vKids(){
+  const cols = ["red","green","blue","orange"];
+  $app.innerHTML = head("Kim tomosha qiladi?") + `<div class="pad"><div class="grid2">` +
+    ME.children.map((c,i)=>{const k=cols[i%4];return `<button class="card" style="align-items:center" onclick="pickChild(${c.id})">
+      <span style="width:118px;height:118px;border-radius:38px;background:${BG[k]};color:${INK[k]};display:flex;align-items:center;justify-content:center;font-family:Fredoka;font-size:52px;font-weight:600;${c.id===ME.active.id?'box-shadow:0 0 0 4px #1F2A6B':''}">${esc(c.name[0]||"?").toUpperCase()}</span>
+      <span class="big" style="font-size:20px">${esc(c.name)}</span><span class="muted" style="font-size:13px;margin-top:-6px">${c.age} yosh · ${c.stars} yulduz</span></button>`}).join("") +
+    `<button class="card" style="align-items:center" onclick="go('addchild')"><span style="width:118px;height:118px;border-radius:38px;border:3px dashed #C9D2E8;display:flex;align-items:center;justify-content:center">${ico("M12 5v14M5 12h14","#4A5580",40)}</span><span class="big" style="font-size:20px">Qo'shish</span></button>
+  </div></div>`;
+}
+async function pickChild(id){ haptic(); try{ await api("/api/child/active",{id}); await refresh(); VIEW=["home"]; render(); }catch(e){ toast(e.message); } }
+function vAddChild(first){
+  $app.innerHTML = (first ? `<div class="hero" style="text-align:center"><img src="/logo.png" alt="Kiddy Toys" width="110" height="110" style="border-radius:50%"><h1 style="margin-top:10px">Kiddy TV'ga xush kelibsiz!</h1><p class="muted" style="margin:6px 0 0">Bepul, reklamasiz multfilm, kino, ertak va o'yinlar</p></div>` : head("Yangi bola")) + `
+  <div class="pad" style="display:flex;flex-direction:column;gap:14px">
+    <label style="display:flex;flex-direction:column;gap:6px">Bolaning ismi<input id="cn" maxlength="40" autocomplete="off" placeholder="Masalan: Ali"></label>
+    <label style="display:flex;flex-direction:column;gap:6px">Tug'ilgan sanasi<input id="cb" type="date" max="${new Date().toISOString().slice(0,10)}"></label>
+    <p class="muted" style="margin:0;font-size:14px">Yoshiga mos kontentni tanlash va tug'ilgan kunida tabriklash uchun.</p>
+    <button class="btn green" onclick="saveChild()">Saqlash</button>
+  </div>`;
+}
+async function saveChild(){
+  const name = document.getElementById("cn").value.trim(), d = document.getElementById("cb").value;
+  if (!name || !d) return toast("Ism va sanani kiriting");
+  try{ await api("/api/child",{name, birth:d}); await refresh(); VIEW=["home"]; render(); toast(`Salom, ${name}!`); }catch(e){ toast(e.message); }
+}
+
+// ---------- sovg'alar ----------
+async function vRewards(){
+  const s = ME.active.stars;
+  let coupons = []; try{ coupons = (await api("/api/coupons")).coupons; }catch(e){}
+  $app.innerHTML = `<div class="hero" style="text-align:center;padding-top:14px">
+    <div class="top"><button class="round" onclick="back()" aria-label="Orqaga">${BACK}</button></div>
+    ${STAR(80)}<div class="big" style="font-size:46px;line-height:1">${s}</div><div style="font-weight:700">yulduz yig'ding!</div></div>
+  <div class="pad" style="display:flex;flex-direction:column;gap:12px">
+    <h2>Kiddy Toys'da chegirma</h2>
+    ${ME.tiers.map(t=>`<div style="display:flex;align-items:center;gap:12px;background:var(--soft);border-radius:20px;padding:12px 14px">
+      <span class="big" style="width:54px;height:54px;border-radius:16px;background:var(--green-l);color:var(--green-d);display:flex;align-items:center;justify-content:center;font-size:19px;flex:none">${t.percent}%</span>
+      <div style="flex:1"><div style="font-weight:700">${t.percent}% chegirma</div><div class="muted" style="font-size:13px">${t.cost} yulduz</div></div>
+      <button class="btn ${s>=t.cost?'red':'ghost'}" style="width:auto;min-height:44px;padding:0 16px;font-size:15px" ${s>=t.cost?"":"disabled"} onclick="redeem(${t.percent},${t.cost})">Olish</button></div>`).join("")}
+    <p class="muted" style="margin:4px 0 0;font-size:14px">Yulduz: har bir multfilm, ertak va o'yin uchun.</p>
+    ${coupons.length?`<h2 style="margin-top:10px">Kuponlarim</h2>`+coupons.map(c=>`<div style="border:3px dashed var(--red);border-radius:18px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center"><div><div class="big" style="font-size:22px;color:var(--red-d)">${c.percent}%</div><div class="muted" style="font-size:12px">${c.until} gacha</div></div><div class="big" style="font-size:20px;letter-spacing:1px">${esc(c.code)}</div></div>`).join("")+`<p class="muted" style="margin:0;font-size:14px">Kiddy Toys do'konida kassirga kodni ko'rsating.</p>`:""}
+  </div>`;
+}
+async function redeem(percent, cost){
+  if (tg && tg.showConfirm){ const ok = await new Promise(r=>tg.showConfirm(`${cost} yulduzni ${percent}% chegirmaga almashtiraymi?`, r)); if(!ok) return; }
+  try{ const r = await api("/api/redeem",{percent,cost}); ME.active.stars = r.stars; haptic("heavy"); showMsg(`Kupon: ${r.code}\n${r.percent}% chegirma. Do'konda kassirga ko'rsating.`, "Tabriklaymiz!"); vRewards(); }catch(e){ toast(e.message); }
+}
+
+// ---------- o'yinlar ----------
+async function startGame(id){
+  haptic();
+  try{ await api("/api/game/start",{}); }catch(e){ return showMsg(e.message); }
+  go(id);
+}
+async function gameDone(game){
+  try{ const r = await api("/api/game/done",{game}); ME.active.stars = r.stars; haptic("heavy");
+    showMsg(r.stars_added ? `+${r.stars_added} yulduz! Jami: ${r.stars}` : "Barakalla! Bugungi o'yin yulduzlari tugadi.", "Barakalla!");
+  }catch(e){ showMsg(e.message); }
+}
+const COLORS = [["Qizil","#E0312B"],["Yashil","#3DAA3A"],["Ko'k","#2F55B4"],["Sariq","#FFD23F"],["To'q sariq","#F28C1E"],["Pushti","#FF6FAE"],["Binafsha","#8B5CF6"],["Jigarrang","#8B5A2B"]];
+function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]} return a; }
+function vColors(st){
+  st = st || {round:1, score:0}; const opts = shuffle(COLORS.slice()).slice(0,4); const ans = opts[Math.floor(Math.random()*4)];
+  $app.innerHTML = head("Rangni top") + `<div class="pad" style="display:flex;flex-direction:column;gap:18px;text-align:center">
+    <div class="muted">${st.round} / 5</div>
+    <h1 style="font-size:34px">${ans[0]} qaysi?</h1>
+    <div class="grid2">${opts.map(o=>`<button class="swatch" aria-label="${o[0]}" style="background:${o[1]}" data-n="${o[0]}"></button>`).join("")}</div></div>`;
+  $app.querySelectorAll(".swatch").forEach(b=>b.onclick=()=>{
+    const ok = b.dataset.n===ans[0]; haptic(ok?"medium":"rigid"); toast(ok?"To'g'ri!":"Yana urinib ko'r!");
+    if(!ok) return; st.score++; if(st.round>=5){ VIEW.pop(); render(); gameDone("colors"); } else { st.round++; setTimeout(()=>vColors(st),500); }
+  });
+}
+const SHAPES = ["M12 3l9 16H3z","M12 3a9 9 0 100 18 9 9 0 000-18z","M4 4h16v16H4z","M12 2l3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21l1.5-7L2 9.3l7-.8z","M12 21s-7-4.5-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.5-7 10-7 10z","M12 2l10 10-10 10L2 12z"];
+SHAPES.push("M3 9l9-6 9 6-3 12H6z", "M4 14a8 8 0 0116 0v2H4z"); // beshburchak, yarim doira
+const SC = ["#E0312B","#3DAA3A","#2F55B4","#F28C1E","#FF6FAE","#8B5CF6","#14B8A6","#8B5A2B"];
+const SNAMES = ["Uchburchak","Doira","Kvadrat","Yulduz","Yurak","Romb","Beshburchak","Yarim doira"];
+const shapeSvg = (i, c, size="44") => `<svg aria-hidden="true" width="${size}" height="${size}" viewBox="0 0 24 24"><path d="${SHAPES[i]}" fill="${c}"/></svg>`;
+function vPairs(n){
+  n = n || 6; const game = n===8 ? "pairs8" : "pairs";
+  const cards = shuffle([...Array(n).keys(), ...Array(n).keys()]); let open = [], done = 0, lock = false, tries = 0;
+  $app.innerHTML = head(n===8?"Katta juftlik":"Juftini top") + `<div class="pad"><p class="muted" style="margin-top:0;text-align:center">Bir xil shakllarni top</p><div class="memory">${cards.map((v,i)=>`<button data-i="${i}" aria-label="Karta ${i+1}"></button>`).join("")}</div></div>`;
+  const btns = $app.querySelectorAll(".memory button");
+  btns.forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i; if(lock||b.classList.contains("open")||b.classList.contains("done")) return; haptic();
+    b.classList.add("open"); b.innerHTML = shapeSvg(cards[i]%SHAPES.length, SC[cards[i]%SC.length], "60%"); open.push(b);
+    if(open.length===2){ lock=true; tries++; const [a,c]=open;
+      if(cards[a.dataset.i]===cards[c.dataset.i]){ setTimeout(()=>{a.className="done";c.className="done";open=[];lock=false;done++; if(done===n){ VIEW.pop(); render(); gameDone(game); }},350); }
+      else setTimeout(()=>{a.className="";c.className="";a.innerHTML="";c.innerHTML="";open=[];lock=false;},800); }
+  });
+}
+function vCount(st){
+  st = st || {round:1}; const n = 1+Math.floor(Math.random()*9); const sh = Math.floor(Math.random()*6);
+  const opts = shuffle([n, ...shuffle([1,2,3,4,5,6,7,8,9].filter(x=>x!==n)).slice(0,2)]);
+  $app.innerHTML = head("Sanaymiz") + `<div class="pad" style="display:flex;flex-direction:column;gap:18px;text-align:center">
+    <div class="muted">${st.round} / 5</div><h1>Nechta?</h1>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;background:var(--cream);border-radius:26px;padding:20px;min-height:150px;align-items:center">${Array(n).fill(`<svg aria-hidden="true" width="44" height="44" viewBox="0 0 24 24"><path d="${SHAPES[sh]}" fill="${SC[sh]}"/></svg>`).join("")}</div>
+    <div class="grid3">${opts.map(o=>`<button class="tile t-blue" style="height:90px;align-items:center;justify-content:center" data-n="${o}"><span style="font-size:40px">${o}</span></button>`).join("")}</div></div>`;
+  $app.querySelectorAll("[data-n]").forEach(b=>b.onclick=()=>{
+    const ok=+b.dataset.n===n; haptic(ok?"medium":"rigid"); toast(ok?"To'g'ri!":"Yana sanab ko'r!");
+    if(!ok) return; if(st.round>=5){ VIEW.pop(); render(); gameDone("count"); } else { st.round++; setTimeout(()=>vCount(st),500); }
+  });
+}
+
+// ---------- savol-javob o'yinlari ----------
+function quiz(game, title, make, rounds=5, st){
+  st = st || {round:1};
+  const q = make();
+  $app.innerHTML = head(title) + `<div class="pad" style="display:flex;flex-direction:column;gap:18px;text-align:center">
+    <div class="muted">${st.round} / ${rounds}</div>${q.prompt}
+    <div class="${q.cols===3?'grid3':'grid2'}">${q.options.map((o,i)=>`<button class="tile ${o.cls||'t-blue'}" style="height:${q.h||110}px;align-items:center;justify-content:center" data-i="${i}" aria-label="${esc(o.label||'')}">${o.html}</button>`).join("")}</div></div>`;
+  $app.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{
+    const ok = q.options[+b.dataset.i].ok; haptic(ok?"medium":"rigid"); toast(ok?"To'g'ri!":"Yana urinib ko'r!");
+    if(!ok) return;
+    if(st.round>=rounds){ VIEW.pop(); render(); gameDone(game); } else { st.round++; setTimeout(()=>quiz(game,title,make,rounds,st),450); }
+  });
+}
+const rnd = n => Math.floor(Math.random()*n);
+function vShapes(){ quiz("shapes","Shakllar",()=>{
+  const ids = shuffle([...Array(8).keys()]).slice(0,4), ans = ids[rnd(4)];
+  return {prompt:`<h1 style="font-size:32px">${SNAMES[ans]}ni top</h1>`, options: ids.map(i=>({html:shapeSvg(i,SC[i],"64"), ok:i===ans, label:SNAMES[i], cls:"t-orange"}))};
+}); }
+function vBigSmall(){ quiz("bigsmall","Katta-kichik",()=>{
+  const sh = rnd(8), big = Math.random()<.5, sizes = shuffle([30,46,62,78]);
+  const target = big ? 78 : 30;
+  return {prompt:`<h1 style="font-size:32px">Eng ${big?"kattasini":"kichigini"} top</h1>`, options: sizes.map(z=>({html:shapeSvg(sh,SC[sh],String(z)), ok:z===target, cls:"t-blue"}))};
+}); }
+function vOddOne(){ quiz("oddone","Boshqachasini top",()=>{
+  const a = rnd(8); let b = rnd(8); while(b===a) b = rnd(8);
+  const sameColor = Math.random()<.5, odd = rnd(4);
+  return {prompt:`<h1 style="font-size:30px">Qaysi biri boshqacha?</h1>`, options:[0,1,2,3].map(i=>{
+    const isOdd = i===odd; const shp = (sameColor && isOdd) ? b : a; const col = (!sameColor && isOdd) ? SC[(a+3)%8] : SC[a];
+    return {html:shapeSvg(shp,col,"64"), ok:isOdd, cls:"t-green"}; })};
+}); }
+const ABC = ["A","B","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","X","Y","Z","O'","G'","Sh","Ch"];
+function vLetters(){ quiz("letters","Harflar",()=>{
+  const opts = shuffle(ABC.slice()).slice(0,4), ans = opts[rnd(4)];
+  return {prompt:`<h1 style="font-size:30px">«${ans}» harfini top</h1><button class="btn ghost" style="width:auto;align-self:center" onclick="sayIt('${ans}')">${ico("M11 5L6 9H2v6h4l5 4zM15.5 8.5a5 5 0 010 7","#1F2A6B",22)} Eshitish</button>`,
+    options: opts.map(l=>({html:`<span class="big" style="font-size:52px">${l}</span>`, ok:l===ans, label:l, cls:"t-red"}))};
+}); }
+function sayIt(t){ try{ const u = new SpeechSynthesisUtterance(t); u.lang="uz-UZ"; speechSynthesis.cancel(); speechSynthesis.speak(u);}catch(e){} }
+function vMath(){ quiz("math","Qo'shamiz",()=>{
+  const a = 1+rnd(5), b = 1+rnd(5), sum = a+b, sh = rnd(8);
+  const opts = shuffle([sum, ...shuffle([2,3,4,5,6,7,8,9,10].filter(x=>x!==sum)).slice(0,2)]);
+  const row = n => Array(n).fill(shapeSvg(sh,SC[sh],"28")).join("");
+  return {prompt:`<div style="background:var(--cream);border-radius:24px;padding:16px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center">${row(a)}<b class="big" style="font-size:34px;margin:0 6px">+</b>${row(b)}</div><h1 style="font-size:34px">${a} + ${b} = ?</h1>`,
+    cols:3, h:90, options: opts.map(o=>({html:`<span style="font-size:40px">${o}</span>`, ok:o===sum, cls:"t-orange"}))};
+}); }
+function vSimon(){
+  const cols = [["#E0312B","Qizil"],["#3DAA3A","Yashil"],["#2F55B4","Ko'k"],["#F28C1E","Sariq"]];
+  let seq = [rnd(4), rnd(4)], pos = 0, busy = true;
+  $app.innerHTML = head("Eslab qol") + `<div class="pad" style="display:flex;flex-direction:column;gap:16px;text-align:center">
+    <h2 id="sm">Ranglar ketma-ketligini eslab qol</h2><div class="muted" id="lv"></div>
+    <div class="grid2">${cols.map((c,i)=>`<button class="swatch" data-i="${i}" aria-label="${c[1]}" style="background:${c[0]};opacity:.45;height:130px;transition:opacity .15s"></button>`).join("")}</div></div>`;
+  const btns = [...$app.querySelectorAll("[data-i]")];
+  const flash = i => new Promise(r=>{ btns[i].style.opacity=1; haptic(); setTimeout(()=>{btns[i].style.opacity=.45; setTimeout(r,220);},480); });
+  async function show(){ busy=true; pos=0; document.getElementById("lv").textContent=`Daraja: ${seq.length-1} / 4`; document.getElementById("sm").textContent="Qara..."; await new Promise(r=>setTimeout(r,600)); for(const i of seq) await flash(i); document.getElementById("sm").textContent="Endi sen bos!"; busy=false; }
+  btns.forEach(b=>b.onclick=async()=>{
+    if(busy) return; const i=+b.dataset.i; await flash(i);
+    if(i!==seq[pos]){ toast("Yana bir bor ko'ramiz!"); return show(); }
+    pos++; if(pos===seq.length){ if(seq.length>=5){ VIEW.pop(); render(); return gameDone("simon"); } toast("Barakalla!"); seq.push(rnd(4)); setTimeout(show,500); }
+  });
+  show();
+}
+
+// ---------- bo'yash ----------
+const PAL = ["#E0312B","#F28C1E","#FFD23F","#3DAA3A","#14B8A6","#2F55B4","#8B5CF6","#FF6FAE","#8B5A2B","#9CA3AF"];
+let paint = "#E0312B";
+const F = 'data-p="1"';
+const PICS = [
+ {t:"Uy va quyosh", svg:`<circle cx="260" cy="60" r="34" ${F}/><path d="M60 170L150 90l90 80z" ${F}/><rect x="75" y="170" width="150" height="120" ${F}/><rect x="130" y="220" width="40" height="70" ${F}/><rect x="90" y="190" width="30" height="30" ${F}/><rect x="180" y="190" width="30" height="30" ${F}/><path d="M270 290v-60" fill="none" stroke-linecap="round"/><circle cx="270" cy="215" r="18" ${F}/><path d="M20 290h280v30H20z" ${F}/>`},
+ {t:"Baliqcha", svg:`<path d="M0 260c40-20 80 20 120 0s80-20 120 0 60 20 80 0v80H0z" ${F}/><path d="M60 150c40-60 140-60 180 0-40 60-140 60-180 0z" ${F}/><path d="M240 150l60-45v90z" ${F}/><path d="M130 105c20-25 50-25 60 0z" ${F}/><path d="M120 150c10 15 10 30 0 40" fill="none"/><circle cx="95" cy="140" r="12" ${F}/><circle cx="60" cy="70" r="14" ${F}/><circle cx="90" cy="40" r="9" ${F}/><circle cx="40" cy="30" r="7" ${F}/>`},
+ {t:"Mashina", svg:`<path d="M0 290h320v50H0z" ${F}/><path d="M30 240v-50l40-10 40-50h100l50 50 30 10v50z" ${F}/><path d="M120 140h40v40h-75z" ${F}/><path d="M170 140h35l35 40h-70z" ${F}/><circle cx="90" cy="250" r="32" ${F}/><circle cx="235" cy="250" r="32" ${F}/><circle cx="90" cy="250" r="12" ${F}/><circle cx="235" cy="250" r="12" ${F}/><circle cx="275" cy="205" r="9" ${F}/><circle cx="60" cy="50" r="28" ${F}/>`},
+ {t:"Kapalak", svg:`<ellipse cx="105" cy="120" rx="70" ry="55" ${F}/><ellipse cx="215" cy="120" rx="70" ry="55" ${F}/><ellipse cx="115" cy="215" rx="50" ry="40" ${F}/><ellipse cx="205" cy="215" rx="50" ry="40" ${F}/><ellipse cx="160" cy="165" rx="14" ry="80" ${F}/><circle cx="105" cy="120" r="18" ${F}/><circle cx="215" cy="120" r="18" ${F}/><path d="M152 90c-10-30-30-45-45-50M168 90c10-30 30-45 45-50" fill="none" stroke-linecap="round"/><path d="M0 300c60-25 100 10 160 0s100-25 160 0v40H0z" ${F}/>`},
+ {t:"Mushukcha", svg:`<ellipse cx="170" cy="240" rx="90" ry="65" ${F}/><path d="M255 250c40-10 55-60 30-90" fill="none" stroke-width="14" stroke-linecap="round"/><circle cx="130" cy="140" r="70" ${F}/><path d="M75 100L70 30l55 40z" ${F}/><path d="M185 100l5-70-55 40z" ${F}/><circle cx="105" cy="130" r="11" ${F}/><circle cx="155" cy="130" r="11" ${F}/><path d="M122 158l8 8 8-8z" ${F}/><path d="M60 160l40 5M60 180l40-5M200 160l-40 5M200 180l-40-5" fill="none" stroke-linecap="round"/><path d="M0 305h320v35H0z" ${F}/>`},
+ {t:"Raketa", svg:`<circle cx="60" cy="60" r="30" ${F}/><path d="M160 30c50 40 60 120 40 190h-80c-20-70-10-150 40-190z" ${F}/><circle cx="160" cy="120" r="24" ${F}/><path d="M120 200l-40 50 45-10z" ${F}/><path d="M200 200l40 50-45-10z" ${F}/><path d="M135 225h50l-25 70z" ${F}/><path d="M270 60l6 14 15 2-11 10 3 15-13-8-13 8 3-15-11-10 15-2z" ${F}/><path d="M250 250l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1z" ${F}/>`},
+ {t:"Olma daraxti", svg:`<path d="M140 330V200h40v130z" ${F}/><circle cx="160" cy="130" r="95" ${F}/><circle cx="120" cy="100" r="14" ${F}/><circle cx="190" cy="90" r="14" ${F}/><circle cx="150" cy="160" r="14" ${F}/><circle cx="210" cy="160" r="14" ${F}/><circle cx="105" cy="165" r="14" ${F}/><path d="M0 310h320v30H0z" ${F}/><circle cx="270" cy="300" r="14" ${F}/>`},
+ {t:"Kema", svg:`<circle cx="265" cy="55" r="30" ${F}/><path d="M60 220h200l-30 50H90z" ${F}/><path d="M160 40v170" fill="none"/><path d="M165 50l80 150h-80z" ${F}/><path d="M155 70l-70 130h70z" ${F}/><path d="M0 270c30-15 50 15 80 0s50-15 80 0 50 15 80 0 50-15 80 0v70H0z" ${F}/>`}
+];
+function vColoring(idx){
+  if (idx === undefined){
+    $app.innerHTML = head("Bo'yash kitobi") + `<div class="pad"><p class="muted" style="margin-top:0">Rasm tanla</p><div class="grid2">${PICS.map((p,i)=>`
+      <button class="card" onclick="go('coloring', ${i})"><div style="background:var(--green-l);border-radius:22px;padding:8px"><svg viewBox="0 0 320 340" style="width:100%;background:#fff;border-radius:16px;display:block" fill="#fff" stroke="#1F2A6B" stroke-width="6" stroke-linejoin="round" aria-hidden="true">${p.svg}</svg></div><span class="ttl">${p.t}</span></button>`).join("")}</div></div>`;
+    return;
+  }
+  const P = PICS[idx];
+  $app.innerHTML = head(P.t) + `<div class="pad" style="padding-top:0;display:flex;flex-direction:column;gap:14px">
+    <div style="background:var(--green-l);border-radius:28px;padding:10px">
+    <svg id="pic" viewBox="0 0 320 340" style="width:100%;background:#fff;border-radius:22px;display:block" fill="#FFFFFF" stroke="#1F2A6B" stroke-width="4" stroke-linejoin="round" role="img" aria-label="Bo'yash uchun rasm: ${esc(P.t)}">
+      <rect x="0" y="0" width="320" height="340" fill="#FFFFFF" stroke="none" data-p="1"/>${P.svg}
+    </svg></div>
+    <div class="pal" style="flex-wrap:wrap;justify-content:center" role="radiogroup" aria-label="Rang">${PAL.map(c=>`<button role="radio" aria-label="Rang" style="background:${c};width:42px;height:42px" class="${c===paint?'on':''}" data-c="${c}"></button>`).join("")}</div>
+    <div class="grid2"><button class="btn green" onclick="gameDone('coloring')">Tayyor</button><button class="btn" onclick="sendContest()">Tanlovga yuborish</button></div>
+    <p class="muted" style="margin:0;text-align:center;font-size:14px">Tanlov: "${esc(ME.contest_title)}"</p>
+  </div>`;
+  $app.querySelectorAll("#pic [data-p]").forEach(el=>el.addEventListener("click",()=>{ el.setAttribute("fill", paint); haptic(); }));
+  $app.querySelectorAll(".pal button").forEach(b=>b.onclick=()=>{ paint=b.dataset.c; $app.querySelectorAll(".pal button").forEach(x=>x.classList.toggle("on",x===b)); });
+}
+async function sendContest(){
+  const svg = new XMLSerializer().serializeToString(document.getElementById("pic"));
+  const img = new Image(); img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+  await new Promise(r=>{ img.onload=r; img.onerror=r; });
+  const cv = document.createElement("canvas"); cv.width=640; cv.height=680; const cx = cv.getContext("2d");
+  cx.fillStyle="#fff"; cx.fillRect(0,0,640,680); cx.drawImage(img,0,0,640,680);
+  try{ await api("/api/contest",{png: cv.toDataURL("image/png")}); haptic("heavy"); showMsg("Rasming tanlovga yuborildi! Natijani bot orqali e'lon qilamiz.","Rahmat!"); }catch(e){ toast(e.message); }
+}
+
+// ---------- ota-ona ----------
+async function vParent(){
+  if (!PKEY) return pinPad();
+  let d; try{ d = await api("/api/parent"); }catch(e){ PKEY=""; return pinPad(); }
+  const sw = (on, act) => `<button class="sw ${on?'on':''}" role="switch" aria-checked="${on}" onclick="${act}"><b></b></button>`;
+  $app.innerHTML = head("Ota-ona paneli") + `<div class="pad" style="padding-top:0;display:flex;flex-direction:column;gap:16px;background:var(--soft);min-height:100vh">
+    <div class="box">
+      <div class="row"><div style="flex:1"><div style="font-weight:700">Kunlik vaqt</div><div class="muted" style="font-size:13px">Har bir bola uchun</div></div>
+        <button class="key" style="width:46px;height:46px;font-size:24px;background:var(--soft)" onclick="psave({limit:${d.limit-15}})" aria-label="Kamaytirish">−</button><b style="min-width:62px;text-align:center">${d.limit} daq</b><button class="key" style="width:46px;height:46px;font-size:24px;background:var(--soft)" onclick="psave({limit:${d.limit+15}})" aria-label="Ko'paytirish">+</button></div>
+      <div class="row"><div style="flex:1"><div style="font-weight:700">Uxlash vaqti</div><div class="muted" style="font-size:13px">Bu vaqtda Kiddy TV yopiq</div></div>${sw(d.sleep.on,`psave({sleep_on:${!d.sleep.on}})`)}</div>
+      ${d.sleep.on?`<div class="row" style="gap:8px"><input type="time" value="${d.sleep.from}" onchange="psave({sleep_from:this.value})" aria-label="Boshlanishi"><span>—</span><input type="time" value="${d.sleep.to}" onchange="psave({sleep_to:this.value})" aria-label="Tugashi"></div>`:""}
+      <div class="row"><div style="flex:1"><div style="font-weight:700">Haftalik hisobot</div><div class="muted" style="font-size:13px">Har yakshanba botga</div></div>${sw(d.report,`psave({report:${!d.report}})`)}</div>
+    </div>
+    <h2 style="margin-top:4px">Bolalar</h2>
+    ${d.kids.map(k=>`<div class="box" style="padding:14px 16px"><div style="display:flex;align-items:center;gap:10px"><b style="flex:1;font-size:17px">${esc(k.name)} <span class="muted" style="font-weight:600;font-size:14px">· ${k.age} yosh</span></b><button class="muted" style="font-size:13px" onclick="delKid(${k.id},'${esc(k.name)}')">O'chirish</button></div>
+      <div class="grid3" style="margin-top:10px">
+        <div style="background:var(--red-l);border-radius:16px;padding:10px"><div class="big" style="font-size:20px;color:var(--red-d)">${k.today}</div><div style="font-size:12px">bugun, daq</div></div>
+        <div style="background:var(--blue-l);border-radius:16px;padding:10px"><div class="big" style="font-size:20px;color:var(--blue-d)">${k.week.minutes}</div><div style="font-size:12px">hafta, daq</div></div>
+        <div style="background:var(--orange-l);border-radius:16px;padding:10px"><div class="big" style="font-size:20px;color:var(--orange-d)">${k.stars}</div><div style="font-size:12px">yulduz</div></div>
+      </div>${k.week.top?`<div class="muted" style="font-size:13px;margin-top:8px">Eng ko'p ko'rgani: ${esc(k.week.top)}</div>`:""}</div>`).join("")}
+    <button class="btn ghost" style="background:#fff" onclick="go('addchild')">+ Bola qo'shish</button>
+    ${d.blocked.length?`<h2>Yopilgan kontent</h2><div class="box">${d.blocked.map(b=>`<div class="row"><span style="flex:1">${esc(b.title)}</span><button class="btn ghost" style="width:auto;min-height:38px;font-size:14px" onclick="psave({unblock:${b.id}})">Ochish</button></div>`).join("")}</div>`:""}
+    <button class="btn ghost" style="background:#fff" onclick="changePin()">PIN-kodni almashtirish</button>
+    <button class="btn ghost" style="background:#fff" onclick="PKEY='';back()">Chiqish</button>
+  </div>`;
+}
+async function psave(data){ try{ await api("/api/parent", data); await refresh(); vParent(); }catch(e){ toast(e.message); if(e.code===403){PKEY="";} } }
+async function delKid(id, name){
+  if (tg && tg.showConfirm){ const ok = await new Promise(r=>tg.showConfirm(`${name} o'chirilsinmi? Yulduzlari ham o'chadi.`, r)); if(!ok) return; }
+  await psave({delete_child:id}); if(!ME.active){ VIEW=[["addchild",true]]; render(); }
+}
+function pinPad(mode){
+  let pin = "";
+  const title = mode==="new" ? "Yangi PIN-kod" : (ME.has_pin ? "PIN-kodni kiriting" : "PIN-kod o'ylab toping");
+  const draw = () => {
+    $app.innerHTML = head("Ota-ona bo'limi") + `<div class="pad" style="display:flex;flex-direction:column;gap:22px;align-items:center;text-align:center">
+      <span class="round" style="width:80px;height:80px;border-radius:26px;background:var(--blue-l);box-shadow:none">${ico("M5 11h14v10H5zM8 11V7a4 4 0 018 0v4","#2446A0",38)}</span>
+      <h2>${title}</h2>${!ME.has_pin&&mode!=="new"?`<p class="muted" style="margin:-12px 0 0;font-size:14px">4 ta raqam. Bola bilmasin!</p>`:""}
+      <div class="dots">${[0,1,2,3].map(i=>`<i class="${i<pin.length?'on':''}"></i>`).join("")}</div>
+      <div class="keys" style="width:100%">${["1","2","3","4","5","6","7","8","9","","0","⌫"].map(k=>k?`<button class="key" data-k="${k}" aria-label="${k==='⌫'?"O'chirish":k}">${k}</button>`:"<span></span>").join("")}</div></div>`;
+    $app.querySelectorAll("[data-k]").forEach(b=>b.onclick=async()=>{
+      haptic(); const k=b.dataset.k; if(k==="⌫"){ pin=pin.slice(0,-1); return draw(); }
+      if(pin.length<4) pin+=k; draw();
+      if(pin.length===4){
+        try{
+          if(mode==="new"){ await api("/api/parent",{pin}); toast("PIN-kod almashtirildi"); vParent(); return; }
+          const r = await api("/api/parent/unlock",{pin}); PKEY=r.key; ME.has_pin=true; vParent();
+        }catch(e){ toast(e.message); pin=""; setTimeout(draw,300); }
+      }
+    });
+  };
+  draw();
+}
+function changePin(){ pinPad("new"); }
+
+function showMsg(text, title){
+  const m = document.createElement("div"); m.className="modal";
+  m.innerHTML = `<div class="sheet" role="dialog" aria-modal="true"><h2>${esc(title||"Kiddy TV")}</h2><p style="margin:0;white-space:pre-line;font-size:17px">${esc(text)}</p><button class="btn">Yaxshi</button></div>`;
+  m.querySelector("button").onclick = ()=>m.remove(); m.onclick = e=>{ if(e.target===m) m.remove(); };
+  document.body.appendChild(m);
+}
+
+(async function init(){
+  if (tg){ tg.ready(); tg.expand(); try{ tg.setHeaderColor("#FFF4E6"); tg.setBackgroundColor("#FFFFFF"); }catch(e){} tg.BackButton.onClick(back); }
+  if (!INIT){ $app.innerHTML = `<div class="empty"><img src="/logo.png" width="120" height="120" alt="Kiddy Toys" style="border-radius:50%"><h1 style="margin-top:12px">Kiddy TV</h1><p>Bu ilova Telegram ichida ochiladi.<br>Botdagi «Kiddy TV ni ochish» tugmasini bosing.</p></div>`; return; }
+  try{ await refresh(); render(); }catch(e){ $app.innerHTML = `<div class="empty">Ulanib bo'lmadi: ${esc(e.message)}<br><br><button class="btn" onclick="location.reload()">Qayta urinish</button></div>`; }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head"><h1>Kontent</h1><a class="btn" href="/import">YouTube'dan import</a><span class="sp"></span>
+  <form method="get" class="row" style="flex:1 1 260px;max-width:420px;min-width:0">
+    <input type="hidden" name="kind" value="{{ kind }}">
+    <input name="q" value="{{ q }}" placeholder="Nomi bo'yicha qidirish" aria-label="Qidirish" style="flex:1">
+    <button class="btn ghost" type="submit">Qidirish</button>
+  </form>
+</div>
+
+{% include "_age.html" %}
+
+<section class="card">
+  <h2>Yangi kontent qo'shish</h2>
+  <p class="muted" style="margin:6px 0 16px">YouTube havolasini qo'ying yoki video/audio faylni yuklang (fayl {{ max_mb }} MB gacha — Telegram cheklovi). Faqat ruxsat etilgan, mualliflik huquqi bo'yicha muammosiz kontent qo'ying.</p>
+  <form method="post" action="/content/add" enctype="multipart/form-data" class="form">
+    <input type="hidden" name="token" value="{{ csrf }}">
+    <label class="f">Bo'lim<select name="kind" required>{% for k, v in KINDS.items() %}<option value="{{ k }}" {{ 'selected' if k == kind }}>{{ v }}</option>{% endfor %}</select></label>
+    <label class="f" style="grid-column:span 2">Nomi<input name="title" required maxlength="80" placeholder="Zumrad va Qimmat"></label>
+    <label class="f">Yoshdan<input name="age_min" type="number" min="0" max="14" value="3" required></label>
+    <label class="f">Yoshgacha<input name="age_max" type="number" min="0" max="14" value="8" required></label>
+    <label class="f">Daqiqa (fayl bo'lsa o'zi)<input name="minutes" type="number" min="0" max="300" placeholder="5"></label>
+    <label class="f" style="grid-column:span 2">YouTube / o'yin havolasi<input name="link" type="url" placeholder="https://youtu.be/..."></label>
+    <label class="f" style="grid-column:span 2">yoki fayl (video / audio)<input name="file" type="file" accept="video/*,audio/*" {{ 'disabled' if not bot_ok }}></label>
+    <button class="btn green" type="submit">Qo'shish</button>
+  </form>
+</section>
+
+<div class="row">
+  <nav class="tabs" aria-label="Bo'lim filtri">
+    <a href="/content?q={{ q }}&hidden={{ hidden }}" class="{{ 'on' if not kind }}">Hammasi</a>
+    {% for k, v in KINDS.items() %}<a href="/content?kind={{ k }}&q={{ q }}&hidden={{ hidden }}" class="{{ 'on' if kind == k }}">{{ v }}</a>{% endfor %}
+  </nav>
+  <span class="sp" style="flex:1"></span>
+  <a class="btn ghost sm" href="/content?kind={{ kind }}&q={{ q }}&hidden={{ 0 if hidden else 1 }}">{{ 'Yashirinlarni berkitish' if hidden else "Yashirinlarni ham ko'rsatish" }}</a>
+</div>
+
+<section class="card tbl" style="padding:8px 12px">
+  <table>
+    <thead><tr><th>ID</th><th>Nomi</th><th>Bo'lim</th><th>Yosh</th><th>Daq</th><th>Manba</th><th>Ko'rish</th><th>Yoqdi</th><th>Holat</th><th></th></tr></thead>
+    <tbody>
+    {% for c in rows %}
+      <tr style="{{ 'opacity:.55' if not c.active }}">
+        <td class="muted">{{ c.id }}</td>
+        <td><a href="/content/{{ c.id }}">{{ c.title }}</a>{% if c.series %}<div class="muted" style="font-size:12px">{{ c.series }} · {{ c.episode }}-qism</div>{% endif %}</td>
+        <td>{{ KINDS[c.kind] }}</td>
+        <td>{{ c.age_min }}–{{ c.age_max }}</td>
+        <td>{{ c.minutes }}</td>
+        <td>{% if c.source_type == 'file' %}<span class="pill t-green">Fayl · {{ c.file_type }}</span>{% elif c.source_type == 'youtube' %}<a href="{{ c.source }}" target="_blank" rel="noopener" class="pill t-red" style="text-decoration:none">YouTube</a>{% else %}<a href="{{ c.source }}" target="_blank" rel="noopener" class="pill t-orange" style="text-decoration:none">Havola</a>{% endif %}</td>
+        <td>{{ c.views }}</td>
+        <td>{{ c.likes }}</td>
+        <td>{% if c.active %}<span class="pill t-blue">Faol</span>{% else %}<span class="pill" style="background:var(--bg)">Yashirin</span>{% endif %}</td>
+        <td><div class="row" style="flex-wrap:nowrap;gap:6px">
+          <a class="btn ghost sm" href="/content/{{ c.id }}">Tahrirlash</a>
+          <form method="post" action="/content/{{ c.id }}/toggle"><input type="hidden" name="token" value="{{ csrf }}"><button class="btn ghost sm" type="submit">{{ 'Yashirish' if c.active else 'Ochish' }}</button></form>
+        </div></td>
+      </tr>
+    {% else %}
+      <tr><td colspan="10" class="empty">Kontent yo'q. Yuqoridagi forma orqali qo'shing.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head"><h1>Xodimlar</h1></div>
+<section class="card">
+  <h2>Yangi xodim</h2>
+  <p class="muted" style="margin:6px 0 14px"><b>Admin</b> — hamma bo'limlar. <b>Kassir</b> — faqat kuponlarni tekshirish va ishlatish.</p>
+  <form method="post" action="/staff/add" class="form">
+    <input type="hidden" name="token" value="{{ csrf }}">
+    <label class="f">Ismi<input name="full_name" placeholder="Soy bo'yi kassiri"></label>
+    <label class="f">Login<input name="username" required pattern="[a-zA-Z0-9_.]{3,30}" autocomplete="off"></label>
+    <label class="f">Parol<input name="password" type="password" minlength="6" required autocomplete="new-password"></label>
+    <label class="f">Rol<select name="role"><option value="kassir">Kassir</option><option value="admin">Admin</option></select></label>
+    <button class="btn green" type="submit">Qo'shish</button>
+  </form>
+</section>
+<section class="card tbl" style="padding:8px 12px">
+  <table>
+    <thead><tr><th>Login</th><th>Ismi</th><th>Rol</th><th>Holat</th><th>Yangi parol</th><th></th></tr></thead>
+    <tbody>
+    {% for s in rows %}
+      <tr style="{{ 'opacity:.55' if not s.active }}">
+        <td><b>{{ s.username }}</b></td><td>{{ s.full_name or '—' }}</td>
+        <td><span class="pill {{ 't-blue' if s.role == 'admin' else 't-orange' }}">{{ 'Admin' if s.role == 'admin' else 'Kassir' }}</span></td>
+        <td>{{ 'Faol' if s.active else "O'chirilgan" }}</td>
+        <td><form method="post" action="/staff/{{ s.id }}/password" class="row" style="flex-wrap:nowrap;gap:4px"><input type="hidden" name="token" value="{{ csrf }}"><input name="password" type="password" minlength="6" required aria-label="Yangi parol" style="min-height:34px;padding:4px 8px;width:140px" autocomplete="new-password"><button class="btn ghost sm" type="submit">O'rnatish</button></form></td>
+        <td>{% if s.id != user.id %}<form method="post" action="/staff/{{ s.id }}/toggle"><input type="hidden" name="token" value="{{ csrf }}"><button class="btn ghost sm" type="submit">{{ "O'chirish" if s.active else 'Yoqish' }}</button></form>{% else %}<span class="muted">siz</span>{% endif %}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

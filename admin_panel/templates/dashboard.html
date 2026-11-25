@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head"><h1>Bosh sahifa</h1><span class="sp"></span>
+  <form action="/coupons" method="get" class="row" style="flex:1 1 260px;max-width:420px;min-width:0">
+    <input name="check" placeholder="Kupon: KIDDY-..." style="flex:1;text-transform:uppercase" aria-label="Kupon kodi">
+    <button class="btn" type="submit" style="flex:none">Tekshirish</button>
+  </form>
+</div>
+{% include "_age.html" %}
+
+
+<div class="grid">
+  <div class="stat t-blue"><b>{{ s.parents }}</b><span>oila · bu hafta +{{ x.new_week }}</span></div>
+  <div class="stat t-green"><b>{{ s.children }}</b><span>bola</span></div>
+  <div class="stat t-red"><b>{{ s.views_today }}</b><span>bugungi ko'rishlar</span></div>
+  <div class="stat t-orange"><b>{{ s.content }}</b><span>faol kontent</span></div>
+</div>
+<div class="grid">
+  <div class="card"><div class="muted">Faol kuponlar</div><h2 style="font-size:28px">{{ x.active_c }}</h2></div>
+  <div class="card"><div class="muted">Bu oy berilgan kupon</div><h2 style="font-size:28px">{{ x.issued_month }}</h2></div>
+  <div class="card"><div class="muted">Bu oy do'konda ishlatildi</div><h2 style="font-size:28px">{{ x.used_month }}</h2></div>
+  <div class="card"><div class="muted">Tanlov rasmlari</div><h2 style="font-size:28px">{{ x.contest_n }}</h2></div>
+</div>
+
+<div class="grid2">
+  <section class="card">
+    <h2>Ko'rishlar · oxirgi 14 kun</h2>
+    <div style="display:flex;align-items:flex-end;gap:6px;height:180px;margin-top:18px" role="img" aria-label="Kunlik ko'rishlar grafigi">
+      {% for d in days %}
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end" title="{{ d.date }}: {{ d.views }} ta, {{ d.minutes }} daq">
+        <span style="font-size:11px" class="muted">{{ d.views if d.views else '' }}</span>
+        <div style="width:100%;max-width:28px;border-radius:8px 8px 4px 4px;background:{{ 'var(--orange)' if loop.last else 'var(--blue)' }};height:{{ (d.views / peak * 130)|round|int + 3 }}px"></div>
+        <span style="font-size:11px" class="muted">{{ d.date[8:] }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  <section class="card">
+    <h2>Bo'limlar bo'yicha</h2>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
+      {% for r in split %}
+      <div>
+        <div class="row" style="justify-content:space-between"><span>{{ KINDS[r.kind] }}</span><span class="muted">{{ r.n }} · {{ (r.n / total * 100)|round|int }}%</span></div>
+        <div style="height:10px;background:var(--bg);border-radius:999px;margin-top:4px"><div style="height:100%;border-radius:999px;width:{{ (r.n / total * 100)|round|int }}%;background:var(--green)"></div></div>
+      </div>
+      {% else %}<div class="empty">Hali ko'rishlar yo'q</div>{% endfor %}
+    </div>
+  </section>
+</div>
+
+<div class="grid2">
+  <section class="card">
+    <div class="row" style="justify-content:space-between"><h2>Hafta kontenti</h2><a href="/ratings">Hammasi</a></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Nomi</th><th>Bo'lim</th><th>Ko'rish</th><th>Yoqdi</th></tr></thead>
+      <tbody>{% for c in top_c %}<tr><td>{{ c.title }}</td><td>{{ KINDS[c.kind] }}</td><td>{{ c.views }}</td><td>{{ c.likes }}</td></tr>
+      {% else %}<tr><td colspan="4" class="empty">Ma'lumot yo'q</td></tr>{% endfor %}</tbody>
+    </table></div>
+  </section>
+  <section class="card">
+    <div class="row" style="justify-content:space-between"><h2>Hafta yulduzlari</h2><a href="/ratings">Hammasi</a></div>
+    <div class="tbl"><table>
+      <thead><tr><th>#</th><th>Bola</th><th>Yosh</th><th>Bu hafta</th></tr></thead>
+      <tbody>{% for k in top_k %}<tr><td>{{ loop.index }}</td><td>{{ k.name }}</td><td>{{ k.birth_date|age }}</td><td>+{{ k.earned }} yulduz</td></tr>
+      {% else %}<tr><td colspan="4" class="empty">Ma'lumot yo'q</td></tr>{% endfor %}</tbody>
+    </table></div>
+  </section>
+</div>
+{% endblock %}
