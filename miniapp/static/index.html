@@ -121,6 +121,7 @@ function kidHead(title){ return `<div class="head"><button class="round" onclick
 async function refresh(){ ME = await api("/api/me"); }
 
 function render(){
+  stopWatch();
   const v = VIEW[VIEW.length-1]; const name = Array.isArray(v) ? v[0] : v;
   if (tg){ if (VIEW.length>1){ tg.BackButton.show(); } else { tg.BackButton.hide(); } }
   if (!ME) return;
@@ -235,7 +236,7 @@ async function openItem(id){
   try {
     const r = await api("/api/open", {id});
     ME.active.stars = r.stars; ME.used += r.item.minutes;
-    if (r.item.type === "link"){ tg ? tg.openLink(r.url) : window.open(r.url); toast(`+${r.stars_added} yulduz!`); return; }
+    if (r.item.type === "link"){ tg ? tg.openLink(r.url) : window.open(r.url); if (r.stars_added) toast(`+${r.stars_added} yulduz!`); return; }
     go("player", r);
   } catch(e){ showMsg(e.message); }
 }
@@ -245,9 +246,9 @@ function openYT(id){ const u = "https://www.youtube.com/watch?v=" + id; if (tg &
 function vPlayer(r){
   const it = r.item; const K = KIND[it.kind] || KIND.video;
   let media;
-  if (r.youtube) media = `<iframe class="vid" src="https://www.youtube.com/embed/${r.youtube}?autoplay=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="${esc(it.title)}"></iframe>`;
-  else if (it.file_type === "audio") media = `<div class="swatch" style="height:180px;background:${BG.blue};display:flex;align-items:center;justify-content:center">${ico(KIND.audio.i,INK.blue,90,1.6)}</div><audio controls autoplay style="width:100%;margin-top:12px" src="${r.media}?init=${encodeURIComponent(INIT)}"></audio>`;
-  else media = `<video class="vid" controls autoplay playsinline src="${r.media}?init=${encodeURIComponent(INIT)}"></video>`;
+  if (r.youtube) media = `<iframe id="ytp" class="vid" src="https://www.youtube.com/embed/${r.youtube}?autoplay=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="${esc(it.title)}"></iframe>`;
+  else if (it.file_type === "audio") media = `<div class="swatch" style="height:180px;background:${BG.blue};display:flex;align-items:center;justify-content:center">${ico(KIND.audio.i,INK.blue,90,1.6)}</div><audio id="mediaEl" controls autoplay style="width:100%;margin-top:12px" src="${r.media}?init=${encodeURIComponent(INIT)}"></audio>`;
+  else media = `<video id="mediaEl" class="vid" controls autoplay playsinline src="${r.media}?init=${encodeURIComponent(INIT)}"></video>`;
   $app.innerHTML = kidHead(K.t) + `<div class="pad" style="padding-top:0;display:flex;flex-direction:column;gap:14px">
     ${media}
     ${r.series?`<div class="muted" style="font-weight:700;margin-bottom:-8px">${esc(r.series.name)} · ${r.series.episode}-qism</div>`:""}
@@ -256,18 +257,89 @@ function vPlayer(r){
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <span class="chip" style="height:34px;box-shadow:none;background:${BG[K.c]};color:${INK[K.c]}">${K.t}</span>
       <span class="chip" style="height:34px;box-shadow:none;background:var(--soft)">${it.age_min}–${it.age_max} yosh</span>
-      <span class="chip" style="height:34px;box-shadow:none;background:var(--orange-l)">${STAR(16)} +${r.stars_added}</span>
+      <span class="chip" id="rewChip" style="height:34px;box-shadow:none;background:var(--orange-l)">${STAR(16)} ${r.stars_added?`+${r.stars_added} olindi`:`+${r.reward||5}`}</span>
     </div>
+    ${r.view_id && !r.stars_added ? `<div id="rewBox" style="background:var(--soft);border-radius:16px;padding:12px 14px">
+      <div style="display:flex;justify-content:space-between;font-weight:700;font-size:15px"><span>Yarmini ko'rsang ${STAR(16)} +${r.reward||5}</span><span id="rewPct">0%</span></div>
+      <div style="height:10px;border-radius:99px;background:#fff;margin-top:8px;overflow:hidden"><div id="rewBar" style="height:100%;width:0;background:var(--orange,#F39200);border-radius:99px;transition:width .5s"></div></div>
+    </div>` : ""}
     <div class="grid2">
       <button class="btn ${r.liked?'red':'ghost'}" id="likeBtn" onclick="likeItem(${it.id})">${ico("M12 21s-7-4.5-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.5-7 10-7 10z", r.liked?"#fff":"#1F2A6B", 22)} Yoqdi</button>
       <button class="btn ghost" onclick="back()">Boshqasi</button>
     </div>
   </div>`;
   if (r.stars_added) toast(`+${r.stars_added} yulduz! Jami: ${r.stars}`);
+  if (r.view_id && !r.stars_added) startWatch(r);
+}
+
+// ---------- ko'rishni kuzatish: yarmi ko'rilganda yulduz ----------
+let WATCH = null, YT_READY = null;
+function loadYT(){
+  if (YT_READY) return YT_READY;
+  YT_READY = new Promise(res=>{
+    if (window.YT && YT.Player) return res(true);
+    window.onYouTubeIframeAPIReady = ()=>res(true);
+    const sc = document.createElement("script"); sc.src = "https://www.youtube.com/iframe_api"; sc.onerror = ()=>res(false);
+    document.head.appendChild(sc); setTimeout(()=>res(!!(window.YT && YT.Player)), 8000);
+  });
+  return YT_READY;
+}
+function stopWatch(){ if (WATCH){ clearInterval(WATCH.t); WATCH = null; } }
+function startWatch(r){
+  stopWatch();
+  const w = WATCH = {id:r.view_id, played:0, dur:0, done:false, retry:0, yt:null, ytOk:false, fallback:false, r};
+  if (r.youtube){
+    loadYT().then(ok=>{
+      if (WATCH!==w) return;
+      const el = document.getElementById("ytp");
+      if (ok && el){ try{ w.yt = new YT.Player(el, {events:{onReady:()=>{ w.ytOk = true; }}}); }catch(e){ w.fallback = true; } }
+      else w.fallback = true;
+      setTimeout(()=>{ if (WATCH===w && !w.ytOk) w.fallback = true; }, 6000);
+    });
+  }
+  w.t = setInterval(()=>tickWatch(w), 1000);
+}
+function watchState(w){
+  if (w.r.youtube){
+    if (w.ytOk && w.yt && w.yt.getPlayerState){
+      try{ return {playing: w.yt.getPlayerState() === 1, dur: w.yt.getDuration() || 0}; }catch(e){ return null; }
+    }
+    if (w.fallback) return {playing: document.visibilityState === "visible", dur: 0}; // API bo'lmasa: ekranda ochiq turgan vaqt
+    return null;
+  }
+  const m = document.getElementById("mediaEl");
+  if (!m) return null;
+  return {playing: !m.paused && !m.ended && m.readyState > 2, dur: isFinite(m.duration) ? m.duration : 0};
+}
+async function tickWatch(w){
+  if (WATCH !== w) return;
+  if (!document.getElementById("rewBox")){ stopWatch(); return; } // pleyerdan chiqildi
+  const st = watchState(w); if (!st) return;
+  if (st.playing) w.played++;
+  if (st.dur > 20) w.dur = st.dur;
+  const need = (w.dur || (w.r.item.minutes||1)*60) / 2;
+  const pct = Math.min(100, Math.round(w.played / need * 100));
+  const bar = document.getElementById("rewBar"), pc = document.getElementById("rewPct");
+  if (bar) bar.style.width = pct + "%"; if (pc) pc.textContent = pct + "%";
+  if (w.done || w.played < need || w.played < w.retry) return;
+  w.done = true;
+  try{
+    const x = await api("/api/progress", {view_id: w.id, played: w.played, duration: w.dur});
+    if (x.stars_added){
+      ME.active.stars = x.stars; haptic("heavy"); toast(`+${x.stars_added} yulduz! Jami: ${x.stars}`);
+      const box = document.getElementById("rewBox"); if (box) box.innerHTML = `<div style="font-weight:700;text-align:center">${STAR(18)} +${x.stars_added} yulduz olindi! Barakalla!</div>`;
+      const chip = document.getElementById("rewChip"); if (chip) chip.innerHTML = `${STAR(16)} +${x.stars_added} olindi`;
+      clearInterval(w.t);
+    } else if (x.reason === "allaqachon"){ clearInterval(w.t); }
+    else { w.done = false; w.retry = w.played + 15; }
+  }catch(e){ w.done = false; w.retry = w.played + 15; }
 }
 async function likeItem(id){
   haptic();
-  try{ const r = await api("/api/like",{id}); const v = VIEW[VIEW.length-1]; v[1].liked = r.liked; render(); if(r.liked) toast("Yoqdi! Rahmat."); }catch(e){ toast(e.message); }
+  try{ const r = await api("/api/like",{id}); const v = VIEW[VIEW.length-1]; v[1].liked = r.liked;
+    const b = document.getElementById("likeBtn");
+    if (b){ b.className = "btn " + (r.liked ? "red" : "ghost"); b.innerHTML = `${ico("M12 21s-7-4.5-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.5-7 10-7 10z", r.liked?"#fff":"#1F2A6B", 22)} Yoqdi`; }
+    if(r.liked) toast("Yoqdi! Rahmat."); }catch(e){ toast(e.message); }
 }
 
 // ---------- bolalar ----------

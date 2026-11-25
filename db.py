@@ -341,6 +341,32 @@ class DB:
         await self.run("UPDATE children SET stars=stars+? WHERE id=?", stars, child_id)
         return stars
 
+    async def start_view(self, child_id, item, at: datetime | None = None) -> int:
+        """Ko'rish boshlandi: yulduz hali berilmaydi (yarmi ko'rilganda beriladi). view id qaytaradi."""
+        return await self.run("INSERT INTO views (child_id, content_id, minutes, stars, created_at) VALUES (?,?,?,0,?)",
+                              child_id, item["id"], item["minutes"] or 1, iso(at or now()))
+
+    async def finish_half(self, view_id, child_id, played_sec: float, duration_sec: float,
+                          at: datetime | None = None):
+        """Kontentning yarmi ko'rilgan bo'lsa yulduz beradi. -> (berilgan yulduz, sabab)."""
+        v = await self.one("SELECT * FROM views WHERE id=? AND child_id=?", view_id, child_id)
+        if not v:
+            return 0, "topilmadi"
+        if v["stars"]:
+            return 0, "allaqachon"
+        item = await self.get_content(v["content_id"])
+        dur = float(duration_sec or 0)
+        if not (20 <= dur <= 4 * 3600):  # pleyer bermasa — kontent daqiqasi
+            dur = (item["minutes"] or 1) * 60 if item else 60
+        need = dur / 2
+        elapsed = ((at or now()) - datetime.fromisoformat(v["created_at"])).total_seconds()
+        if played_sec < need or elapsed < need * 0.9:  # haqiqatan ham shuncha vaqt o'tgan bo'lsin
+            return 0, "erta"
+        stars = int(await self.setting("stars_per_view"))
+        await self.run("UPDATE views SET stars=? WHERE id=? AND stars=0", stars, view_id)
+        await self.run("UPDATE children SET stars=stars+? WHERE id=?", stars, child_id)
+        return stars, ""
+
     # ---------- kuponlar ----------
     async def make_coupon(self, parent_id, child_id, percent, stars_cost=0, reason="stars"):
         while True:

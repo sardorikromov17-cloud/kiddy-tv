@@ -163,7 +163,7 @@ async def open_content(cb: CallbackQuery, bot: Bot, db: DB):
     if not ok:
         await cb.answer(reason, show_alert=True)
         return
-    stars = await db.record_view(child["id"], item)
+    await db.start_view(child["id"], item)  # yulduz faqat Mini App'da yarmi ko'rilganda beriladi
     caption = f"<b>{item['title']}</b>\n{config.KINDS[item['kind']]} · {item['minutes']} daqiqa"
     chat = cb.message.chat.id
     if item["source_type"] == "file":
@@ -172,8 +172,8 @@ async def open_content(cb: CallbackQuery, bot: Bot, db: DB):
         await send(chat, item["source"], caption=caption, reply_markup=markup, protect_content=True)
     else:
         await bot.send_message(chat, caption, reply_markup=kb.open_item(item, item["source"]))
-    child = await db.child(child["id"])
-    await bot.send_message(chat, f"+{stars} yulduz! {child['name']}: jami {child['stars']} yulduz.")
+    await bot.send_message(chat, "⭐ Yulduzlar Kiddy TV ilovasida videoning yarmini ko'rganda beriladi. "
+                                 "Ilovani ochish: /app")
     await cb.answer()
 
 

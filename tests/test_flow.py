@@ -140,7 +140,16 @@ async def main():
     zid = (await db.one("SELECT id FROM content WHERE title='Zumrad va Qimmat'"))["id"]
     await feed(cbq(PARENT, f"open:{zid}"))
     kid = await db.child(kid["id"])
-    check(kid["stars"] == 5 and await db.minutes_today(kid["id"]) == 40, "ko'rildi: +5 yulduz, 40 daqiqa yozildi")
+    check(kid["stars"] == 0 and await db.minutes_today(kid["id"]) == 40,
+          "botda ochildi: yulduz hali berilmaydi (yarmi ko'rilganda), 40 daqiqa yozildi")
+    vid = (await db.one("SELECT id FROM views WHERE child_id=? ORDER BY id DESC", kid["id"]))["id"]
+    s0, why = await db.finish_half(vid, kid["id"], 10, 0)
+    check(s0 == 0 and why == "erta", "yarmi ko'rilmasa yulduz yo'q")
+    from datetime import timedelta
+    s1, _ = await db.finish_half(vid, kid["id"], 20 * 60, 0, at=dbm.now() + timedelta(minutes=25))
+    s2, why2 = await db.finish_half(vid, kid["id"], 40 * 60, 0, at=dbm.now() + timedelta(minutes=45))
+    kid = await db.child(kid["id"])
+    check(s1 == 5 and s2 == 0 and why2 == "allaqachon" and kid["stars"] == 5, "yarmi ko'rildi: +5 yulduz, faqat bir marta")
 
     # 5. Kunlik limit (60 daq): ikkinchi ko'rish -> 80 daq, uchinchisi bloklanadi
     await feed(cbq(PARENT, f"open:{zid}"))

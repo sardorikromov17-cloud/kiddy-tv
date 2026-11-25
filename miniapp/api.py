@@ -212,8 +212,12 @@ def create_miniapp(db: DB, bot: Bot | None, token: str) -> FastAPI:
         ok, reason = await db.check_access(p, c, it)
         if not ok:
             return err(reason, 403)
-        stars = await db.record_view(c["id"], it)
-        out = {"ok": True, "stars_added": stars, "stars": (await db.child(c["id"]))["stars"], "item": item_out(it)}
+        if it["source_type"] == "link":  # tashqi o'yin/sayt — kuzatib bo'lmaydi, darhol beriladi
+            view_id, added = None, await db.record_view(c["id"], it)
+        else:
+            view_id, added = await db.start_view(c["id"], it), 0
+        out = {"ok": True, "stars_added": added, "view_id": view_id, "reward": int(await db.setting("stars_per_view")),
+               "stars": (await db.child(c["id"]))["stars"], "item": item_out(it)}
         if it["source_type"] == "youtube":
             out["youtube"] = youtube_id(it["source"])
             out["url"] = it["source"]
@@ -251,6 +255,23 @@ def create_miniapp(db: DB, bot: Bot | None, token: str) -> FastAPI:
         except Exception as e:
             logging.warning("Media yuborilmadi: %s", e)
             return Response("Fayl 20 MB dan katta bo'lsa Telegram uni bermaydi", status_code=502)
+
+    @app.post("/api/progress")
+    async def progress(request: Request):
+        """Pleyer: kontentning yarmi ko'rilganda yulduz."""
+        user, p = await auth(request)
+        if not user:
+            return err("auth", 401)
+        d = await body(request)
+        c = await db.active_child(p["tg_id"])
+        if not c:
+            return err("Topilmadi", 404)
+        try:
+            vid, played, dur = int(d.get("view_id", 0)), float(d.get("played", 0)), float(d.get("duration", 0) or 0)
+        except (TypeError, ValueError):
+            return err("Xato so'rov")
+        stars, why = await db.finish_half(vid, c["id"], played, dur)
+        return {"ok": True, "stars_added": stars, "reason": why, "stars": (await db.child(c["id"]))["stars"]}
 
     @app.post("/api/clientlog")
     async def clientlog(request: Request):

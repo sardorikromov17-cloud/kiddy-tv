@@ -83,7 +83,17 @@ async def main():
     check(r.status_code == 403, "yoshga mos bo'lmagan kontentni ochib bo'lmaydi")
     await db.set_parent(111, sleep_on=0)
     r = (await c.post("/api/open", headers=H, json={"id": z})).json()
-    check(r["ok"] and r["youtube"] == "dQw4w9WgXcQ" and r["stars_added"] == 5, "ochildi: YouTube id, +5 yulduz")
+    check(r["ok"] and r["youtube"] == "dQw4w9WgXcQ" and r["stars_added"] == 0 and r["view_id"],
+          "ochildi: YouTube id, yulduz hali yo'q")
+    p = (await c.post("/api/progress", headers=H, json={"view_id": r["view_id"], "played": 400, "duration": 720})).json()
+    check(p["stars_added"] == 0 and p["reason"] == "erta", "darhol 'yarmi ko'rildi' deb aldab bo'lmaydi (vaqt o'tmagan)")
+    await db.run("UPDATE views SET created_at=? WHERE id=?", dbm.iso(dbm.now() - __import__('datetime').timedelta(minutes=7)), r["view_id"])
+    p = (await c.post("/api/progress", headers=H, json={"view_id": r["view_id"], "played": 200, "duration": 720})).json()
+    check(p["stars_added"] == 0, "yarmidan kam ko'rilgan: yulduz yo'q")
+    p = (await c.post("/api/progress", headers=H, json={"view_id": r["view_id"], "played": 370, "duration": 720})).json()
+    check(p["stars_added"] == 5, "yarmi ko'rildi: +5 yulduz")
+    p = (await c.post("/api/progress", headers=H, json={"view_id": r["view_id"], "played": 700, "duration": 720})).json()
+    check(p["stars_added"] == 0 and p["reason"] == "allaqachon", "ikkinchi marta berilmaydi")
     r = (await c.post("/api/like", headers=H, json={"id": z})).json()
     check(r["liked"], "yoqdi")
 
