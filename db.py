@@ -215,6 +215,8 @@ DEFAULT_SETTINGS = {
     "quiz_stars": "2",
     "gift_days": "30",
     "notify_new": "1",
+    "show_continue": "1",     # ilova bosh ekranida «Davom ettirish» qatori
+    "show_recent": "1",       # ilova bosh ekranida «Oxirgi ko'rganlaring» qatori
     "ref_bonus": "20",        # do'stini taklif qilganga
     "ref_new_bonus": "10",    # taklif bilan kelgan yangi bolaga
     "quiz_drafts": "",  # 1 = yosh chegarasi yoqilgan, 0 = hamma kontent hammaga ochiq

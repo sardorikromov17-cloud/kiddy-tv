@@ -554,6 +554,8 @@ def create_app(db: DB, bot: Bot | None) -> FastAPI:
             if v.isdigit() and lo <= int(v) <= hi:
                 await db.set_setting(key, int(v))
         await db.set_setting("notify_new", "1" if form.get("notify_new") else "0")
+        await db.set_setting("show_continue", "1" if form.get("show_continue") else "0")
+        await db.set_setting("show_recent", "1" if form.get("show_recent") else "0")
         for key in ("ref_bonus", "ref_new_bonus"):
             v = str(form.get(key, "")).strip()
             if v.isdigit() and 0 <= int(v) <= 500:

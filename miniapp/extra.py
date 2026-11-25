@@ -61,11 +61,13 @@ def register(app, db, bot, auth, err, body, item_out, youtube_id):
             return {"ok": True, "banners": banners, "recent": [], "cont": [], "streak": 0, "bonus": 0}
         streak, bonus = await db.touch_day(c["id"])
         recent = []
-        for r in await db.recent(c["id"], age, p["tg_id"]):
-            o = item_out(r)
-            o["pos"] = r["pos"] or 0
-            recent.append(o)
-        cont = [item_out(r) for r in await db.continue_series(c["id"], age, p["tg_id"])]
+        if await db.setting("show_recent") == "1":
+            for r in await db.recent(c["id"], age, p["tg_id"]):
+                o = item_out(r)
+                o["pos"] = r["pos"] or 0
+                recent.append(o)
+        cont = [item_out(r) for r in await db.continue_series(c["id"], age, p["tg_id"])] \
+            if await db.setting("show_continue") == "1" else []
         child = await db.child(c["id"])
         return {"ok": True, "banners": banners, "recent": recent, "cont": cont, "streak": streak, "bonus": bonus,
                 "stars": child["stars"], "level": level_of(child["total_stars"])}

@@ -33,6 +33,13 @@
     </div>
   </section>
   <section class="card">
+    <h2>Ilova bosh ekrani</h2>
+    <div class="form" style="margin-top:14px">
+      <label class="row" style="gap:8px;grid-column:span 2"><input type="checkbox" name="show_continue" value="1" {{ 'checked' if st.show_continue == '1' }} style="width:auto;min-height:0"> «Davom ettirish» qatori ko'rinsin (boshlangan serialning keyingi qismi)</label>
+      <label class="row" style="gap:8px;grid-column:span 2"><input type="checkbox" name="show_recent" value="1" {{ 'checked' if st.show_recent == '1' }} style="width:auto;min-height:0"> «Oxirgi ko'rganlaring» qatori ko'rinsin</label>
+    </div>
+  </section>
+  <section class="card">
     <h2>Seriya, savollar, sovg'alar, takliflar</h2>
     <div class="form" style="margin-top:14px">
       <label class="f" style="grid-column:span 2">Ketma-ket kirish bonusi (kun:yulduz)<input name="streak_bonus" value="{{ st.streak_bonus }}" placeholder="3:5,7:15,14:25,30:50"></label>

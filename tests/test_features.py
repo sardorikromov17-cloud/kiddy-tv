@@ -207,7 +207,20 @@ async def main():
 
     # --- sozlamalar ---
     r = await panel.get("/settings")
-    check("Ketma-ket kirish bonusi" in _html.unescape(r.text), "sozlamalarda yangi bo'lim")
+    check("Ketma-ket kirish bonusi" in _html.unescape(r.text) and "Davom ettirish" in _html.unescape(r.text),
+          "sozlamalarda yangi bo'limlar")
+    form = {"token": token(r.text), "stars_per_view": 5, "birthday_percent": 10, "coupon_days": 30,
+            "default_daily_limit": 60, "contest_percent": 20, "tp0": 5, "tc0": 100, "show_recent": "1"}
+    r = await panel.post("/settings", data=form)
+    h = (await mini.get("/api/home", headers=H)).json()
+    check(h["cont"] == [] and h["recent"], "«Davom ettirish» o'chirildi, «Oxirgilar» yoniq")
+    await db.set_parent(111, daily_limit=0)
+    await mini.post("/api/open", headers=H, json={"id": eps[0]})
+    form.pop("show_recent"); form["show_continue"] = "1"; form["token"] = token(r.text)
+    await panel.post("/settings", data=form)
+    h = (await mini.get("/api/home", headers=H)).json()
+    check(h["cont"] and h["recent"] == [], "«Oxirgilar» o'chirildi, «Davom ettirish» yoniq")
+    await db.set_setting("notify_new", "1")
 
     # --- do'st taklifi ---
     code = db.ref_code(111)
