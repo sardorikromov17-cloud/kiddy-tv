@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head"><h1>Sovg'alar</h1></div>
+
+<section class="card" style="background:var(--cream);border-color:#F0E2D0">
+  <h2>Kassada sovg'a kodini tekshirish</h2>
+  <form method="get" class="row" style="margin-top:12px">
+    <input name="check" value="{{ check }}" placeholder="SOVGA-AB12C" aria-label="Sovg'a kodi" style="flex:1 1 220px;max-width:340px;text-transform:uppercase;font-size:18px" autofocus>
+    <button class="btn" type="submit">Tekshirish</button>
+  </form>
+  {% if check %}
+  <div style="margin-top:14px">
+    {% if not found %}<div class="flash err">«{{ check|upper }}» — bunday kod yo'q.</div>
+    {% elif found.issued_at %}<div class="flash err">{{ found.code }} — sovg'a allaqachon berilgan ({{ found.issued_at }}, {{ found.issued_by }}).</div>
+    {% elif found.expires_at < now_s %}<div class="flash err">{{ found.code }} — muddati o'tgan ({{ found.expires_at[:10] }}).</div>
+    {% else %}
+    <div class="card row" style="justify-content:space-between">
+      <div><div style="font-family:Fredoka,Nunito,system-ui,sans-serif;font-size:30px;color:var(--green-d)">{{ found.title }}</div>
+        <div class="muted">{{ found.code }} · {{ found.child_name or '—' }} · {{ found.stars }} yulduz · {{ found.expires_at[:10] }} gacha</div></div>
+      <form method="post" action="/gifts/issue"><input type="hidden" name="token" value="{{ csrf }}"><input type="hidden" name="code" value="{{ found.code }}"><button class="btn green" type="submit">Sovg'a berildi</button></form>
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
+</section>
+
+{% if user.role == 'admin' %}
+<section class="card">
+  <h2>Yangi sovg'a</h2>
+  <p class="muted" style="margin:6px 0 16px">Bola yulduzlarini shu sovg'aga almashtiradi va kod oladi. Do'konda kod tekshirilib, sovg'a beriladi.</p>
+  <form method="post" action="/gifts/add" enctype="multipart/form-data" class="form">
+    <input type="hidden" name="token" value="{{ csrf }}">
+    <label class="f" style="grid-column:span 2">Nomi<input name="title" required maxlength="60" placeholder="Kichik mashina"></label>
+    <label class="f">Narxi (yulduz)<input name="stars" type="number" min="1" required placeholder="300"></label>
+    <label class="f">Soni (bo'sh = cheklanmagan)<input name="stock" type="number" min="0"></label>
+    <label class="f" style="grid-column:span 2">Izoh<input name="note" maxlength="120" placeholder="3 yoshdan katta bolalar uchun"></label>
+    <label class="f">Rasm fayli<input name="image" type="file" accept="image/*"></label>
+    <label class="f">yoki rasm havolasi<input name="image_url" type="url" placeholder="https://..."></label>
+    <button class="btn green" type="submit">Qo'shish</button>
+  </form>
+</section>
+
+<section class="card tbl" style="padding:8px 12px">
+  <table>
+    <thead><tr><th>Rasm</th><th>Sovg'a</th><th>Narx</th><th>Qoldiq</th><th>Holat</th><th></th></tr></thead>
+    <tbody>
+    {% for g in gifts %}
+    <tr>
+      <td>{% if g.image %}<img src="{{ g.image if g.image.startswith('http') else '/tg-file/' ~ g.image }}" alt="" style="width:56px;height:56px;object-fit:cover;border-radius:12px">{% endif %}</td>
+      <td><b>{{ g.title }}</b><br><span class="muted">{{ g.note or '' }}</span></td>
+      <td colspan="4">
+        <form method="post" action="/gifts/{{ g.id }}/edit" class="row">
+          <input type="hidden" name="token" value="{{ csrf }}">
+          <input name="stars" type="number" min="1" value="{{ g.stars }}" style="width:100px" aria-label="Narx">
+          <input name="stock" type="number" min="0" value="{{ g.stock if g.stock is not none else '' }}" placeholder="∞" style="width:90px" aria-label="Qoldiq">
+          <label class="row" style="gap:6px"><input type="checkbox" name="active" value="1" {{ 'checked' if g.active }} style="width:auto;min-height:0"> Ko'rinadi</label>
+          <button class="btn ghost sm" type="submit">Saqlash</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}<tr><td colspan="6" class="muted">Hali sovg'a yo'q.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+
+<section class="card tbl" style="padding:8px 12px">
+  <h2 style="padding:8px 4px">So'nggi buyurtmalar</h2>
+  <table>
+    <thead><tr><th>Kod</th><th>Sovg'a</th><th>Bola</th><th>Sana</th><th>Holat</th></tr></thead>
+    <tbody>
+    {% for o in orders %}
+    <tr><td><a href="/gifts?check={{ o.code }}">{{ o.code }}</a></td><td>{{ o.title }}</td><td>{{ o.child_name or '—' }}</td>
+      <td>{{ o.created_at[:16] }}</td><td>{% if o.issued_at %}Berildi ({{ o.issued_at[:10] }}){% elif o.expires_at < now_s %}<span class="muted">Muddati o'tgan</span>{% else %}<b>Kutilmoqda</b>{% endif %}</td></tr>
+    {% else %}<tr><td colspan="5" class="muted">Hali buyurtma yo'q.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

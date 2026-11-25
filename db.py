@@ -107,6 +107,72 @@ CREATE TABLE IF NOT EXISTS game_plays (
     stars INTEGER NOT NULL,
     created_at TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS child_days (
+    child_id INTEGER NOT NULL,
+    day TEXT NOT NULL,
+    PRIMARY KEY (child_id, day)
+);
+CREATE TABLE IF NOT EXISTS streak_awards (
+    child_id INTEGER NOT NULL,
+    day TEXT NOT NULL,
+    days INTEGER NOT NULL,
+    stars INTEGER NOT NULL,
+    PRIMARY KEY (child_id, day)
+);
+CREATE TABLE IF NOT EXISTS gifts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    note TEXT,
+    stars INTEGER NOT NULL,
+    image TEXT,                      -- telegram file_id yoki https havola
+    stock INTEGER,                   -- NULL = cheklanmagan
+    active INTEGER DEFAULT 1,
+    created_at TEXT
+);
+CREATE TABLE IF NOT EXISTS gift_orders (
+    code TEXT PRIMARY KEY,
+    gift_id INTEGER NOT NULL,
+    parent_id INTEGER NOT NULL,
+    child_id INTEGER NOT NULL,
+    stars INTEGER NOT NULL,
+    created_at TEXT NOT NULL,
+    expires_at TEXT NOT NULL,
+    issued_at TEXT,
+    issued_by TEXT
+);
+CREATE TABLE IF NOT EXISTS banners (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    text TEXT,
+    image TEXT,
+    link TEXT,
+    active INTEGER DEFAULT 1,
+    sort INTEGER DEFAULT 0,
+    created_at TEXT
+);
+CREATE TABLE IF NOT EXISTS quiz (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    content_id INTEGER,
+    series TEXT,                     -- butun serial uchun savol bo'lsa
+    q TEXT NOT NULL,
+    a TEXT NOT NULL,
+    b TEXT NOT NULL,
+    c TEXT,
+    correct TEXT NOT NULL            -- 'a' / 'b' / 'c'
+);
+CREATE TABLE IF NOT EXISTS quiz_done (
+    child_id INTEGER NOT NULL,
+    quiz_id INTEGER NOT NULL,
+    ok INTEGER NOT NULL,
+    stars INTEGER NOT NULL,
+    created_at TEXT,
+    PRIMARY KEY (child_id, quiz_id)
+);
+CREATE TABLE IF NOT EXISTS notified (
+    parent_id INTEGER NOT NULL,
+    content_id INTEGER NOT NULL,
+    PRIMARY KEY (parent_id, content_id)
+);
 CREATE TABLE IF NOT EXISTS report_sent (
     parent_id INTEGER NOT NULL,
     week TEXT NOT NULL,
@@ -143,7 +209,11 @@ DEFAULT_SETTINGS = {
     "contest_title": "Mening sevimli o'yinchog'im",
     "contest_percent": "20",
     "webapp_url": "",
-    "age_limit": "1",  # 1 = yosh chegarasi yoqilgan, 0 = hamma kontent hammaga ochiq
+    "age_limit": "1",
+    "streak_bonus": "3:5,7:15,14:25,30:50",   # ketma-ket kun:yulduz
+    "quiz_stars": "2",
+    "gift_days": "30",
+    "notify_new": "1",  # 1 = yosh chegarasi yoqilgan, 0 = hamma kontent hammaga ochiq
 }
 
 
@@ -203,11 +273,17 @@ class DB:
         # eski bazalar uchun yangi ustunlar
         for sql in ["ALTER TABLE contest ADD COLUMN winner INTEGER DEFAULT 0",
                     "ALTER TABLE content ADD COLUMN series TEXT",
-                    "ALTER TABLE content ADD COLUMN episode INTEGER"]:
+                    "ALTER TABLE content ADD COLUMN episode INTEGER",
+                    "ALTER TABLE views ADD COLUMN pos INTEGER DEFAULT 0",
+                    "ALTER TABLE children ADD COLUMN total_stars INTEGER"]:
             try:
                 await self.conn.execute(sql)
             except Exception:
                 pass
+        # umumiy (sarflanmagan + sarflangan) yulduz — daraja uchun
+        await self.conn.execute(
+            "UPDATE children SET total_stars = COALESCE((SELECT SUM(stars) FROM views v WHERE v.child_id=children.id),0)"
+            " + COALESCE((SELECT SUM(stars) FROM game_plays g WHERE g.child_id=children.id),0) WHERE total_stars IS NULL")
         await self.conn.commit()
 
     async def close(self):
@@ -338,7 +414,7 @@ class DB:
         stars = int(await self.setting("stars_per_view"))
         await self.run("INSERT INTO views (child_id, content_id, minutes, stars, created_at) VALUES (?,?,?,?,?)",
                        child_id, item["id"], item["minutes"] or 1, stars, iso(at or now()))
-        await self.run("UPDATE children SET stars=stars+? WHERE id=?", stars, child_id)
+        await self.run("UPDATE children SET stars=stars+?, total_stars=COALESCE(total_stars,0)+? WHERE id=?", stars, stars, child_id)
         return stars
 
     async def start_view(self, child_id, item, at: datetime | None = None) -> int:
@@ -364,7 +440,7 @@ class DB:
             return 0, "erta"
         stars = int(await self.setting("stars_per_view"))
         await self.run("UPDATE views SET stars=? WHERE id=? AND stars=0", stars, view_id)
-        await self.run("UPDATE children SET stars=stars+? WHERE id=?", stars, child_id)
+        await self.run("UPDATE children SET stars=stars+?, total_stars=COALESCE(total_stars,0)+? WHERE id=?", stars, stars, child_id)
         return stars, ""
 
     # ---------- kuponlar ----------
@@ -588,7 +664,7 @@ class DB:
         await self.run("INSERT INTO game_plays (child_id, game, minutes, stars, created_at) VALUES (?,?,?,?,?)",
                        child_id, game[:20], minutes, stars, iso(now()))
         if stars:
-            await self.run("UPDATE children SET stars=stars+? WHERE id=?", stars, child_id)
+            await self.run("UPDATE children SET stars=stars+?, total_stars=COALESCE(total_stars,0)+? WHERE id=?", stars, stars, child_id)
         return stars
 
     # --- seriallar ---
@@ -646,3 +722,210 @@ class DB:
             "SELECT * FROM content WHERE active=1 AND series=? AND age_min<=? AND age_max>=? "
             "AND id NOT IN (SELECT content_id FROM blocked WHERE parent_id=?) ORDER BY episode, id",
             series, age, age, parent_id)
+
+    # ================= qo'shimcha imkoniyatlar =================
+    async def add_stars(self, child_id, n):
+        if n:
+            await self.run("UPDATE children SET stars=stars+?, total_stars=COALESCE(total_stars,0)+? WHERE id=?",
+                           n, n, child_id)
+
+    # --- davom ettirish, oxirgilar, sevimlilar, qidiruv ---
+    async def save_pos(self, view_id, child_id, pos):
+        await self.run("UPDATE views SET pos=? WHERE id=? AND child_id=?", int(max(0, pos)), view_id, child_id)
+
+    async def last_pos(self, child_id, content_id):
+        r = await self.one("SELECT pos FROM views WHERE child_id=? AND content_id=? AND pos>0 ORDER BY id DESC LIMIT 1",
+                           child_id, content_id)
+        return r["pos"] if r else 0
+
+    def _vis(self, age):
+        return ("" if age is None else " AND c.age_min<=? AND c.age_max>=?"), ([] if age is None else [age, age])
+
+    async def recent(self, child_id, age, parent_id, limit=10):
+        age = await self.age_filter(age)
+        cond, a = self._vis(age)
+        return await self.all(
+            "SELECT c.*, MAX(v.id) AS last_view, (SELECT pos FROM views v2 WHERE v2.child_id=v.child_id AND "
+            "v2.content_id=c.id ORDER BY v2.id DESC LIMIT 1) AS pos FROM views v JOIN content c ON c.id=v.content_id "
+            f"WHERE v.child_id=? AND c.active=1 AND c.source_type!='link'{cond} "
+            "AND c.id NOT IN (SELECT content_id FROM blocked WHERE parent_id=?) "
+            "GROUP BY c.id ORDER BY last_view DESC LIMIT ?", child_id, *a, parent_id, limit)
+
+    async def continue_series(self, child_id, age, parent_id, limit=6):
+        """Har bir boshlangan serial uchun keyingi ko'rilmagan qism."""
+        out = []
+        rows = await self.all(
+            "SELECT c.series, MAX(v.id) AS last_view FROM views v JOIN content c ON c.id=v.content_id "
+            "WHERE v.child_id=? AND c.series IS NOT NULL GROUP BY c.series ORDER BY last_view DESC LIMIT 12", child_id)
+        for r in rows:
+            last = await self.one("SELECT c.* FROM views v JOIN content c ON c.id=v.content_id WHERE v.child_id=? "
+                                  "AND c.series=? ORDER BY v.id DESC LIMIT 1", child_id, r["series"])
+            nxt = await self.next_episode(last, age=age, parent_id=parent_id) if last else None
+            if nxt:
+                out.append(nxt)
+            if len(out) >= limit:
+                break
+        return out
+
+    async def favorites(self, child_id, age, parent_id):
+        age = await self.age_filter(age)
+        cond, a = self._vis(age)
+        return await self.all(
+            f"SELECT c.* FROM likes l JOIN content c ON c.id=l.content_id WHERE l.child_id=? AND c.active=1{cond} "
+            "AND c.id NOT IN (SELECT content_id FROM blocked WHERE parent_id=?) ORDER BY l.created_at DESC",
+            child_id, *a, parent_id)
+
+    async def search(self, q, age, parent_id, limit=40):
+        q = (q or "").strip()
+        if len(q) < 2:
+            return []
+        age = await self.age_filter(age)
+        cond, a = self._vis(age)
+        like = f"%{q}%"
+        return await self.all(
+            f"SELECT c.* FROM content c WHERE c.active=1{cond} AND (c.title LIKE ? OR c.series LIKE ?) "
+            "AND c.id NOT IN (SELECT content_id FROM blocked WHERE parent_id=?) "
+            "ORDER BY CASE WHEN c.title LIKE ? THEN 0 ELSE 1 END, c.series, c.episode, c.id DESC LIMIT ?",
+            *a, like, like, parent_id, f"{q}%", limit)
+
+    # --- kunlik seriya ---
+    async def touch_day(self, child_id, at: datetime | None = None):
+        """Bola bugun kirdi. -> (ketma-ket kunlar, bugun berilgan bonus)"""
+        d = (at or now()).date()
+        await self.run("INSERT OR IGNORE INTO child_days (child_id, day) VALUES (?,?)", child_id, d.isoformat())
+        streak = await self.streak(child_id, d)
+        bonus = 0
+        tiers = dict(parse_tiers(await self.setting("streak_bonus")))  # {kun: yulduz}
+        if streak in tiers and not await self.one("SELECT 1 FROM streak_awards WHERE child_id=? AND day=?",
+                                                  child_id, d.isoformat()):
+            bonus = tiers[streak]
+            await self.run("INSERT INTO streak_awards (child_id, day, days, stars) VALUES (?,?,?,?)",
+                           child_id, d.isoformat(), streak, bonus)
+            await self.add_stars(child_id, bonus)
+        return streak, bonus
+
+    async def streak(self, child_id, d: date | None = None):
+        d = d or now().date()
+        days = {r["day"] for r in await self.all(
+            "SELECT day FROM child_days WHERE child_id=? AND day>=?", child_id, (d - timedelta(days=400)).isoformat())}
+        n = 0
+        while (d - timedelta(days=n)).isoformat() in days:
+            n += 1
+        return n
+
+    async def best_streak(self, child_id):
+        rows = [date.fromisoformat(r["day"]) for r in await self.all(
+            "SELECT day FROM child_days WHERE child_id=? ORDER BY day", child_id)]
+        best = cur = 0
+        prev = None
+        for d in rows:
+            cur = cur + 1 if prev and (d - prev).days == 1 else 1
+            best, prev = max(best, cur), d
+        return best
+
+    # --- daraja va nishonlar ---
+    async def child_stats(self, child_id):
+        kinds = {r["kind"]: r["n"] for r in await self.all(
+            "SELECT c.kind, COUNT(DISTINCT c.id) n FROM views v JOIN content c ON c.id=v.content_id "
+            "WHERE v.child_id=? AND v.stars>0 GROUP BY c.kind", child_id)}
+        games = (await self.one("SELECT COUNT(*) n FROM game_plays WHERE child_id=?", child_id))["n"]
+        quiz_ok = (await self.one("SELECT COUNT(*) n FROM quiz_done WHERE child_id=? AND ok=1", child_id))["n"]
+        contest = (await self.one("SELECT COUNT(*) n FROM contest WHERE child_id=?", child_id))["n"]
+        likes = (await self.one("SELECT COUNT(*) n FROM likes WHERE child_id=?", child_id))["n"]
+        return {"kinds": kinds, "games": games, "quiz_ok": quiz_ok, "contest": contest, "likes": likes,
+                "best_streak": await self.best_streak(child_id)}
+
+    # --- sovg'alar ---
+    async def gifts_list(self, only_active=True):
+        return await self.all("SELECT * FROM gifts" + (" WHERE active=1 AND (stock IS NULL OR stock>0)" if only_active
+                                                        else "") + " ORDER BY stars, id")
+
+    async def add_gift(self, title, stars, note="", image=None, stock=None):
+        return await self.run("INSERT INTO gifts (title, note, stars, image, stock, created_at) VALUES (?,?,?,?,?,?)",
+                              title, note, stars, image, stock, iso(now()))
+
+    async def redeem_gift(self, parent_id, child_id, gift_id):
+        """-> (kod, xato)"""
+        g = await self.one("SELECT * FROM gifts WHERE id=? AND active=1", gift_id)
+        if not g or (g["stock"] is not None and g["stock"] <= 0):
+            return None, "Bu sovg'a hozir yo'q."
+        c = await self.child(child_id)
+        if not c or c["parent_id"] != parent_id:
+            return None, "Topilmadi"
+        if c["stars"] < g["stars"]:
+            return None, f"Yulduz yetmaydi: yana {g['stars'] - c['stars']} ta kerak."
+        cur = await self.conn.execute("UPDATE children SET stars=stars-? WHERE id=? AND stars>=?",
+                                      (g["stars"], child_id, g["stars"]))
+        if cur.rowcount != 1:
+            await self.conn.commit()
+            return None, "Yulduz yetmaydi."
+        if g["stock"] is not None:
+            await self.conn.execute("UPDATE gifts SET stock=stock-1 WHERE id=?", (gift_id,))
+        await self.conn.commit()
+        while True:
+            code = "SOVGA-" + "".join(secrets.choice("ABCDEFGHJKLMNPQRSTUVWXYZ23456789") for _ in range(5))
+            if not await self.one("SELECT 1 FROM gift_orders WHERE code=?", code):
+                break
+        n = now()
+        days = int(await self.setting("gift_days"))
+        await self.run("INSERT INTO gift_orders (code, gift_id, parent_id, child_id, stars, created_at, expires_at) "
+                       "VALUES (?,?,?,?,?,?,?)", code, gift_id, parent_id, child_id, g["stars"], iso(n),
+                       iso(n + timedelta(days=days)))
+        return code, ""
+
+    async def gift_orders(self, parent_id=None, child_id=None, limit=100):
+        sql = ("SELECT o.*, g.title, ch.name AS child_name, p.full_name AS parent_name FROM gift_orders o "
+               "JOIN gifts g ON g.id=o.gift_id LEFT JOIN children ch ON ch.id=o.child_id "
+               "LEFT JOIN parents p ON p.tg_id=o.parent_id WHERE 1=1")
+        a = []
+        if parent_id:
+            sql += " AND o.parent_id=?"; a.append(parent_id)
+        if child_id:
+            sql += " AND o.child_id=?"; a.append(child_id)
+        return await self.all(sql + " ORDER BY o.created_at DESC LIMIT ?", *a, limit)
+
+    async def issue_gift(self, code, cashier):
+        """Kassir sovg'ani beradi. -> (holat, buyurtma) holat: ok/used/expired/none"""
+        code = code.strip().upper()
+        o = await self.one("SELECT o.*, g.title FROM gift_orders o JOIN gifts g ON g.id=o.gift_id WHERE o.code=?", code)
+        if not o:
+            return "none", None
+        if o["issued_at"]:
+            return "used", o
+        if o["expires_at"] < iso(now()):
+            return "expired", o
+        await self.run("UPDATE gift_orders SET issued_at=?, issued_by=? WHERE code=?", iso(now()), cashier, code)
+        return "ok", await self.one("SELECT o.*, g.title FROM gift_orders o JOIN gifts g ON g.id=o.gift_id "
+                                    "WHERE o.code=?", code)
+
+    # --- bannerlar ---
+    async def banners(self, only_active=True):
+        return await self.all("SELECT * FROM banners" + (" WHERE active=1" if only_active else "")
+                              + " ORDER BY sort, id DESC")
+
+    # --- savollar ---
+    async def quiz_for(self, item):
+        rows = await self.all("SELECT * FROM quiz WHERE content_id=? ORDER BY id", item["id"])
+        if not rows and item["series"]:
+            rows = await self.all("SELECT * FROM quiz WHERE series=? AND content_id IS NULL ORDER BY id", item["series"])
+        return rows
+
+    async def answer_quiz(self, child_id, quiz_id, choice):
+        q = await self.one("SELECT * FROM quiz WHERE id=?", quiz_id)
+        if not q:
+            return None
+        if await self.one("SELECT 1 FROM quiz_done WHERE child_id=? AND quiz_id=?", child_id, quiz_id):
+            return {"ok": choice == q["correct"], "correct": q["correct"], "stars": 0, "again": True}
+        ok = choice == q["correct"]
+        stars = int(await self.setting("quiz_stars")) if ok else 0
+        await self.run("INSERT INTO quiz_done (child_id, quiz_id, ok, stars, created_at) VALUES (?,?,?,?,?)",
+                       child_id, quiz_id, int(ok), stars, iso(now()))
+        await self.add_stars(child_id, stars)
+        return {"ok": ok, "correct": q["correct"], "stars": stars, "again": False}
+
+    # --- yangi qism xabari ---
+    async def watchers_of_series(self, series):
+        """Shu serialni ko'rgan ota-onalar (bola ismi bilan)."""
+        return await self.all(
+            "SELECT DISTINCT ch.parent_id, ch.name FROM views v JOIN content c ON c.id=v.content_id "
+            "JOIN children ch ON ch.id=v.child_id WHERE c.series=?", series)

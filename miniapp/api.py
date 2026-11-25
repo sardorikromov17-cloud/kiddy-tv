@@ -229,6 +229,8 @@ def create_miniapp(db: DB, bot: Bot | None, token: str) -> FastAPI:
         out["next"] = {"id": nxt["id"], "title": nxt["title"]} if nxt else None
         if it["series"]:
             out["series"] = {"name": it["series"], "episode": it["episode"]}
+        out["pos"] = await db.last_pos(c["id"], it["id"]) if view_id else 0
+        out["quiz"] = len(await db.quiz_for(it))
         liked = await db.one("SELECT 1 FROM likes WHERE child_id=? AND content_id=?", c["id"], it["id"])
         out["liked"] = bool(liked)
         return out
@@ -455,5 +457,8 @@ def create_miniapp(db: DB, bot: Bot | None, token: str) -> FastAPI:
         if "delete_child" in d:
             await db.delete_child(p["tg_id"], int(d["delete_child"]))
         return {"ok": True}
+
+    from miniapp.extra import register as _reg_extra
+    _reg_extra(app, db, bot, auth, err, body, item_out, youtube_id)
 
     return app

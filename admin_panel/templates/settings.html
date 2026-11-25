@@ -32,6 +32,15 @@
       <label class="f">Standart kunlik vaqt (daqiqa)<input name="default_daily_limit" type="number" min="15" max="240" value="{{ st.default_daily_limit }}" required></label>
     </div>
   </section>
+  <section class="card">
+    <h2>Seriya, savollar, sovg'alar</h2>
+    <div class="form" style="margin-top:14px">
+      <label class="f" style="grid-column:span 2">Ketma-ket kirish bonusi (kun:yulduz)<input name="streak_bonus" value="{{ st.streak_bonus }}" placeholder="3:5,7:15,14:25,30:50"></label>
+      <label class="f">To'g'ri javob uchun yulduz<input name="quiz_stars" type="number" min="0" max="50" value="{{ st.quiz_stars }}"></label>
+      <label class="f">Sovg'a kodi amal qilish muddati (kun)<input name="gift_days" type="number" min="1" max="365" value="{{ st.gift_days }}"></label>
+      <label class="row" style="gap:8px;grid-column:span 2"><input type="checkbox" name="notify_new" value="1" {{ 'checked' if st.notify_new == '1' }} style="width:auto;min-height:0"> Serialga yangi qism qo'shilganda uni ko'rgan oilalarga botdan xabar yuborilsin</label>
+    </div>
+  </section>
   <button class="btn" type="submit" style="align-self:flex-start">Saqlash</button>
 </form>
 {% endblock %}

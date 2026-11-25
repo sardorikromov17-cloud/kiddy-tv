@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="head"><h1>Banner</h1></div>
+<section class="card">
+  <h2>Yangi banner</h2>
+  <p class="muted" style="margin:6px 0 16px">Ilova bosh ekranida ko'rinadi: do'kondagi yangi o'yinchoqlar, aksiyalar. Bolalar uchun yumshoq, qisqa matn yozing.</p>
+  <form method="post" action="/banners/add" enctype="multipart/form-data" class="form">
+    <input type="hidden" name="token" value="{{ csrf }}">
+    <label class="f" style="grid-column:span 2">Sarlavha<input name="title" required maxlength="60" placeholder="Yangi konstruktorlar keldi!"></label>
+    <label class="f" style="grid-column:span 2">Matn<input name="text" maxlength="140" placeholder="Kiddy Toys do'konida ko'ring"></label>
+    <label class="f">Rasm fayli<input name="image" type="file" accept="image/*"></label>
+    <label class="f">yoki rasm havolasi<input name="image_url" type="url" placeholder="https://..."></label>
+    <label class="f" style="grid-column:span 2">Bosilganda ochiladigan havola (ixtiyoriy)<input name="link" type="url" placeholder="https://instagram.com/..."></label>
+    <button class="btn green" type="submit">Qo'shish</button>
+  </form>
+</section>
+<section class="card tbl" style="padding:8px 12px">
+  <table>
+    <thead><tr><th>Rasm</th><th>Banner</th><th>Holat</th><th></th></tr></thead>
+    <tbody>
+    {% for b in rows %}
+    <tr>
+      <td>{% if b.image %}<img src="{{ b.image if b.image.startswith('http') else '/tg-file/' ~ b.image }}" alt="" style="width:90px;height:50px;object-fit:cover;border-radius:10px">{% endif %}</td>
+      <td><b>{{ b.title }}</b><br><span class="muted">{{ b.text or '' }}</span></td>
+      <td>{{ 'Ko\'rinadi' if b.active else 'Yashirilgan' }}</td>
+      <td class="row">
+        <form method="post" action="/banners/{{ b.id }}/toggle"><input type="hidden" name="token" value="{{ csrf }}"><button class="btn ghost sm" type="submit">{{ 'Yashirish' if b.active else 'Ko\'rsatish' }}</button></form>
+        <form method="post" action="/banners/{{ b.id }}/delete"><input type="hidden" name="token" value="{{ csrf }}"><button class="btn red sm" type="submit">O'chirish</button></form>
+      </td>
+    </tr>
+    {% else %}<tr><td colspan="4" class="muted">Hali banner yo'q.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

@@ -23,4 +23,25 @@
     <button class="btn" type="submit">Saqlash</button>
   </form>
 </section>
+<section class="card" id="quiz">
+  <h2>Video savollari</h2>
+  <p class="muted" style="margin:4px 0 14px">Bola videoni ko'rgach shu savollarga javob beradi, har to'g'ri javobga yulduz oladi. {% if it.series %}«Butun serial uchun» belgilansa — savol serialning savoli bo'lmagan barcha qismlarida chiqadi.{% endif %}</p>
+  {% for q in quiz %}
+  <div class="row" style="justify-content:space-between;border-top:1px solid var(--line);padding:10px 0">
+    <div><b>{{ q.q }}</b>{% if not q.content_id %} <span class="muted">(butun serial)</span>{% endif %}<br>
+      <span class="muted">A) {{ q.a }} · B) {{ q.b }}{% if q.c %} · C) {{ q.c }}{% endif %} — to'g'ri: <b>{{ q.correct|upper }}</b></span></div>
+    <form method="post" action="/quiz/{{ q.id }}/delete"><input type="hidden" name="token" value="{{ csrf }}"><input type="hidden" name="back" value="{{ it.id }}"><button class="btn ghost sm" type="submit">O'chirish</button></form>
+  </div>
+  {% else %}<p class="muted">Hali savol yo'q.</p>{% endfor %}
+  <form method="post" action="/content/{{ it.id }}/quiz" class="form" style="margin-top:12px">
+    <input type="hidden" name="token" value="{{ csrf }}">
+    <label class="f" style="grid-column:span 2">Savol<input name="q" required maxlength="160" placeholder="Ertakda nechta quyon bor edi?"></label>
+    <label class="f">A javob<input name="a" required maxlength="60"></label>
+    <label class="f">B javob<input name="b" required maxlength="60"></label>
+    <label class="f">C javob (ixtiyoriy)<input name="c" maxlength="60"></label>
+    <label class="f">To'g'ri javob<select name="correct"><option value="a">A</option><option value="b">B</option><option value="c">C</option></select></label>
+    {% if it.series %}<label class="row" style="gap:8px"><input type="checkbox" name="whole" value="1" style="width:auto;min-height:0"> Butun serial uchun</label>{% endif %}
+    <button class="btn green" type="submit">Savol qo'shish</button>
+  </form>
+</section>
 {% endblock %}

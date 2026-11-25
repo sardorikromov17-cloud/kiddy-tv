@@ -21,7 +21,7 @@ from youtube_import import fetch_list
 HERE = os.path.dirname(__file__)
 YT_RE = re.compile(r"^https?://(www\.|m\.)?(youtube\.com|youtu\.be)/\S+$")
 URL_RE = re.compile(r"^https?://\S+$")
-ROLE_PAGES = {"kassir": {"coupons"}}  # kassir faqat kuponlarni ko'radi
+ROLE_PAGES = {"kassir": {"coupons", "gifts"}}  # kassir faqat kuponlarni ko'radi
 MAX_UPLOAD_MB = 50  # Telegram bot API cheklovi
 
 KIND_LABELS = config.KINDS
@@ -242,7 +242,9 @@ def create_app(db: DB, bot: Bot | None) -> FastAPI:
                              "FROM content c WHERE c.id=?", cid))
         if not item:
             return go("/content")
-        return await page(request, "content_edit.html", "content", it=item[0])
+        quiz = await db.all("SELECT * FROM quiz WHERE content_id=? OR (content_id IS NULL AND series=? AND ? IS NOT NULL) "
+                            "ORDER BY id", cid, item[0]["series"], item[0]["series"])
+        return await page(request, "content_edit.html", "content", it=item[0], quiz=quiz)
 
     @app.post("/content/{cid}")
     async def content_edit(request: Request, cid: int, token: str = Form(""), title: str = Form(...),
@@ -341,6 +343,8 @@ def create_app(db: DB, bot: Bot | None) -> FastAPI:
                                  f"https://www.youtube.com/watch?v={it['id']}", None, a, b,
                                  min(300, it["minutes"] or default_min), series, ep if series else None)
             added += 1
+        if added and series:
+            asyncio.create_task(notify_new_episodes(series, added))
         flash(request, f"{added} ta video qo'shildi" + (f" («{series}» seriali)" if series else "") +
               ". Botda va ilovada darhol ko'rinadi.")
         return go(f"/content?kind={kind}")
@@ -351,6 +355,8 @@ def create_app(db: DB, bot: Bot | None) -> FastAPI:
         if r := await guard(request, "coupons"):
             return r
         found = None
+        if check and check.strip().upper().startswith("SOVGA-"):
+            return go(f"/gifts?check={check.strip().upper()}")
         if check:
             found = await db.one("SELECT cp.*, ch.name child_name FROM coupons cp "
                                  "LEFT JOIN children ch ON ch.id=cp.child_id WHERE cp.code=?", check.strip().upper())
@@ -536,6 +542,18 @@ def create_app(db: DB, bot: Bot | None) -> FastAPI:
         title = str(form.get("contest_title", "")).strip()[:80]
         if title:
             await db.set_setting("contest_title", title)
+        from db import parse_tiers
+        sb = str(form.get("streak_bonus", "")).replace(" ", "")
+        if sb and not parse_tiers(sb):
+            flash(request, "Seriya bonusi formati: 3:5,7:15 (kun:yulduz).", "err")
+            return go("/settings")
+        if sb:
+            await db.set_setting("streak_bonus", sb)
+        for key, (lo, hi) in {"quiz_stars": (0, 50), "gift_days": (1, 365)}.items():
+            v = str(form.get(key, "")).strip()
+            if v.isdigit() and lo <= int(v) <= hi:
+                await db.set_setting(key, int(v))
+        await db.set_setting("notify_new", "1" if form.get("notify_new") else "0")
         flash(request, "Sozlamalar saqlandi. Bot darhol yangi qiymatlardan foydalanadi.")
         return go("/settings")
 
@@ -590,6 +608,9 @@ def create_app(db: DB, bot: Bot | None) -> FastAPI:
         path = os.path.join(os.path.dirname(HERE), "assets", "logo.png")
         with open(path, "rb") as f:
             return Response(f.read(), media_type="image/png", headers={"Cache-Control": "max-age=86400"})
+
+    from admin_panel.extra import register as _reg_extra
+    notify_new_episodes = _reg_extra(app, db, bot, page, guard, flash, go)
 
     return app
 

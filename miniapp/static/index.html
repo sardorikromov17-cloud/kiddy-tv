@@ -43,6 +43,22 @@ input:focus{outline:none;border-color:var(--blue)}
 .play{width:46px;height:46px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.15)}
 .dur{position:absolute;right:8px;bottom:8px;background:rgba(31,42,107,.85);color:#fff;font-size:12px;padding:2px 8px;border-radius:999px}
 .ttl{font-weight:700;font-size:15px;line-height:1.25}
+.hrow{display:flex;gap:12px;overflow-x:auto;margin:0 -18px;padding:2px 18px 6px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.hrow::-webkit-scrollbar{display:none}
+.hrow>.card{flex:0 0 158px;scroll-snap-align:start}
+.sec-h{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.sec-h h2{font-size:20px}
+.banner{display:flex;gap:12px;align-items:center;background:linear-gradient(120deg,#FFE9CC,#FFE1DE);border-radius:24px;padding:12px;text-align:left;width:100%}
+.banner img{width:92px;height:72px;object-fit:cover;border-radius:16px;flex:none}
+.pbar{height:6px;border-radius:99px;background:rgba(255,255,255,.7);position:absolute;left:10px;right:10px;bottom:8px;overflow:hidden}
+.pbar i{display:block;height:100%;background:#E0312B}
+.badge{border-radius:22px;padding:14px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
+.badge.off{background:var(--soft)!important;color:#8A93B0}
+.badge.off svg{filter:grayscale(1);opacity:.45}
+.searchbox{display:flex;align-items:center;gap:10px;background:#fff;border-radius:18px;padding:0 14px;min-height:52px;box-shadow:0 3px 0 #EBDCC6;width:100%;color:var(--muted);font-weight:700}
+.qopt{width:100%;text-align:left;padding:14px 16px;border-radius:18px;background:var(--soft);font-weight:700;font-size:17px;border:3px solid transparent}
+.qopt.ok{background:var(--green-l);border-color:var(--green)}
+.qopt.bad{background:var(--red-l);border-color:var(--red)}
 .head{display:flex;align-items:center;gap:12px;padding:14px 18px}
 .head h1{font-size:24px}
 .muted{color:var(--muted)}
@@ -82,7 +98,6 @@ input:focus{outline:none;border-color:var(--blue)}
 function _rep(kind, msg){ try{ fetch("/api/clientlog",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({k:kind,m:String(msg).slice(0,500),ua:navigator.userAgent,v:(window.Telegram&&Telegram.WebApp&&Telegram.WebApp.version)||""})}); }catch(e){} }
 window.addEventListener("error", e=>_rep("error", (e.message||"")+" @"+(e.lineno||"")+":"+(e.colno||"")));
 window.addEventListener("unhandledrejection", e=>_rep("promise", e.reason&&e.reason.stack||e.reason));
-document.addEventListener("click", e=>{ const b=e.target.closest&&e.target.closest("button"); _rep("tap", (b?("btn:"+(b.textContent||"").trim().slice(0,20)):("el:"+e.target.tagName))); }, true);
 const tg = window.Telegram ? Telegram.WebApp : null;
 const INIT = tg ? tg.initData : "";
 let ME = null, PKEY = "", VIEW = ["home"];
@@ -127,7 +142,7 @@ function render(){
   if (!ME) return;
   if (!ME.active && name!=="addchild"){ VIEW=[["addchild",true]]; }
   const cur = VIEW[VIEW.length-1];
-  const fn = {home:vHome, list:vList, series:vSeries, letters:vLetters, shapes:vShapes, bigsmall:vBigSmall, oddone:vOddOne, simon:vSimon, math:vMath, pairs8:()=>vPairs(8), player:vPlayer, addchild:vAddChild, kids:vKids, rewards:vRewards, colors:vColors, pairs:vPairs, count:vCount, coloring:vColoring, parent:vParent}[Array.isArray(cur)?cur[0]:cur];
+  const fn = {home:vHome, list:vList, series:vSeries, letters:vLetters, shapes:vShapes, bigsmall:vBigSmall, oddone:vOddOne, simon:vSimon, math:vMath, pairs8:()=>vPairs(8), player:vPlayer, favs:vFavs, search:vSearch, profile:vProfile, quiz:vQuiz, addchild:vAddChild, kids:vKids, rewards:vRewards, colors:vColors, pairs:vPairs, count:vCount, coloring:vColoring, parent:vParent}[Array.isArray(cur)?cur[0]:cur];
   fn(...(Array.isArray(cur)?cur.slice(1):[]));
 }
 
@@ -150,10 +165,14 @@ function vHome(){
       ${ME.blocked_reason ? `<div class="muted" style="font-weight:700">${esc(ME.blocked_reason)}</div>` :
       `<div class="muted" style="font-weight:700">Bugun yana <b style="color:#B3201B">${left} daqiqa</b> ko'rishing mumkin</div>
        <div class="bar"><i style="width:${pct}%"></i></div>`}
+      <button id="lvlLine" onclick="go('profile')" style="text-align:left;font-weight:700;font-size:14px;color:var(--muted);min-height:20px;padding-right:64px;position:relative;z-index:1"></button>
     </div>
   </div>
   <div class="pad" style="display:flex;flex-direction:column;gap:22px">
+    <button class="searchbox" onclick="go('search')">${ico("M11 19a8 8 0 100-16 8 8 0 000 16zM21 21l-4.3-4.3","#4A5580",22)}Multfilm, ertak qidirish...</button>
+    <div id="homeTop" style="display:flex;flex-direction:column;gap:22px"></div>
     <div class="grid2">${tiles}</div>
+    <div id="homeRows" style="display:flex;flex-direction:column;gap:22px"></div>
     <button class="tile t-green" style="height:auto;flex-direction:row;align-items:center;gap:14px" onclick="go('list','islamic')">${ico(KIND.islamic.i, INK.green, 34)}<span style="display:flex;flex-direction:column;gap:2px"><span>Islomiy multfilmlar</span><small style="font-family:Nunito;font-size:13px;font-weight:600">Payg'ambarlar va Qur'on qissalari</small></span></button>
     <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px">
       <button class="mini t-blue" onclick="go('list','audio')">${ico(KIND.audio.i,INK.blue,28)}Ertaklar</button>
@@ -161,7 +180,81 @@ function vHome(){
       <button class="mini t-red" onclick="go('coloring')">${ico("M12 3a9 9 0 100 18c1.2 0 1.8-.8 1.8-1.6 0-1.2-1-1.4-1-2.4s.8-1.6 1.8-1.6H17a4 4 0 004-4c0-4.6-4-8.4-9-8.4z",INK.red,28)}Bo'yash</button>
       <button class="mini t-orange" onclick="go('rewards')">${STAR(28)}Sovg'alar</button>
     </div>
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+      <button class="mini t-red" style="flex-direction:row;justify-content:center;padding:14px 8px" onclick="go('favs')">${ico("M12 21s-7-4.5-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.5-7 10-7 10z",INK.red,24)}Sevimlilarim</button>
+      <button class="mini t-blue" style="flex-direction:row;justify-content:center;padding:14px 8px" onclick="go('profile')">${ico("M12 15a6 6 0 100-12 6 6 0 000 12zM8.2 13.9L7 23l5-3 5 3-1.2-9.1",INK.blue,24)}Yutuqlarim</button>
+    </div>
     ${ME.children.length>1 || true ? `<button class="btn ghost" onclick="go('kids')">${ico("M9 11a4 4 0 100-8 4 4 0 000 8zM2 21v-1a6 6 0 0112 0v1M17 11a3 3 0 100-6M22 21v-1a5 5 0 00-4-4.9","#1F2A6B",22)} Kim tomosha qiladi?</button>`:""}
+  </div>`;
+  loadHome();
+}
+let HOME = null, BONUS_SHOWN = {};
+async function loadHome(){
+  let h; try{ h = await api("/api/home"); }catch(e){ return; }
+  HOME = h;
+  if (VIEW[VIEW.length-1] !== "home" && (VIEW[VIEW.length-1]||[])[0] !== "home") return;
+  if (h.stars != null){ ME.active.stars = h.stars; }
+  const lv = document.getElementById("lvlLine");
+  if (lv && h.level) lv.innerHTML = `${ico("M12 15a6 6 0 100-12 6 6 0 000 12z","#F28C1E",16)} ${h.level.n}-daraja · ${esc(h.level.name)}${h.streak>1?` · 🔥 ${h.streak} kun ketma-ket`:""}`;
+  const top = document.getElementById("homeTop");
+  if (top) top.innerHTML = h.banners.map(b=>`<button class="banner" onclick="openBanner(${b.id})">${b.img?`<img src="${b.img}" alt="">`:`<span style="width:72px;height:72px;border-radius:16px;background:#fff;display:flex;align-items:center;justify-content:center;flex:none">${STAR(40)}</span>`}<span style="display:flex;flex-direction:column;gap:4px"><b style="font-size:17px">${esc(b.title)}</b><span class="muted" style="font-size:14px">${esc(b.text)}</span></span></button>`).join("");
+  const rows = document.getElementById("homeRows"); let html = "";
+  if (h.cont.length) html += `<div><div class="sec-h"><h2>Davom ettirish</h2></div><div class="hrow">${h.cont.map(it=>cardItem(it, KIND[it.kind]||KIND.video)).join("")}</div></div>`;
+  if (h.recent.length) html += `<div><div class="sec-h"><h2>Oxirgi ko'rganlaring</h2></div><div class="hrow">${h.recent.map(it=>cardItem(it, KIND[it.kind]||KIND.video)).join("")}</div></div>`;
+  if (rows) rows.innerHTML = html;
+  const chip = document.querySelector('.hero .chip'); if (chip) chip.innerHTML = `${STAR()} ${ME.active.stars}`;
+  const key = ME.active.id + ":" + new Date().toDateString();
+  if (h.bonus && !BONUS_SHOWN[key]){ BONUS_SHOWN[key] = 1; haptic("heavy"); showMsg(`${h.streak} kun ketma-ket kirding!\n+${h.bonus} yulduz sovg'a!`, "🔥 Barakalla!"); }
+}
+function openBanner(id){ const b = (HOME && HOME.banners || []).find(x=>x.id===id); if (b && b.link) openLinkSafe(b.link); }
+function openLinkSafe(u){ if (!/^https:\/\//.test(u)) return; if (tg && tg.openLink) tg.openLink(u); else window.open(u, "_blank"); }
+
+// ---------- sevimlilar va qidiruv ----------
+async function vFavs(){
+  $app.innerHTML = kidHead("Sevimlilarim") + `<div class="pad" id="lst"><div class="empty">Yuklanmoqda...</div></div>`;
+  let items = []; try{ items = (await api("/api/favorites")).items; }catch(e){ toast(e.message); }
+  document.getElementById("lst").innerHTML = items.length ? `<div class="grid2">${items.map(it=>cardItem(it, KIND[it.kind]||KIND.video)).join("")}</div>` :
+    `<div class="empty">${ico("M12 21s-7-4.5-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.5-7 10-7 10z","#4A5580",56,1.6)}<p>Hali sevimli yo'q.<br>Video ostidagi «Yoqdi» tugmasini bos — shu yerga tushadi.</p></div>`;
+}
+let SQ = "", STIMER = null;
+function vSearch(){
+  $app.innerHTML = kidHead("Qidirish") + `<div class="pad" style="display:flex;flex-direction:column;gap:16px">
+    <input id="sq" type="search" value="${esc(SQ)}" placeholder="Masalan: Bek va Lola" autocomplete="off" style="font:inherit;font-weight:700;font-size:18px;border:3px solid #E6EAF3;border-radius:18px;padding:12px 16px;width:100%;color:var(--navy)">
+    <div id="sres"></div></div>`;
+  const inp = document.getElementById("sq");
+  inp.addEventListener("input", ()=>{ SQ = inp.value; clearTimeout(STIMER); STIMER = setTimeout(runSearch, 350); });
+  setTimeout(()=>inp.focus(), 200); if (SQ) runSearch();
+}
+async function runSearch(){
+  const box = document.getElementById("sres"); if (!box) return;
+  if (SQ.trim().length < 2){ box.innerHTML = `<p class="muted">Kamida 2 ta harf yoz.</p>`; return; }
+  let items = []; try{ items = (await api("/api/search?q="+encodeURIComponent(SQ.trim()))).items; }catch(e){ return toast(e.message); }
+  if (!document.getElementById("sres")) return;
+  box.innerHTML = items.length ? `<div class="grid2">${items.map(it=>cardItem(it, KIND[it.kind]||KIND.video)).join("")}</div>` : `<div class="empty"><p>Hech narsa topilmadi.</p></div>`;
+}
+
+// ---------- yutuqlar: daraja, seriya, nishonlar ----------
+const BADGE_ICON = {first:"M5 12l5 5L20 7", cartoon:"M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2zM10 9v6l5-3z", audio:"M4 19V5a2 2 0 012-2h12v16H6a2 2 0 00-2 2zM8 7h6", music:"M9 18V5l12-2v13M9 18a3 3 0 11-6 0 3 3 0 016 0zM21 16a3 3 0 11-6 0 3 3 0 016 0z", islamic:"M12 3a9 9 0 109 9 7 7 0 01-9-9z", games:"M6 11h4M8 9v4M15 12h.01M18 10h.01M17.3 5H6.7a4 4 0 00-4 3.6L2 15a3 3 0 005.4 1.8L9 15h6l1.6 1.8A3 3 0 0022 15l-.7-6.4A4 4 0 0017.3 5z", quiz:"M9 9a3 3 0 115 2c-1 .6-2 1.2-2 2.5M12 17h.01", streak7:"M12 2c1 4 5 5 5 10a5 5 0 01-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z", streak30:"M12 2c1 4 5 5 5 10a5 5 0 01-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z", artist:"M12 3a9 9 0 100 18c1.2 0 1.8-.8 1.8-1.6 0-1.2-1-1.4-1-2.4s.8-1.6 1.8-1.6H17a4 4 0 004-4c0-4.6-4-8.4-9-8.4z", likes:"M12 21s-7-4.5-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.5-7 10-7 10z"};
+async function vProfile(){
+  $app.innerHTML = kidHead("Yutuqlarim") + `<div class="pad" id="prf"><div class="empty">Yuklanmoqda...</div></div>`;
+  let r; try{ r = await api("/api/profile"); }catch(e){ return toast(e.message); }
+  const box = document.getElementById("prf"); if (!box) return;
+  const L = r.level, span = L.next ? (L.next - L.from) : 1, prog = L.next ? Math.round((L.total - L.from) / span * 100) : 100;
+  box.innerHTML = `<div style="display:flex;flex-direction:column;gap:18px">
+    <div style="background:var(--cream);border-radius:26px;padding:18px;text-align:center">
+      <div class="big" style="font-size:44px;line-height:1;color:#A65400">${L.n}</div><div style="font-weight:700">daraja</div>
+      <h2 style="margin:6px 0 10px">${esc(L.name)}</h2>
+      <div class="bar"><i style="width:${prog}%"></i></div>
+      <div class="muted" style="margin-top:8px;font-size:14px">${L.next ? `Keyingi daraja «${esc(L.next_name)}» — yana ${L.next - L.total} yulduz` : "Eng yuqori daraja! Sen haqiqiy qahramonsan!"}</div>
+    </div>
+    <div style="background:var(--red-l);border-radius:26px;padding:16px 18px">
+      <div style="display:flex;align-items:center;gap:12px"><span style="font-size:40px">🔥</span><div><div class="big" style="font-size:26px">${r.streak} kun ketma-ket</div><div class="muted" style="font-size:14px">Eng yaxshi natija: ${r.best_streak} kun</div></div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">${r.streak_tiers.map(t=>`<span class="chip" style="height:34px;box-shadow:none;${r.streak>=t.days?'background:#fff;color:#B3201B':'background:rgba(255,255,255,.55)'}">${t.days} kun → +${t.stars}</span>`).join("")}</div>
+      <p class="muted" style="margin:10px 0 0;font-size:13px">Har kuni Kiddy TV'ga kir — bonus yulduz ol!</p>
+    </div>
+    <h2>Nishonlar</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">${r.badges.map(b=>`<div class="badge t-${b.color} ${b.done?'':'off'}">${ico(BADGE_ICON[b.id]||BADGE_ICON.first, INK[b.color], 34)}<b style="font-size:13px;line-height:1.2">${esc(b.title)}</b><span style="font-size:11px;line-height:1.2">${b.done?'Olindi!':`${b.cur}/${b.need}`}</span></div>`).join("")}</div>
+    <p class="muted" style="margin:0;font-size:13px">${r.badges.filter(b=>!b.done).slice(0,2).map(b=>esc(b.desc)).join(" · ")}</p>
   </div>`;
 }
 
@@ -246,13 +339,15 @@ function openYT(id){ const u = "https://www.youtube.com/watch?v=" + id; if (tg &
 function vPlayer(r){
   const it = r.item; const K = KIND[it.kind] || KIND.video;
   let media;
-  if (r.youtube) media = `<iframe id="ytp" class="vid" src="https://www.youtube.com/embed/${r.youtube}?autoplay=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="${esc(it.title)}"></iframe>`;
+  if (r.youtube) media = `<iframe id="ytp" class="vid" src="https://www.youtube.com/embed/${r.youtube}?autoplay=1${r.pos>20?`&start=${Math.floor(r.pos)}`:""}&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="${esc(it.title)}"></iframe>`;
   else if (it.file_type === "audio") media = `<div class="swatch" style="height:180px;background:${BG.blue};display:flex;align-items:center;justify-content:center">${ico(KIND.audio.i,INK.blue,90,1.6)}</div><audio id="mediaEl" controls autoplay style="width:100%;margin-top:12px" src="${r.media}?init=${encodeURIComponent(INIT)}"></audio>`;
   else media = `<video id="mediaEl" class="vid" controls autoplay playsinline src="${r.media}?init=${encodeURIComponent(INIT)}"></video>`;
   $app.innerHTML = kidHead(K.t) + `<div class="pad" style="padding-top:0;display:flex;flex-direction:column;gap:14px">
     ${media}
     ${r.series?`<div class="muted" style="font-weight:700;margin-bottom:-8px">${esc(r.series.name)} · ${r.series.episode}-qism</div>`:""}
     <h1 style="font-size:26px">${esc(it.title)}</h1>
+    ${r.pos>20?`<div class="muted" style="font-weight:700;margin-top:-6px">Qolgan joyingdan davom etyapmiz</div>`:""}
+    ${r.quiz?`<button class="btn" style="background:var(--orange);" onclick="go('quiz', ${it.id})">${ico("M9 9a3 3 0 115 2c-1 .6-2 1.2-2 2.5M12 17h.01","#fff",22)} Savollarga javob ber (${r.quiz} ta)</button>`:""}
     ${r.next?`<button class="btn green" onclick="VIEW.pop();openItem(${r.next.id})">${ico("M5 4l10 8-10 8zM19 5v14","#fff",22)} Keyingi qism</button>`:""}
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <span class="chip" style="height:34px;box-shadow:none;background:${BG[K.c]};color:${INK[K.c]}">${K.t}</span>
@@ -269,7 +364,9 @@ function vPlayer(r){
     </div>
   </div>`;
   if (r.stars_added) toast(`+${r.stars_added} yulduz! Jami: ${r.stars}`);
-  if (r.view_id && !r.stars_added) startWatch(r);
+  const me = document.getElementById("mediaEl");
+  if (me && r.pos > 20) me.addEventListener("loadedmetadata", ()=>{ try{ if (r.pos < me.duration - 20) me.currentTime = r.pos; }catch(e){} }, {once:true});
+  if (r.view_id) startWatch(r);
 }
 
 // ---------- ko'rishni kuzatish: yarmi ko'rilganda yulduz ----------
@@ -287,7 +384,7 @@ function loadYT(){
 function stopWatch(){ if (WATCH){ clearInterval(WATCH.t); WATCH = null; } }
 function startWatch(r){
   stopWatch();
-  const w = WATCH = {id:r.view_id, played:0, dur:0, done:false, retry:0, yt:null, ytOk:false, fallback:false, r};
+  const w = WATCH = {id:r.view_id, played:0, dur:0, done:false, retry:0, yt:null, ytOk:false, fallback:false, r, awarded: !!r.stars_added};
   if (r.youtube){
     loadYT().then(ok=>{
       if (WATCH!==w) return;
@@ -298,6 +395,12 @@ function startWatch(r){
     });
   }
   w.t = setInterval(()=>tickWatch(w), 1000);
+}
+function curPos(w){
+  try{
+    if (w.r.youtube) return (w.ytOk && w.yt && w.yt.getCurrentTime) ? w.yt.getCurrentTime() : 0;
+    const m = document.getElementById("mediaEl"); return m ? m.currentTime : 0;
+  }catch(e){ return 0; }
 }
 function watchState(w){
   if (w.r.youtube){
@@ -313,9 +416,12 @@ function watchState(w){
 }
 async function tickWatch(w){
   if (WATCH !== w) return;
-  if (!document.getElementById("rewBox")){ stopWatch(); return; } // pleyerdan chiqildi
+  if (!document.getElementById("likeBtn")){ stopWatch(); return; } // pleyerdan chiqildi
   const st = watchState(w); if (!st) return;
   if (st.playing) w.played++;
+  w.tick = (w.tick||0) + 1;
+  if (w.tick % 15 === 0){ const pos = curPos(w); if (pos > 0) api("/api/pos", {view_id: w.id, pos}).catch(()=>{}); }
+  if (w.awarded) return;
   if (st.dur > 20) w.dur = st.dur;
   const need = (w.dur || (w.r.item.minutes||1)*60) / 2;
   const pct = Math.min(100, Math.round(w.played / need * 100));
@@ -329,8 +435,8 @@ async function tickWatch(w){
       ME.active.stars = x.stars; haptic("heavy"); toast(`+${x.stars_added} yulduz! Jami: ${x.stars}`);
       const box = document.getElementById("rewBox"); if (box) box.innerHTML = `<div style="font-weight:700;text-align:center">${STAR(18)} +${x.stars_added} yulduz olindi! Barakalla!</div>`;
       const chip = document.getElementById("rewChip"); if (chip) chip.innerHTML = `${STAR(16)} +${x.stars_added} olindi`;
-      clearInterval(w.t);
-    } else if (x.reason === "allaqachon"){ clearInterval(w.t); }
+      w.awarded = true;
+    } else if (x.reason === "allaqachon"){ w.awarded = true; }
     else { w.done = false; w.retry = w.played + 15; }
   }catch(e){ w.done = false; w.retry = w.played + 15; }
 }
@@ -371,19 +477,60 @@ async function saveChild(){
 // ---------- sovg'alar ----------
 async function vRewards(){
   const s = ME.active.stars;
-  let coupons = []; try{ coupons = (await api("/api/coupons")).coupons; }catch(e){}
+  let coupons = [], gifts = {items:[], orders:[]};
+  try{ coupons = (await api("/api/coupons")).coupons; }catch(e){}
+  try{ gifts = await api("/api/gifts"); GIFTS = {}; gifts.items.forEach(g=>GIFTS[g.id]=g); }catch(e){}
   $app.innerHTML = `<div class="hero" style="text-align:center;padding-top:14px">
     <div class="top"><button class="round" onclick="back()" aria-label="Orqaga">${BACK}</button></div>
     ${STAR(80)}<div class="big" style="font-size:46px;line-height:1">${s}</div><div style="font-weight:700">yulduz yig'ding!</div></div>
   <div class="pad" style="display:flex;flex-direction:column;gap:12px">
+    ${gifts.items.length?`<h2>Sovg'alar</h2><div class="grid2">${gifts.items.map(g=>`<div class="card" style="background:var(--soft);border-radius:22px;padding:10px">
+      <div class="thumb" style="background-color:#fff;${g.img?`background-image:url('${g.img}')`:""}">${g.img?"":`<span style="font-size:44px">🎁</span>`}</div>
+      <span class="ttl">${esc(g.title)}</span>${g.note?`<span class="muted" style="font-size:12px;margin-top:-4px">${esc(g.note)}</span>`:""}
+      <button class="btn ${s>=g.stars?'red':'ghost'}" style="min-height:42px;font-size:15px;padding:0 10px" onclick="redeemGift(${g.id})">${STAR(16)} ${g.stars}</button>
+    </div>`).join("")}</div>`:""}
+    ${gifts.orders.filter(o=>!o.issued).length?`<h2 style="margin-top:6px">Sovg'a kodlarim</h2>`+gifts.orders.filter(o=>!o.issued).map(o=>`<div style="border:3px dashed var(--green);border-radius:18px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px"><div><div style="font-weight:700">${esc(o.title)}</div><div class="muted" style="font-size:12px">${o.until} gacha</div></div><div class="big" style="font-size:19px;letter-spacing:1px">${esc(o.code)}</div></div>`).join(""):""}
     <h2>Kiddy Toys'da chegirma</h2>
     ${ME.tiers.map(t=>`<div style="display:flex;align-items:center;gap:12px;background:var(--soft);border-radius:20px;padding:12px 14px">
       <span class="big" style="width:54px;height:54px;border-radius:16px;background:var(--green-l);color:var(--green-d);display:flex;align-items:center;justify-content:center;font-size:19px;flex:none">${t.percent}%</span>
       <div style="flex:1"><div style="font-weight:700">${t.percent}% chegirma</div><div class="muted" style="font-size:13px">${t.cost} yulduz</div></div>
       <button class="btn ${s>=t.cost?'red':'ghost'}" style="width:auto;min-height:44px;padding:0 16px;font-size:15px" ${s>=t.cost?"":"disabled"} onclick="redeem(${t.percent},${t.cost})">Olish</button></div>`).join("")}
-    <p class="muted" style="margin:4px 0 0;font-size:14px">Yulduz: har bir multfilm, ertak va o'yin uchun.</p>
+    <p class="muted" style="margin:4px 0 0;font-size:14px">Yulduz: videoning yarmini ko'rganda, o'yin, savollar va har kuni kirganing uchun.</p>
     ${coupons.length?`<h2 style="margin-top:10px">Kuponlarim</h2>`+coupons.map(c=>`<div style="border:3px dashed var(--red);border-radius:18px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center"><div><div class="big" style="font-size:22px;color:var(--red-d)">${c.percent}%</div><div class="muted" style="font-size:12px">${c.until} gacha</div></div><div class="big" style="font-size:20px;letter-spacing:1px">${esc(c.code)}</div></div>`).join("")+`<p class="muted" style="margin:0;font-size:14px">Kiddy Toys do'konida kassirga kodni ko'rsating.</p>`:""}
   </div>`;
+}
+// ---------- video savollari ----------
+async function vQuiz(cid){
+  $app.innerHTML = kidHead("Savollar") + `<div class="pad" id="qz"><div class="empty">Yuklanmoqda...</div></div>`;
+  let r; try{ r = await api("/api/quiz?id="+cid); }catch(e){ return toast(e.message); }
+  const box = document.getElementById("qz"); if (!box) return;
+  if (!r.items.length){ box.innerHTML = `<div class="empty"><p>Savollar yo'q.</p></div>`; return; }
+  box.innerHTML = `<div style="display:flex;flex-direction:column;gap:22px">${r.items.map((q,i)=>`<div id="q${q.id}" style="display:flex;flex-direction:column;gap:10px">
+    <h2 style="font-size:21px">${i+1}. ${esc(q.q)}</h2>
+    ${q.opts.map(([k,t])=>`<button class="qopt" data-k="${k}" onclick="answerQ(${q.id},'${k}')">${k.toUpperCase()}) ${esc(t)}</button>`).join("")}
+    ${q.done?`<div class="muted" style="font-size:13px">Bu savolga javob bergansan.</div>`:""}
+  </div>`).join("")}
+  <p class="muted" style="margin:0">Har to'g'ri javob: +${r.stars} yulduz (bir marta)</p>
+  <button class="btn ghost" onclick="back()">Videoga qaytish</button></div>`;
+}
+async function answerQ(qid, k){
+  const box = document.getElementById("q"+qid); if (!box || box.dataset.ans) return;
+  box.dataset.ans = 1; haptic();
+  try{
+    const r = await api("/api/quiz/answer", {id: qid, choice: k});
+    box.querySelectorAll(".qopt").forEach(b=>{ if (b.dataset.k === r.correct) b.classList.add("ok"); else if (b.dataset.k === k) b.classList.add("bad"); b.disabled = true; });
+    ME.active.stars = r.total;
+    if (r.ok) toast(r.stars ? `To'g'ri! +${r.stars} yulduz` : "To'g'ri! Barakalla!"); else toast("Afsus, to'g'ri javob yashil rangda");
+  }catch(e){ box.dataset.ans = ""; toast(e.message); }
+}
+
+let GIFTS = {};
+async function redeemGift(id){
+  const g = GIFTS[id]; if (!g) return;
+  if (ME.active.stars < g.stars) return toast(`Yana ${g.stars - ME.active.stars} yulduz kerak`);
+  if (tg && tg.showConfirm){ const ok = await new Promise(r=>tg.showConfirm(`${g.stars} yulduzni «${g.title}» sovg'asiga almashtiraymi?`, r)); if(!ok) return; }
+  try{ const r = await api("/api/gift/redeem",{id}); ME.active.stars = r.stars; haptic("heavy");
+    showMsg(`Kod: ${r.code}\n«${r.title}» — Kiddy Toys do'konida kassirga shu kodni ko'rsating.`, "🎁 Tabriklaymiz!"); vRewards(); }catch(e){ toast(e.message); }
 }
 async function redeem(percent, cost){
   if (tg && tg.showConfirm){ const ok = await new Promise(r=>tg.showConfirm(`${cost} yulduzni ${percent}% chegirmaga almashtiraymi?`, r)); if(!ok) return; }
