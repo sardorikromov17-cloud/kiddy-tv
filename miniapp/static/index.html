@@ -117,7 +117,7 @@ async function api(path, data, method){
 }
 function go(...v){ VIEW.push(v); render(); window.scrollTo(0,0); }
 function back(){ if (VIEW.length>1){ VIEW.pop(); render(); window.scrollTo(0,0);} }
-function head(title){ return `<div class="head"><button class="round" onclick="back()" aria-label="Orqaga">${BACK}</button><h1>${title}</h1></div>`; }
+function kidHead(title){ return `<div class="head"><button class="round" onclick="back()" aria-label="Orqaga">${BACK}</button><h1>${title}</h1></div>`; }
 async function refresh(){ ME = await api("/api/me"); }
 
 function render(){
@@ -206,7 +206,7 @@ function cardSeries(g, K, kind){
 }
 async function vList(kind){
   const K = KIND[kind];
-  $app.innerHTML = head(K.t) + `<div class="pad" id="lst"><div class="empty">Yuklanmoqda...</div></div>`;
+  $app.innerHTML = kidHead(K.t) + `<div class="pad" id="lst"><div class="empty">Yuklanmoqda...</div></div>`;
   let items = [];
   try { items = (await api("/api/content?kind="+kind)).items; } catch(e){ toast(e.message); }
   let html = "";
@@ -224,7 +224,7 @@ async function vList(kind){
 }
 async function vSeries(kind, name){
   const K = KIND[kind] || KIND.cartoon;
-  $app.innerHTML = head(esc(name)) + `<div class="pad" id="lst"><div class="empty">Yuklanmoqda...</div></div>`;
+  $app.innerHTML = kidHead(esc(name)) + `<div class="pad" id="lst"><div class="empty">Yuklanmoqda...</div></div>`;
   let items = [];
   try { items = (await api("/api/series?name="+encodeURIComponent(name))).items; } catch(e){ toast(e.message); }
   document.getElementById("lst").innerHTML = items.length ? `<p class="muted" style="margin:0 0 14px">${items.length} ta qism</p><div class="grid2">` + items.map(it=>cardItem(it, K)).join("") + `</div>` : `<div class="empty">Qismlar topilmadi</div>`;
@@ -248,7 +248,7 @@ function vPlayer(r){
   if (r.youtube) media = `<iframe class="vid" src="https://www.youtube.com/embed/${r.youtube}?autoplay=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="${esc(it.title)}"></iframe>`;
   else if (it.file_type === "audio") media = `<div class="swatch" style="height:180px;background:${BG.blue};display:flex;align-items:center;justify-content:center">${ico(KIND.audio.i,INK.blue,90,1.6)}</div><audio controls autoplay style="width:100%;margin-top:12px" src="${r.media}?init=${encodeURIComponent(INIT)}"></audio>`;
   else media = `<video class="vid" controls autoplay playsinline src="${r.media}?init=${encodeURIComponent(INIT)}"></video>`;
-  $app.innerHTML = head(K.t) + `<div class="pad" style="padding-top:0;display:flex;flex-direction:column;gap:14px">
+  $app.innerHTML = kidHead(K.t) + `<div class="pad" style="padding-top:0;display:flex;flex-direction:column;gap:14px">
     ${media}
     ${r.series?`<div class="muted" style="font-weight:700;margin-bottom:-8px">${esc(r.series.name)} · ${r.series.episode}-qism</div>`:""}
     <h1 style="font-size:26px">${esc(it.title)}</h1>
@@ -273,7 +273,7 @@ async function likeItem(id){
 // ---------- bolalar ----------
 function vKids(){
   const cols = ["red","green","blue","orange"];
-  $app.innerHTML = head("Kim tomosha qiladi?") + `<div class="pad"><div class="grid2">` +
+  $app.innerHTML = kidHead("Kim tomosha qiladi?") + `<div class="pad"><div class="grid2">` +
     ME.children.map((c,i)=>{const k=cols[i%4];return `<button class="card" style="align-items:center" onclick="pickChild(${c.id})">
       <span style="width:118px;height:118px;border-radius:38px;background:${BG[k]};color:${INK[k]};display:flex;align-items:center;justify-content:center;font-family:Fredoka;font-size:52px;font-weight:600;${c.id===ME.active.id?'box-shadow:0 0 0 4px #1F2A6B':''}">${esc(c.name[0]||"?").toUpperCase()}</span>
       <span class="big" style="font-size:20px">${esc(c.name)}</span><span class="muted" style="font-size:13px;margin-top:-6px">${c.age} yosh · ${c.stars} yulduz</span></button>`}).join("") +
@@ -282,7 +282,7 @@ function vKids(){
 }
 async function pickChild(id){ haptic(); try{ await api("/api/child/active",{id}); await refresh(); VIEW=["home"]; render(); }catch(e){ toast(e.message); } }
 function vAddChild(first){
-  $app.innerHTML = (first ? `<div class="hero" style="text-align:center"><img src="/logo.png" alt="Kiddy Toys" width="110" height="110" style="border-radius:50%"><h1 style="margin-top:10px">Kiddy TV'ga xush kelibsiz!</h1><p class="muted" style="margin:6px 0 0">Bepul, reklamasiz multfilm, kino, ertak va o'yinlar</p></div>` : head("Yangi bola")) + `
+  $app.innerHTML = (first ? `<div class="hero" style="text-align:center"><img src="/logo.png" alt="Kiddy Toys" width="110" height="110" style="border-radius:50%"><h1 style="margin-top:10px">Kiddy TV'ga xush kelibsiz!</h1><p class="muted" style="margin:6px 0 0">Bepul, reklamasiz multfilm, kino, ertak va o'yinlar</p></div>` : kidHead("Yangi bola")) + `
   <div class="pad" style="display:flex;flex-direction:column;gap:14px">
     <label style="display:flex;flex-direction:column;gap:6px">Bolaning ismi<input id="cn" maxlength="40" autocomplete="off" placeholder="Masalan: Ali"></label>
     <label style="display:flex;flex-direction:column;gap:6px">Tug'ilgan sanasi<input id="cb" type="date" max="${new Date().toISOString().slice(0,10)}"></label>
@@ -333,7 +333,7 @@ const COLORS = [["Qizil","#E0312B"],["Yashil","#3DAA3A"],["Ko'k","#2F55B4"],["Sa
 function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]} return a; }
 function vColors(st){
   st = st || {round:1, score:0}; const opts = shuffle(COLORS.slice()).slice(0,4); const ans = opts[Math.floor(Math.random()*4)];
-  $app.innerHTML = head("Rangni top") + `<div class="pad" style="display:flex;flex-direction:column;gap:18px;text-align:center">
+  $app.innerHTML = kidHead("Rangni top") + `<div class="pad" style="display:flex;flex-direction:column;gap:18px;text-align:center">
     <div class="muted">${st.round} / 5</div>
     <h1 style="font-size:34px">${ans[0]} qaysi?</h1>
     <div class="grid2">${opts.map(o=>`<button class="swatch" aria-label="${o[0]}" style="background:${o[1]}" data-n="${o[0]}"></button>`).join("")}</div></div>`;
@@ -350,7 +350,7 @@ const shapeSvg = (i, c, size="44") => `<svg aria-hidden="true" width="${size}" h
 function vPairs(n){
   n = n || 6; const game = n===8 ? "pairs8" : "pairs";
   const cards = shuffle([...Array(n).keys(), ...Array(n).keys()]); let open = [], done = 0, lock = false, tries = 0;
-  $app.innerHTML = head(n===8?"Katta juftlik":"Juftini top") + `<div class="pad"><p class="muted" style="margin-top:0;text-align:center">Bir xil shakllarni top</p><div class="memory">${cards.map((v,i)=>`<button data-i="${i}" aria-label="Karta ${i+1}"></button>`).join("")}</div></div>`;
+  $app.innerHTML = kidHead(n===8?"Katta juftlik":"Juftini top") + `<div class="pad"><p class="muted" style="margin-top:0;text-align:center">Bir xil shakllarni top</p><div class="memory">${cards.map((v,i)=>`<button data-i="${i}" aria-label="Karta ${i+1}"></button>`).join("")}</div></div>`;
   const btns = $app.querySelectorAll(".memory button");
   btns.forEach(b=>b.onclick=()=>{
     const i=+b.dataset.i; if(lock||b.classList.contains("open")||b.classList.contains("done")) return; haptic();
@@ -363,7 +363,7 @@ function vPairs(n){
 function vCount(st){
   st = st || {round:1}; const n = 1+Math.floor(Math.random()*9); const sh = Math.floor(Math.random()*6);
   const opts = shuffle([n, ...shuffle([1,2,3,4,5,6,7,8,9].filter(x=>x!==n)).slice(0,2)]);
-  $app.innerHTML = head("Sanaymiz") + `<div class="pad" style="display:flex;flex-direction:column;gap:18px;text-align:center">
+  $app.innerHTML = kidHead("Sanaymiz") + `<div class="pad" style="display:flex;flex-direction:column;gap:18px;text-align:center">
     <div class="muted">${st.round} / 5</div><h1>Nechta?</h1>
     <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;background:var(--cream);border-radius:26px;padding:20px;min-height:150px;align-items:center">${Array(n).fill(`<svg aria-hidden="true" width="44" height="44" viewBox="0 0 24 24"><path d="${SHAPES[sh]}" fill="${SC[sh]}"/></svg>`).join("")}</div>
     <div class="grid3">${opts.map(o=>`<button class="tile t-blue" style="height:90px;align-items:center;justify-content:center" data-n="${o}"><span style="font-size:40px">${o}</span></button>`).join("")}</div></div>`;
@@ -377,7 +377,7 @@ function vCount(st){
 function quiz(game, title, make, rounds=5, st){
   st = st || {round:1};
   const q = make();
-  $app.innerHTML = head(title) + `<div class="pad" style="display:flex;flex-direction:column;gap:18px;text-align:center">
+  $app.innerHTML = kidHead(title) + `<div class="pad" style="display:flex;flex-direction:column;gap:18px;text-align:center">
     <div class="muted">${st.round} / ${rounds}</div>${q.prompt}
     <div class="${q.cols===3?'grid3':'grid2'}">${q.options.map((o,i)=>`<button class="tile ${o.cls||'t-blue'}" style="height:${q.h||110}px;align-items:center;justify-content:center" data-i="${i}" aria-label="${esc(o.label||'')}">${o.html}</button>`).join("")}</div></div>`;
   $app.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{
@@ -420,7 +420,7 @@ function vMath(){ quiz("math","Qo'shamiz",()=>{
 function vSimon(){
   const cols = [["#E0312B","Qizil"],["#3DAA3A","Yashil"],["#2F55B4","Ko'k"],["#F28C1E","Sariq"]];
   let seq = [rnd(4), rnd(4)], pos = 0, busy = true;
-  $app.innerHTML = head("Eslab qol") + `<div class="pad" style="display:flex;flex-direction:column;gap:16px;text-align:center">
+  $app.innerHTML = kidHead("Eslab qol") + `<div class="pad" style="display:flex;flex-direction:column;gap:16px;text-align:center">
     <h2 id="sm">Ranglar ketma-ketligini eslab qol</h2><div class="muted" id="lv"></div>
     <div class="grid2">${cols.map((c,i)=>`<button class="swatch" data-i="${i}" aria-label="${c[1]}" style="background:${c[0]};opacity:.45;height:130px;transition:opacity .15s"></button>`).join("")}</div></div>`;
   const btns = [...$app.querySelectorAll("[data-i]")];
@@ -450,12 +450,12 @@ const PICS = [
 ];
 function vColoring(idx){
   if (idx === undefined){
-    $app.innerHTML = head("Bo'yash kitobi") + `<div class="pad"><p class="muted" style="margin-top:0">Rasm tanla</p><div class="grid2">${PICS.map((p,i)=>`
+    $app.innerHTML = kidHead("Bo'yash kitobi") + `<div class="pad"><p class="muted" style="margin-top:0">Rasm tanla</p><div class="grid2">${PICS.map((p,i)=>`
       <button class="card" onclick="go('coloring', ${i})"><div style="background:var(--green-l);border-radius:22px;padding:8px"><svg viewBox="0 0 320 340" style="width:100%;background:#fff;border-radius:16px;display:block" fill="#fff" stroke="#1F2A6B" stroke-width="6" stroke-linejoin="round" aria-hidden="true">${p.svg}</svg></div><span class="ttl">${p.t}</span></button>`).join("")}</div></div>`;
     return;
   }
   const P = PICS[idx];
-  $app.innerHTML = head(P.t) + `<div class="pad" style="padding-top:0;display:flex;flex-direction:column;gap:14px">
+  $app.innerHTML = kidHead(P.t) + `<div class="pad" style="padding-top:0;display:flex;flex-direction:column;gap:14px">
     <div style="background:var(--green-l);border-radius:28px;padding:10px">
     <svg id="pic" viewBox="0 0 320 340" style="width:100%;background:#fff;border-radius:22px;display:block" fill="#FFFFFF" stroke="#1F2A6B" stroke-width="4" stroke-linejoin="round" role="img" aria-label="Bo'yash uchun rasm: ${esc(P.t)}">
       <rect x="0" y="0" width="320" height="340" fill="#FFFFFF" stroke="none" data-p="1"/>${P.svg}
@@ -481,7 +481,7 @@ async function vParent(){
   if (!PKEY) return pinPad();
   let d; try{ d = await api("/api/parent"); }catch(e){ PKEY=""; return pinPad(); }
   const sw = (on, act) => `<button class="sw ${on?'on':''}" role="switch" aria-checked="${on}" onclick="${act}"><b></b></button>`;
-  $app.innerHTML = head("Ota-ona paneli") + `<div class="pad" style="padding-top:0;display:flex;flex-direction:column;gap:16px;background:var(--soft);min-height:100vh">
+  $app.innerHTML = kidHead("Ota-ona paneli") + `<div class="pad" style="padding-top:0;display:flex;flex-direction:column;gap:16px;background:var(--soft);min-height:100vh">
     <div class="box">
       <div class="row"><div style="flex:1"><div style="font-weight:700">Kunlik vaqt</div><div class="muted" style="font-size:13px">Har bir bola uchun</div></div>
         <button class="key" style="width:46px;height:46px;font-size:24px;background:var(--soft)" onclick="psave({limit:${d.limit-15}})" aria-label="Kamaytirish">−</button><b style="min-width:62px;text-align:center">${d.limit} daq</b><button class="key" style="width:46px;height:46px;font-size:24px;background:var(--soft)" onclick="psave({limit:${d.limit+15}})" aria-label="Ko'paytirish">+</button></div>
@@ -511,7 +511,7 @@ function pinPad(mode){
   let pin = "";
   const title = mode==="new" ? "Yangi PIN-kod" : (ME.has_pin ? "PIN-kodni kiriting" : "PIN-kod o'ylab toping");
   const draw = () => {
-    $app.innerHTML = head("Ota-ona bo'limi") + `<div class="pad" style="display:flex;flex-direction:column;gap:22px;align-items:center;text-align:center">
+    $app.innerHTML = kidHead("Ota-ona bo'limi") + `<div class="pad" style="display:flex;flex-direction:column;gap:22px;align-items:center;text-align:center">
       <span class="round" style="width:80px;height:80px;border-radius:26px;background:var(--blue-l);box-shadow:none">${ico("M5 11h14v10H5zM8 11V7a4 4 0 018 0v4","#2446A0",38)}</span>
       <h2>${title}</h2>${!ME.has_pin&&mode!=="new"?`<p class="muted" style="margin:-12px 0 0;font-size:14px">4 ta raqam. Bola bilmasin!</p>`:""}
       <div class="dots">${[0,1,2,3].map(i=>`<i class="${i<pin.length?'on':''}"></i>`).join("")}</div>
